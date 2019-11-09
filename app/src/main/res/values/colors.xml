@@ -8,4 +8,5 @@
     <color name="colorPositif">#36BA54</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorGreyLight">#F4F4F4</color>
 </resources>

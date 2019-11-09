@@ -1,14 +1,30 @@
 package com.example.mycomifclient
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener, TransactionFragment.OnFragmentInteractionListener {
+
+    private val homeFragment = HomeFragment()
+    private val transactionFragment = TransactionFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(a_main_toolbar)
+
+        val adapter = ViewPagerAdapter(supportFragmentManager)
+        adapter.addFragment(homeFragment, "Home")
+        adapter.addFragment(transactionFragment, "Transactions")
+        a_main_view_pager.adapter = adapter
+        tabs.setupWithViewPager(a_main_view_pager)
+    }
+
+    override fun onFragmentInteraction(uri: Uri) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
