@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:id="@+id/recycler_view_transaction_item"
+    android:background="@drawable/custom_rectangle_white_cr10"
+    android:layout_margin="5dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recycler_view_transaction_constraint_layout">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/recycler_view_transaction_relative_layout_date_hour"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/recycler_view_transaction_text_view_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:textSize="14sp"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/recycler_view_transaction_text_view_dash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textSize="14sp"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/recycler_view_transaction_text_view_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hour"
+                android:textSize="14sp"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/recycler_view_transaction_text_view_products_quantities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="5dp"
+            android:text="Product xQuantities"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view_transaction_relative_layout_date_hour" />
+
+        <TextView
+            android:id="@+id/recycler_view_transaction_text_view_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/custom_rectangle_positif_cr10"
+            android:text="  Price €  "
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textStyle="normal"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

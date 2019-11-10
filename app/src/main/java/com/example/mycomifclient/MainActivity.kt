@@ -7,12 +7,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import com.example.mycomifclient.fragmenttransaction.Transaction
+import com.example.mycomifclient.fragmenttransaction.TransactionFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener, TransactionFragment.OnFragmentInteractionListener {
 
     private val homeFragment = HomeFragment()
     private val transactionFragment = TransactionFragment()
+    private val transactionList: ArrayList<Transaction> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +27,21 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         adapter.addFragment(transactionFragment, "Transactions")
         a_main_view_pager.adapter = adapter
         tabs.setupWithViewPager(a_main_view_pager)
+
+        // Test
+        iniTransactionList()
+        transactionFragment.setTransactionList(transactionList)
+    }
+
+    private fun iniTransactionList() {
+        val productMap: MutableMap<String, Int> = mutableMapOf()
+        productMap["Oreo"] = 1
+        productMap["Coca"] = 2
+        transactionList.add(Transaction("13/09/1997", "21:59", productMap, "-7.56"))
+        transactionList.add(Transaction("10/11/2019", "13:59", productMap, "-7.56"))
+        //productMap.clear()
+        //productMap["Recharge"] = 1
+        transactionList.add(Transaction("10/11/2019", "13:59", productMap, "+25.00"))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
