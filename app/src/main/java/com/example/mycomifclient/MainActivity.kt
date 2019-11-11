@@ -1,5 +1,9 @@
 package com.example.mycomifclient
 
+import android.content.Context
+import android.content.DialogInterface
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,10 +11,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.mycomifclient.fragmenttransaction.Transaction
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
+
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener, TransactionFragment.OnFragmentInteractionListener {
 
@@ -34,6 +40,29 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         transactionFragment.setTransactionList(transactionList)
     }
 
+    private fun checkConnectivity(context: Context) {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
+        //Alert Dialog box
+        val alertDialog: AlertDialog? = this.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setPositiveButton(R.string.OK,
+                    DialogInterface.OnClickListener { dialog, id ->
+                        // User clicked OK button
+                    })
+            }
+            builder.setTitle(R.string.no_internet_connexion)
+            builder.setMessage(R.string.offline_message)
+            // Create the AlertDialog
+            builder.create()
+        }
+        if(!isConnected) {
+            alertDialog?.show()
+        }
+    }
+
     private fun iniTransactionList() {
         val productMap1: MutableMap<String, Int> = mutableMapOf()
         val productMap2: MutableMap<String, Int> = mutableMapOf()
@@ -55,7 +84,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         }
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
@@ -64,6 +92,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     override fun onFragmentInteraction(uri: Uri) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkConnectivity(this)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
