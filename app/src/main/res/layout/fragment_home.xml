@@ -41,7 +41,7 @@
         android:layout_width="130dp"
         android:layout_height="115dp"
         android:layout_marginTop="30dp"
-        android:src="@drawable/ic_comif_logo_white_background"
+        android:src="@drawable/ic_comif_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
