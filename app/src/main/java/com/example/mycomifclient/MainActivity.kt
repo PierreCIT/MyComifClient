@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.example.mycomifclient.fragmenttransaction.Transaction
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener, TransactionFragment.OnFragmentInteractionListener {
 
@@ -34,14 +35,14 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     private fun iniTransactionList() {
-        val productMap: MutableMap<String, Int> = mutableMapOf()
-        productMap["Oreo"] = 1
-        productMap["Coca"] = 2
-        transactionList.add(Transaction("13/09/1997", "21:59", productMap, "-7.56"))
-        transactionList.add(Transaction("10/11/2019", "13:59", productMap, "-7.56"))
-        //productMap.clear()
-        //productMap["Recharge"] = 1
-        transactionList.add(Transaction("10/11/2019", "13:59", productMap, "+25.00"))
+        val productMap1: MutableMap<String, Int> = mutableMapOf()
+        val productMap2: MutableMap<String, Int> = mutableMapOf()
+        productMap1["Oreo"] = 1
+        productMap1["Coca"] = 2
+        transactionList.add(Transaction("13/09/1997", "21:59", productMap1, "-7.56"))
+        transactionList.add(Transaction("10/11/2019", "13:59", productMap1, "-7.56"))
+        productMap2["Recharge"] = 1
+        transactionList.add(Transaction("10/11/2019", "13:59", productMap2, "+25.00"))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

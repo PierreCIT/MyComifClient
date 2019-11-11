@@ -4,21 +4,189 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorGreyLight"
+    android:background="@drawable/beer_wallpaper"
+    android:id="@+id/f_home_constraint_layout_root"
     tools:context=".HomeFragment">
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/f_home_text_view_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="174dp"
-        android:layout_marginTop="335dp"
-        android:layout_marginEnd="179dp"
-        android:layout_marginBottom="377dp"
-        android:text="Fragment1 (remove this txv)"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="50dp"
+        android:text="User name"
+        android:textColor="@color/colorWhite"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/f_home_image_view_comif_logo" />
+
+    <TextView
+        android:id="@+id/f_home_text_view_solde"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/custom_rectangle_positif_cr10"
+        android:text="  +77 €  "
+        android:textColor="@color/colorWhite"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_user_name" />
+
+    <ImageView
+        android:id="@+id/f_home_image_view_comif_logo"
+        android:layout_width="130dp"
+        android:layout_height="115dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/ic_comif_logo_white_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/f_home_linear_layout_today_stats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/custom_rectangle_primary_color_cr10"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_solde">
+
+        <TextView
+            android:id="@+id/f_home_text_view_today_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:text="@string/today"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/f_home_divider_today"
+            android:layout_width="80dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/f_home_text_view_today_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text=" -13.09 €  "
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/f_home_linear_layout_this_week_stats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/custom_rectangle_primary_color_cr10"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/f_home_linear_layout_this_month_stats"
+        app:layout_constraintStart_toEndOf="@+id/f_home_linear_layout_today_stats"
+        app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_solde">
+
+        <TextView
+            android:id="@+id/f_home_text_view_this_week_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:text="@string/this_week"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/f_home_divider_this_week"
+            android:layout_width="80dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/f_home_text_view_this_week_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text=" +77.09 €  "
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/f_home_linear_layout_this_month_stats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/custom_rectangle_primary_color_cr10"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_solde">
+
+        <TextView
+            android:id="@+id/f_home_text_view_this_month_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:text="@string/this_month"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/f_home_divider_this_month"
+            android:layout_width="80dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/f_home_text_view_this_month_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text=" -77.09 €  "
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

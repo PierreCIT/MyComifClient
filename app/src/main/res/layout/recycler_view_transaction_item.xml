@@ -24,7 +24,7 @@
             android:id="@+id/recycler_view_transaction_relative_layout_date_hour"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="5dp">
 
             <TextView
@@ -65,7 +65,7 @@
             android:id="@+id/recycler_view_transaction_text_view_products_quantities"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="5dp"
             android:text="Product xQuantities"
