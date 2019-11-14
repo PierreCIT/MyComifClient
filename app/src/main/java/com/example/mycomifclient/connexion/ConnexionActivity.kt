@@ -1,5 +1,6 @@
 package com.example.mycomifclient.connexion
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -14,7 +15,8 @@ class ConnexionActivity : AppCompatActivity() {
             // TODO: Link this button to the connexion functionality
         }
         findViewById<Button>(R.id.a_connexion_button_first_connexion).setOnClickListener {
-            // TODO: Link this button the the first connexion activity
+            val intent = Intent(this, FirstConnexionActivity::class.java)
+            this.startActivity(intent)
         }
     }
 }

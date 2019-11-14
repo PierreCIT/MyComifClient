@@ -13,7 +13,8 @@
         android:roundIcon="@drawable/ic_comif_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".connexion.ConnexionActivity"></activity>
+        <activity android:name=".connexion.FirstConnexionActivity"></activity>
+        <activity android:name=".connexion.ConnexionActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
