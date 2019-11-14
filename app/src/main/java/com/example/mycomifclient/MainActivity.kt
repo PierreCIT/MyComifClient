@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(this@MainActivity, "Settings", Toast.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -15,13 +15,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:fontFamily="sans-serif-thin"
         android:text="Alexandre LADRIERE"
         android:textColor="@color/colorWhite"
         android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/f_home_image_view_comif_logo" />
 
@@ -32,7 +30,6 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/custom_rectangle_positif_cr10"
         android:bufferType="normal"
-        android:fontFamily="sans-serif-thin"
         android:padding="5dp"
         android:text="  +77 €  "
         android:textColor="@color/colorWhite"
@@ -63,10 +60,8 @@
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_solde"
-        app:layout_constraintVertical_bias="0.471">
+        app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_solde">
 
         <LinearLayout
             android:id="@+id/f_home_linear_layout_today_stats"
@@ -197,7 +192,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:fontFamily="sans-serif-thin"
                 android:text="-77,09 €"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
