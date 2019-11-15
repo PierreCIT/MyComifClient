@@ -1,25 +1,25 @@
-package com.example.mycomifclient.database.user
+package com.example.mycomifclient.database.transactions
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [User::class], version = 1)
-abstract class UserDatabase : RoomDatabase() {
+@Database(entities = [Transaction::class], version = 1)
+abstract class TransactionDatabase : RoomDatabase() {
 
-    abstract fun getUserDao(): UserDAO
+    abstract fun getTransactionDAO(): TransactionDAO
 
     companion object {
-        private var INSTANCE: UserDatabase? = null
+        private var INSTANCE: TransactionDatabase? = null
 
-        fun getAppDatabase(context: Context): UserDatabase {
+        fun getAppDatabase(context: Context): TransactionDatabase {
             if (INSTANCE == null) {
-                synchronized(UserDatabase::class) {
+                synchronized(TransactionDatabase::class) {
                     INSTANCE = Room
                         .databaseBuilder(
                             context.applicationContext,
-                            UserDatabase::class.java,
+                            TransactionDatabase::class.java,
                             "UserDB"
                         )
                         .allowMainThreadQueries()
@@ -27,7 +27,7 @@ abstract class UserDatabase : RoomDatabase() {
                         .build()
                 }
             }
-            return INSTANCE as UserDatabase
+            return INSTANCE as TransactionDatabase
         }
     }
 }

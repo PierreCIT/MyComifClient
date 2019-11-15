@@ -21,7 +21,7 @@ interface UserDAO {
     @Query("SELECT * FROM User")
     fun getAll(): User
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg user: User)
 
     @Delete
