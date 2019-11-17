@@ -2,6 +2,7 @@ package com.example.mycomifclient
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
@@ -12,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.example.mycomifclient.connexion.ConnexionActivity
 import com.example.mycomifclient.fragmenttransaction.Transaction
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -78,6 +80,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         return when (item.itemId) {
             R.id.action_settings -> {
                 // Toast.makeText(this@MainActivity, "Settings", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, ConnexionActivity::class.java)
+                this.startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
