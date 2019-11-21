@@ -11,10 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mycomifclient.database.transactions.TransactionDAO
-import com.example.mycomifclient.database.transactions.TransactionDatabase
-import com.example.mycomifclient.database.user.UserDAO
-import com.example.mycomifclient.database.user.UserDatabase
+import com.example.mycomifclient.database.*
 import com.example.mycomifclient.fragmenttransaction.Transaction
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,6 +26,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     private lateinit var userDAO: UserDAO
     private lateinit var transactionDAO: TransactionDAO
+    private lateinit var itemDAO: ItemDAO
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +34,13 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         setContentView(R.layout.activity_main)
         setSupportActionBar(a_main_toolbar)
 
-        userDAO = UserDatabase.getAppDatabase(this).getUserDao()
-        transactionDAO = TransactionDatabase.getAppDatabase(this).getTransactionDAO()
+        userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
+        transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
+        itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
+
+        userDAO.insert(UserEntity(1, "Emilie", "Bes", "", "", "", 0, "EI18"))
+        transactionDAO.insert(TransactionEntity(0, "", ""))
+        itemDAO.insert(ItemEntity(0, "Croissant", 2, 50))
 
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(homeFragment, "Home")

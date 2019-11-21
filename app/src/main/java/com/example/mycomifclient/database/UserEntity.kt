@@ -1,9 +1,9 @@
-package com.example.mycomifclient.database.user
+package com.example.mycomifclient.database
 
 import androidx.room.*
 
 @Entity
-data class User(
+data class UserEntity(
     @PrimaryKey
     val id: Int,
     val firstName: String,
@@ -18,12 +18,12 @@ data class User(
 @Dao
 interface UserDAO {
 
-    @Query("SELECT * FROM User")
-    fun getAll(): User
+    @Query("SELECT * FROM UserEntity")
+    fun getAll(): UserEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg user: User)
+    fun insert(vararg userEntity: UserEntity)
 
     @Delete
-    fun delete(user: User)
+    fun delete(userEntity: UserEntity)
 }
