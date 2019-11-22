@@ -11,4 +11,11 @@
     <string name="OK">OK</string>
     <string name="no_internet_connexion">No Internet Connexion</string>
     <string name="offline_message">You are offline. Your data are not up to date.</string>
+    <string name="email">Email address</string>
+    <string name="password">Password</string>
+    <string name="connexion">Connexion</string>
+    <string name="first_connexion">First connexion</string>
+    <string name="get_password">Get password</string>
+    <string name="new_password">New password</string>
+    <string name="password_by_email">Your new password was sent by email. Please check your emails.</string>
 </resources>

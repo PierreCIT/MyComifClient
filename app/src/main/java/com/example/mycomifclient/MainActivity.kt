@@ -2,6 +2,7 @@ package com.example.mycomifclient
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
@@ -92,6 +93,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         return when (item.itemId) {
             R.id.action_settings -> {
                 // Toast.makeText(this@MainActivity, "Settings", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, ConnexionActivity::class.java)
+                this.startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
