@@ -6,30 +6,43 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import com.example.mycomifclient.database.*
 import com.example.mycomifclient.connexion.ConnexionActivity
 import com.example.mycomifclient.fragmenttransaction.Transaction
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener, TransactionFragment.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
+    TransactionFragment.OnFragmentInteractionListener {
 
     private val homeFragment = HomeFragment()
     private val transactionFragment = TransactionFragment()
     private val transactionList: ArrayList<Transaction> = ArrayList()
 
+    private lateinit var userDAO: UserDAO
+    private lateinit var transactionDAO: TransactionDAO
+    private lateinit var itemDAO: ItemDAO
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(a_main_toolbar)
+
+        userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
+        transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
+        itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
+
+        userDAO.insert(UserEntity(1, "Emilie", "Bes", "", "", "", 0, "EI18"))
+        transactionDAO.insert(TransactionEntity(0, "", ""))
+        itemDAO.insert(ItemEntity(0, "Croissant", 2, 50))
 
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(homeFragment, "Home")
@@ -60,7 +73,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
             // Create the AlertDialog
             builder.create()
         }
-        if(!isConnected) {
+        if (!isConnected) {
             alertDialog?.show()
         }
     }
