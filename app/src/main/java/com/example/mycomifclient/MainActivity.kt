@@ -12,6 +12,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.database.*
+import com.example.mycomifclient.connexion.ConnexionActivity
 import com.example.mycomifclient.fragmenttransaction.Transaction
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
 import kotlinx.android.synthetic.main.activity_main.*
