@@ -248,5 +248,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         super.onActivityResult(requestCode, resultCode, data)
         user = userDAO.getFirst()
         homeFragment.updateNameAndBalance(user.firstName, user.lastName, user.balance / 100f)
+        getTransactions()
     }
 }
