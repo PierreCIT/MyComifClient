@@ -12,52 +12,45 @@ import java.util.*
 
 class HomeFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
-    var firstName: String? = "My"
-    var lastName: String? = "friend"
-    var balance: Float = 0f
-
-    lateinit var balanceView: TextView
-    lateinit var nameView: TextView
+    private lateinit var firstName: String
+    private lateinit var lastName: String
+    private var balance: Float = 0f
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
-        balanceView = view.findViewById<TextView>(R.id.f_home_text_view_solde)
-        nameView = view.findViewById<TextView>(R.id.f_home_text_view_user_name)
-
-        updateNameAndBalance(firstName, lastName, balance)
-
-        return view
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    fun updateNameAndBalance(firstName: String?, lastName: String?, balance: Float) {
+    fun updateNameAndBalance(firstName: String, lastName: String, balance: Float) {
 
         this.firstName = firstName
         this.lastName = lastName
         this.balance = balance
 
-        nameView.text = String.format(
+        val nameView = view?.findViewById<TextView>(R.id.f_home_text_view_user_name)
+        val balanceView = view?.findViewById<TextView>(R.id.f_home_text_view_solde)
+
+        nameView?.text = String.format(
             resources.getString(
                 R.string.first_last_name
-            ), firstName, lastName?.toUpperCase(
+            ), firstName, lastName.toUpperCase(
                 Locale.FRANCE
             )
         )
 
         if (balance < 0) {
-            balanceView.text = String.format(
-                resources.getString(R.string.balance), "-", balance.toString()
+            balanceView?.text = String.format(
+                resources.getString(R.string.balance), "", balance.toString()
             )
-            balanceView.background =
+            balanceView?.background =
                 (resources.getDrawable(R.drawable.custom_rectangle_negatif_cr10))
         } else {
-            balanceView.text = String.format(
+            balanceView?.text = String.format(
                 resources.getString(R.string.balance), "+", balance.toString()
             )
-            balanceView.background =
+            balanceView?.background =
                 (resources.getDrawable(R.drawable.custom_rectangle_positif_cr10))
         }
     }

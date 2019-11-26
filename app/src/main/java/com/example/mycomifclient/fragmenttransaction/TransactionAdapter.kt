@@ -6,7 +6,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mycomifclient.R
 
-class TransactionAdapter(private val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionViewHolder>() {
+class TransactionAdapter(private val transactions: ArrayList<Transaction>) :
+    RecyclerView.Adapter<TransactionViewHolder>() {
 
     lateinit var parent: ViewGroup
 
@@ -28,11 +29,12 @@ class TransactionAdapter(private val transactions: ArrayList<Transaction>) : Rec
         holder.transactionProducts.text = mutableMapOfToString(product)
         holder.transactionPrice.text = "$price €"
 
-        if(price.toDouble() < 0.0) {
-            holder.transactionPrice.background = ContextCompat.getDrawable(parent.context, R.drawable.custom_rectangle_negatif_cr10)
-        }
-        else {
-            holder.transactionPrice.background = ContextCompat.getDrawable(parent.context, R.drawable.custom_rectangle_positif_cr10)
+        if (price.toDouble() < 0.0) {
+            holder.transactionPrice.background =
+                ContextCompat.getDrawable(parent.context, R.drawable.custom_rectangle_negatif_cr10)
+        } else {
+            holder.transactionPrice.background =
+                ContextCompat.getDrawable(parent.context, R.drawable.custom_rectangle_positif_cr10)
         }
     }
 

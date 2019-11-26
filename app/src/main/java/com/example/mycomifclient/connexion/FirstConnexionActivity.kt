@@ -2,13 +2,11 @@ package com.example.mycomifclient.connexion
 
 import android.content.Context
 import android.content.DialogInterface
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.R
 
 class FirstConnexionActivity : AppCompatActivity() {

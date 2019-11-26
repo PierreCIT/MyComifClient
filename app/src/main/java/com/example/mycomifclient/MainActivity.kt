@@ -13,17 +13,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mycomifclient.database.*
 import com.example.mycomifclient.connexion.ConnexionActivity
+import com.example.mycomifclient.database.*
 import com.example.mycomifclient.fragmenttransaction.Transaction
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
 import com.example.mycomifclient.serverhandling.HTTPServices
-import com.google.android.gms.dynamic.SupportFragmentWrapper
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -31,8 +28,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
@@ -57,32 +52,22 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(SERVER_BASE_URL)
         .build()
-
     private val retrofitHTTPServices = retrofit.create<HTTPServices>(HTTPServices::class.java)
 
+    private lateinit var user: UserEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(a_main_toolbar)
 
         userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
         transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
 
-        // INSERT A KNOWN USER TO TEST API REQUEST
-        // userDAO.insert(UserEntity(ID, "", "", "hello@hello.com", "password", "", balanceValue))
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(a_main_toolbar)
 
-        var user = userDAO.getFirst()
-        val authBody: JsonObject
-
-        if (user!= null) {
-            authBody = createAuthBody(user.email, user.password)
-        } else {
-            authBody = createAuthBody("xxx@xxx.com", "password")
-        }
-
-        authenticate(authBody)
+        val intent = Intent(this, ConnexionActivity::class.java)
+        this.startActivityForResult(intent, 1)
 
         adapter.addFragment(homeFragment, "Home")
         adapter.addFragment(transactionFragment, "Transactions")
@@ -168,31 +153,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
     }
 
-    private fun authenticate(authBody: JsonObject) {
-
-        retrofitHTTPServices.authenticate(authBody).enqueue(object : Callback<JsonObject> {
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                when (response.raw().code()) {
-
-                    //TODO: Implement bearer token in the header of the POST request
-                    200 -> handleAuthenticationResponse(response.body())
-
-                    401 -> Toast.makeText(
-                        this@MainActivity,
-                        "Unauthorised request",
-                        Toast.LENGTH_LONG
-                    ).show()
-
-                    else -> println("Error")
-                }
-            }
-
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Error: $t", Toast.LENGTH_LONG).show()
-            }
-        })
-    }
-
     private fun getTransactions() {
         val user = userDAO.getFirst()
         retrofitHTTPServices.getTransactions(
@@ -208,37 +168,13 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
                         200 -> handleGetTransactionsResponse(response.body())
 
-                        401 -> println("401")
+                        401 -> reconnect()
 
                         else -> println("Error")
                     }
                 }
 
                 override fun onFailure(call: Call<JsonArray>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "Error: $t", Toast.LENGTH_LONG).show()
-                }
-            })
-    }
-
-    private fun getUser() {
-        val user  = userDAO.getFirst()
-            retrofitHTTPServices.getUser(user.id, "Bearer " + user.token)
-            .enqueue(object : Callback<JsonObject> {
-                override fun onResponse(
-                    call: Call<JsonObject>,
-                    response: Response<JsonObject>
-                ) {
-                    when (response.raw().code()) {
-
-                        200 -> handleGetUserResponse(response.body())
-
-                        401 -> println("401")
-
-                        else -> println("Error")
-                    }
-                }
-
-                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
                     Toast.makeText(this@MainActivity, "Error: $t", Toast.LENGTH_LONG).show()
                 }
             })
@@ -281,55 +217,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         createTransactionsList()
     }
 
-    private fun handleAuthenticationResponse(body: JsonObject?) {
-        val token = body?.get("access_token")
-        if (token == null) {
-            Toast.makeText(
-                this@MainActivity,
-                "Error while recovering items from server. Please contact an administrator",
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
-            userDAO.updateToken(removeQuotes(token))
-            getUser()
-        }
-    }
-
-    private fun handleGetUserResponse(body: JsonObject?) {
-        if (body != null) {
-            var user = userDAO.getFirst()
-            val userEntity = UserEntity(
-                body.get("id").asInt,
-                removeQuotes(body.get("first_name")),
-                removeQuotes(body.get("last_name")),
-                removeQuotes(body.get("email")),
-                user.password,
-                user.token,
-                body.get("balance").asInt
-            )
-            userDAO.nukeTable()
-            userDAO.insert(userEntity)
-
-            user = userDAO.getFirst()
-
-            homeFragment.updateNameAndBalance(user.firstName, user.lastName, user.balance / 100f)
-
-            getTransactions()
-        }
-    }
-
     private fun removeQuotes(item: JsonElement): String {
         return item.toString().substring(1, item.toString().length - 1)
-    }
-
-    private fun createAuthBody(username: String, password: String): JsonObject {
-        val serverBody = JsonObject()
-        serverBody.addProperty("client_id", 1)
-        serverBody.addProperty("client_secret", "secret")
-        serverBody.addProperty("grant_type", "password")
-        serverBody.addProperty("username", username)
-        serverBody.addProperty("password", password)
-        return serverBody
     }
 
     private fun createTransactionsList() {
@@ -348,5 +237,16 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         }
         transactionList.reverse()
         transactionFragment.setTransactionList(transactionList)
+    }
+
+    private fun reconnect() {
+        val intent = Intent(this, ConnexionActivity::class.java)
+        this.startActivity(intent)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        user = userDAO.getFirst()
+        homeFragment.updateNameAndBalance(user.firstName, user.lastName, user.balance / 100f)
     }
 }
