@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                     200 -> handleAuthenticationResponse(response.body())
 
                     401 -> Toast.makeText(
-                        this@MainActivity,
+                        baseContext,
                         "Unauthorised request",
                         Toast.LENGTH_LONG
                     ).show()
