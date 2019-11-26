@@ -22,7 +22,7 @@ data class ItemEntity(
 interface ItemDAO {
 
     @Query("SELECT * FROM ItemEntity WHERE transactionId = :transactionId")
-    fun selectItems(transactionId: Int): ItemEntity
+    fun selectItems(transactionId: Int): List<ItemEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg itemEntity: ItemEntity)

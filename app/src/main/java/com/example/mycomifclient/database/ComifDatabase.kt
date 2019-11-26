@@ -5,7 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [UserEntity::class, TransactionEntity::class, ItemEntity::class], version = 1)
+@Database(
+    entities = [UserEntity::class, TransactionEntity::class, ItemEntity::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class ComifDatabase : RoomDatabase() {
 
     abstract fun getUserDAO(): UserDAO

@@ -9,13 +9,24 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.database.*
 import com.example.mycomifclient.fragmenttransaction.Transaction
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
+import com.example.mycomifclient.serverhandling.HTTPServices
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_main.*
-
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
@@ -28,6 +39,19 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     private lateinit var transactionDAO: TransactionDAO
     private lateinit var itemDAO: ItemDAO
 
+    private val httpLoggingInterceptor =
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    private val okHttpClient: OkHttpClient.Builder =
+        OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor)
+    private val SERVER_BASE_URL = "https://comif.fr"
+    private val retrofit = Retrofit.Builder()
+        .client(okHttpClient.build())
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(SERVER_BASE_URL)
+        .build()
+
+    private val retrofitHTTPServices = retrofit.create<HTTPServices>(HTTPServices::class.java)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,19 +62,19 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
 
-        userDAO.insert(UserEntity(1, "Emilie", "Bes", "", "", "", 0, "EI18"))
-        transactionDAO.insert(TransactionEntity(0, "", ""))
-        itemDAO.insert(ItemEntity(0, "Croissant", 2, 50))
+        homeFragment.firstName = userDAO.getAll().firstName
+        homeFragment.lastName = userDAO.getAll().lastName
+        homeFragment.balance = userDAO.getAll().balance / 100f
+
+        val authBody = createAuthBody(userDAO.getAll().email, userDAO.getAll().password)
+
+        authenticate(authBody)
 
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(homeFragment, "Home")
         adapter.addFragment(transactionFragment, "Transactions")
         a_main_view_pager.adapter = adapter
         tabs.setupWithViewPager(a_main_view_pager)
-
-        // Test
-        iniTransactionList()
-        transactionFragment.setTransactionList(transactionList)
     }
 
     private fun checkConnectivity(context: Context) {
@@ -74,17 +98,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         if (!isConnected) {
             alertDialog?.show()
         }
-    }
-
-    private fun iniTransactionList() {
-        val productMap1: MutableMap<String, Int> = mutableMapOf()
-        val productMap2: MutableMap<String, Int> = mutableMapOf()
-        productMap1["Oreo"] = 1
-        productMap1["Coca"] = 2
-        transactionList.add(Transaction("13/09/1997", "21:59", productMap1, "-7.56"))
-        transactionList.add(Transaction("10/11/2019", "13:59", productMap1, "-7.56"))
-        productMap2["Recharge"] = 1
-        transactionList.add(Transaction("10/11/2019", "13:59", productMap2, "+25.00"))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -138,5 +151,179 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+    }
+
+    private fun authenticate(authBody: JsonObject) {
+
+        retrofitHTTPServices.authenticate(authBody).enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                when (response.raw().code()) {
+
+                    //TODO: Implement bearer token in the header of the POST request
+                    200 -> handleAuthenticationResponse(response.body())
+
+                    401 -> Toast.makeText(
+                        this@MainActivity,
+                        "Unauthorised request",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    else -> println("Error")
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error: $t", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    private fun getTransactions() {
+        retrofitHTTPServices.getTransactions(
+            userDAO.getAll().id,
+            "Bearer " + userDAO.getAll().token
+        )
+            .enqueue(object : Callback<JsonArray> {
+                override fun onResponse(
+                    call: Call<JsonArray>,
+                    response: Response<JsonArray>
+                ) {
+                    when (response.raw().code()) {
+
+                        200 -> handleGetTransactionsResponse(response.body())
+
+                        401 -> println("401")
+
+                        else -> println("Error")
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonArray>, t: Throwable) {
+                    Toast.makeText(this@MainActivity, "Error: $t", Toast.LENGTH_LONG).show()
+                }
+            })
+    }
+
+    private fun getUser() {
+        retrofitHTTPServices.getUser(userDAO.getAll().id, "Bearer " + userDAO.getAll().token)
+            .enqueue(object : Callback<JsonObject> {
+                override fun onResponse(
+                    call: Call<JsonObject>,
+                    response: Response<JsonObject>
+                ) {
+                    when (response.raw().code()) {
+
+                        200 -> handleGetUserResponse(response.body())
+
+                        401 -> println("401")
+
+                        else -> println("Error")
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Toast.makeText(this@MainActivity, "Error: $t", Toast.LENGTH_LONG).show()
+                }
+            })
+    }
+
+    private fun handleGetTransactionsResponse(body: JsonArray?) {
+        body?.forEach { bodyElement ->
+            val transaction = bodyElement.asJsonObject
+            val items = transaction.get("products").asJsonArray
+            transactionDAO.insert(
+                TransactionEntity(
+                    transaction.get("id").asInt,
+                    removeQuotes(transaction.get("type")),
+                    removeQuotes(transaction.get("created_at"))
+                )
+            )
+            if (removeQuotes(transaction.get("type")) == "credit") {
+                itemDAO.insert(
+                    ItemEntity(
+                        transaction.get("id").asInt,
+                        "Recharge",
+                        1,
+                        transaction.get("value").asInt * -1
+                    )
+                )
+            } else {
+                items.forEach { itemsElement ->
+                    val item = itemsElement.asJsonObject
+                    itemDAO.insert(
+                        ItemEntity(
+                            transaction.get("id").asInt,
+                            removeQuotes(item.get("name")),
+                            item.get("pivot").asJsonObject.get("quantity").asInt,
+                            item.get("pivot").asJsonObject.get("unit_price").asInt
+                        )
+                    )
+                }
+            }
+        }
+        createTransactionsList()
+    }
+
+    private fun handleAuthenticationResponse(body: JsonObject?) {
+        val token = body?.get("access_token")
+        if (token == null) {
+            Toast.makeText(
+                this@MainActivity,
+                "Error while recovering items from server. Please contact an administrator",
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            userDAO.updateToken(removeQuotes(token))
+            getUser()
+        }
+    }
+
+    private fun handleGetUserResponse(body: JsonObject?) {
+        if (body != null) {
+            val userEntity = UserEntity(
+                body.get("id").asInt,
+                removeQuotes(body.get("first_name")),
+                removeQuotes(body.get("last_name")),
+                removeQuotes(body.get("email")),
+                userDAO.getAll().password,
+                userDAO.getAll().token,
+                body.get("balance").asInt
+            )
+            userDAO.nukeTable()
+            userDAO.insert(userEntity)
+            getTransactions()
+        }
+    }
+
+    private fun removeQuotes(item: JsonElement): String {
+        return item.toString().substring(1, item.toString().length - 1)
+    }
+
+    private fun createAuthBody(username: String, password: String): JsonObject {
+        val serverBody = JsonObject()
+        serverBody.addProperty("client_id", 1)
+        serverBody.addProperty("client_secret", "secret")
+        serverBody.addProperty("grant_type", "password")
+        serverBody.addProperty("username", username)
+        serverBody.addProperty("password", password)
+        return serverBody
+    }
+
+    private fun createTransactionsList() {
+        val transactions = transactionDAO.getAll()
+        transactions.forEach { transaction ->
+            val itemsMap: MutableMap<String, Int> = mutableMapOf()
+            val items = itemDAO.selectItems(transaction.transactionId)
+            var totalTransactionPrice = 0f
+            val date = transaction.date.split(' ')[0]
+            val hour = transaction.date.split(' ')[1]
+            items.forEach { item ->
+                itemsMap[item.itemName] = item.quantity
+                totalTransactionPrice -= item.price * item.quantity / 100f
+            }
+            transactionList.add(Transaction(date, hour, itemsMap, totalTransactionPrice.toString()))
+        }
+        transactionList.reverse()
+        transactionFragment.setTransactionList(transactionList)
     }
 }
