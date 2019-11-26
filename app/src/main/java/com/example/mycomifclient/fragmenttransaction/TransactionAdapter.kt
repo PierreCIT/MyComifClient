@@ -26,7 +26,7 @@ class TransactionAdapter(private val transactions: ArrayList<Transaction>) : Rec
         holder.transactionDate.text = date
         holder.transactionHour.text = hour
         holder.transactionProducts.text = mutableMapOfToString(product)
-        holder.transactionPrice.text = "  $price €  "
+        holder.transactionPrice.text = "$price €"
 
         if(price.toDouble() < 0.0) {
             holder.transactionPrice.background = ContextCompat.getDrawable(parent.context, R.drawable.custom_rectangle_negatif_cr10)
@@ -38,10 +38,14 @@ class TransactionAdapter(private val transactions: ArrayList<Transaction>) : Rec
 
     private fun mutableMapOfToString(map: MutableMap<String, Int>): String {
         var productStr = ""
-        for((k, v) in map) {
-            productStr += "$k x$v - "
+        for ((item, quantity) in map) {
+            productStr += if (item == "Recharge") {
+                item
+            } else {
+                "$item x$quantity\n"
+            }
         }
-        productStr = productStr.removeSuffix(" - ")
+        productStr = productStr.removeSuffix("\n")
         return productStr
     }
 }

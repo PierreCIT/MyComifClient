@@ -14,7 +14,7 @@ data class TransactionEntity(
 interface TransactionDAO {
 
     @Query("SELECT * FROM TransactionEntity")
-    fun getAll(): TransactionEntity
+    fun getAll(): List<TransactionEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg transactionEntity: TransactionEntity)
