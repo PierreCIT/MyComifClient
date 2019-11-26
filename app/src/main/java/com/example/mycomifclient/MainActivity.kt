@@ -18,10 +18,12 @@ import com.example.mycomifclient.connexion.ConnexionActivity
 import com.example.mycomifclient.fragmenttransaction.Transaction
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
 import com.example.mycomifclient.serverhandling.HTTPServices
+import com.google.android.gms.dynamic.SupportFragmentWrapper
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -29,6 +31,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
@@ -36,6 +40,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     private val homeFragment = HomeFragment()
     private val transactionFragment = TransactionFragment()
     private val transactionList: ArrayList<Transaction> = ArrayList()
+
+    private var adapter = ViewPagerAdapter(supportFragmentManager)
 
     private lateinit var userDAO: UserDAO
     private lateinit var transactionDAO: TransactionDAO
@@ -64,15 +70,20 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
 
-        homeFragment.firstName = userDAO.getAll().firstName
-        homeFragment.lastName = userDAO.getAll().lastName
-        homeFragment.balance = userDAO.getAll().balance / 100f
+        // INSERT A KNOWN USER TO TEST API REQUEST
+        // userDAO.insert(UserEntity(ID, "", "", "hello@hello.com", "password", "", balanceValue))
 
-        val authBody = createAuthBody(userDAO.getAll().email, userDAO.getAll().password)
+        var user = userDAO.getFirst()
+        val authBody: JsonObject
+
+        if (user!= null) {
+            authBody = createAuthBody(user.email, user.password)
+        } else {
+            authBody = createAuthBody("xxx@xxx.com", "password")
+        }
 
         authenticate(authBody)
 
-        val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(homeFragment, "Home")
         adapter.addFragment(transactionFragment, "Transactions")
         a_main_view_pager.adapter = adapter
@@ -183,9 +194,10 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     private fun getTransactions() {
+        val user = userDAO.getFirst()
         retrofitHTTPServices.getTransactions(
-            userDAO.getAll().id,
-            "Bearer " + userDAO.getAll().token
+            user.id,
+            "Bearer " + user.token
         )
             .enqueue(object : Callback<JsonArray> {
                 override fun onResponse(
@@ -209,7 +221,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     private fun getUser() {
-        retrofitHTTPServices.getUser(userDAO.getAll().id, "Bearer " + userDAO.getAll().token)
+        val user  = userDAO.getFirst()
+            retrofitHTTPServices.getUser(user.id, "Bearer " + user.token)
             .enqueue(object : Callback<JsonObject> {
                 override fun onResponse(
                     call: Call<JsonObject>,
@@ -284,17 +297,23 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     private fun handleGetUserResponse(body: JsonObject?) {
         if (body != null) {
+            var user = userDAO.getFirst()
             val userEntity = UserEntity(
                 body.get("id").asInt,
                 removeQuotes(body.get("first_name")),
                 removeQuotes(body.get("last_name")),
                 removeQuotes(body.get("email")),
-                userDAO.getAll().password,
-                userDAO.getAll().token,
+                user.password,
+                user.token,
                 body.get("balance").asInt
             )
             userDAO.nukeTable()
             userDAO.insert(userEntity)
+
+            user = userDAO.getFirst()
+
+            homeFragment.updateNameAndBalance(user.firstName, user.lastName, user.balance / 100f)
+
             getTransactions()
         }
     }
