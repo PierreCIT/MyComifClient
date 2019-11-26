@@ -11,6 +11,6 @@
     <string name="OK">OK</string>
     <string name="no_internet_connexion">No Internet Connexion</string>
     <string name="offline_message">You are offline. Your data are not up to date.</string>
-    <string name="first_last_name">Hello\n%s %s</string>
+    <string name="first_last_name">%s %s</string>
     <string name="balance">%s %s €</string>
 </resources>
