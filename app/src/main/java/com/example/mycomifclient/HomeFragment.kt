@@ -33,14 +33,16 @@ class HomeFragment : Fragment() {
         return view
     }
 
-    fun updateNameAndBalance(firstName: String?, lastName: String?, balance: Float){
+    fun updateNameAndBalance(firstName: String?, lastName: String?, balance: Float) {
 
         this.firstName = firstName
         this.lastName = lastName
         this.balance = balance
 
         nameView.text = String.format(
-            "Hello %s %s", firstName, lastName?.toUpperCase(
+            resources.getString(
+                R.string.first_last_name
+            ), firstName, lastName?.toUpperCase(
                 Locale.FRANCE
             )
         )
