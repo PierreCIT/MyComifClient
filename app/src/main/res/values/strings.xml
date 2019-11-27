@@ -20,4 +20,6 @@
     <string name="get_password">Get password</string>
     <string name="new_password">New password</string>
     <string name="password_by_email">Your new password was sent by email. Please check your emails.</string>
+    <string name="logout">Logout</string>
+    <string name="info">Information</string>
 </resources>

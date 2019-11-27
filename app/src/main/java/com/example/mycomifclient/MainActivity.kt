@@ -115,10 +115,13 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> {
-                // Toast.makeText(this@MainActivity, "Settings", Toast.LENGTH_SHORT).show()
+            R.id.action_logout -> {
                 val intent = Intent(this, ConnexionActivity::class.java)
                 this.startActivity(intent)
+                true
+            }
+            R.id.action_information -> {
+                Toast.makeText(baseContext, "Not implemented yet", Toast.LENGTH_LONG).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
