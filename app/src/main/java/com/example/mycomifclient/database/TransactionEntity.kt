@@ -21,5 +21,4 @@ interface TransactionDAO {
 
     @Delete
     fun delete(transactionEntity: TransactionEntity)
-
 }

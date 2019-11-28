@@ -28,6 +28,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
@@ -222,7 +225,14 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     private fun createTransactionsList() {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE)
+        val currentDate = Date().time
         val transactions = transactionDAO.getAll()
+
+        var dayConsos = 0f
+        var weekConsos = 0f
+        var monthConsos = 0f
+
         transactions.forEach { transaction ->
             val itemsMap: MutableMap<String, Int> = mutableMapOf()
             val items = itemDAO.selectItems(transaction.transactionId)
@@ -233,10 +243,28 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 itemsMap[item.itemName] = item.quantity
                 totalTransactionPrice -= item.price * item.quantity / 100f
             }
+            val timeDiff = (currentDate - dateFormat.parse(date).time) / 1000f / 60f / 60f / 24f
+            if (timeDiff <= 1 && itemsMap["Recharge"] == null) {
+                dayConsos += totalTransactionPrice
+            }
+            if (timeDiff <= 7 && itemsMap["Recharge"] == null) {
+                weekConsos += totalTransactionPrice
+            }
+            if (timeDiff <= 30 && itemsMap["Recharge"] == null) {
+                monthConsos += totalTransactionPrice
+            }
             transactionList.add(Transaction(date, hour, itemsMap, totalTransactionPrice.toString()))
         }
         transactionList.reverse()
         transactionFragment.setTransactionList(transactionList)
+        homeFragment.updateViews(
+            user.firstName,
+            user.lastName,
+            user.balance / 100f,
+            "%.2f".format(dayConsos),
+            "%.2f".format(weekConsos),
+            "%.2f".format(monthConsos)
+        )
     }
 
     private fun reconnect() {
@@ -247,7 +275,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         user = userDAO.getFirst()
-        homeFragment.updateNameAndBalance(user.firstName, user.lastName, user.balance / 100f)
+        homeFragment.updateViews(user.firstName, user.lastName, user.balance / 100f, "", "", "")
         getTransactions()
     }
 }

@@ -12,9 +12,14 @@ import java.util.*
 
 class HomeFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
+
     private lateinit var firstName: String
     private lateinit var lastName: String
-    private var balance: Float = 0f
+    private lateinit var dayConsos: String
+    private lateinit var weekConsos: String
+    private lateinit var monthConsos: String
+
+    private var balance = 0f
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,14 +28,27 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    fun updateNameAndBalance(firstName: String, lastName: String, balance: Float) {
+    fun updateViews(
+        firstName: String,
+        lastName: String,
+        balance: Float,
+        dayConsos: String,
+        weekConsos: String,
+        monthConsos: String
+    ) {
 
         this.firstName = firstName
         this.lastName = lastName
         this.balance = balance
+        this.dayConsos = dayConsos
+        this.weekConsos = weekConsos
+        this.monthConsos = monthConsos
 
         val nameView = view?.findViewById<TextView>(R.id.f_home_text_view_user_name)
         val balanceView = view?.findViewById<TextView>(R.id.f_home_text_view_solde)
+        val dayConsosView = view?.findViewById<TextView>(R.id.f_home_text_view_today_total)
+        val weekConsosView = view?.findViewById<TextView>(R.id.f_home_text_view_this_week_total)
+        val monthConsosView = view?.findViewById<TextView>(R.id.f_home_text_view_this_month_total)
 
         nameView?.text = String.format(
             resources.getString(
@@ -53,6 +71,12 @@ class HomeFragment : Fragment() {
             balanceView?.background =
                 (resources.getDrawable(R.drawable.custom_rectangle_positif_cr10))
         }
+        dayConsosView?.text =
+            String.format(resources.getString(R.string.balance), "", dayConsos)
+        weekConsosView?.text =
+            String.format(resources.getString(R.string.balance), "", weekConsos)
+        monthConsosView?.text =
+            String.format(resources.getString(R.string.balance), "", monthConsos)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
