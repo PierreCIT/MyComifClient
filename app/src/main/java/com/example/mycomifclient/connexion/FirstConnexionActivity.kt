@@ -1,7 +1,6 @@
 package com.example.mycomifclient.connexion
 
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
@@ -26,10 +25,11 @@ class FirstConnexionActivity : AppCompatActivity() {
         val alertDialog: AlertDialog? = this.let {
             val builder = AlertDialog.Builder(it)
             builder.apply {
-                setPositiveButton(R.string.OK,
-                    DialogInterface.OnClickListener { dialog, id ->
-                        finish()
-                    })
+                setPositiveButton(
+                    R.string.OK
+                ) { dialog, id ->
+                    finish()
+                }
             }
             builder.setTitle(R.string.new_password)
             builder.setMessage(R.string.password_by_email)

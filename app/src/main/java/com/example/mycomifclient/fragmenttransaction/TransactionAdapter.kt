@@ -1,5 +1,6 @@
 package com.example.mycomifclient.fragmenttransaction
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -9,7 +10,7 @@ import com.example.mycomifclient.R
 class TransactionAdapter(private val transactions: ArrayList<Transaction>) :
     RecyclerView.Adapter<TransactionViewHolder>() {
 
-    lateinit var parent: ViewGroup
+    private lateinit var parent: ViewGroup
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
         this.parent = parent
@@ -22,6 +23,7 @@ class TransactionAdapter(private val transactions: ArrayList<Transaction>) :
         return this.transactions.size
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val (date, hour, product, price) = this.transactions[position]
         holder.transactionDate.text = date
@@ -34,7 +36,7 @@ class TransactionAdapter(private val transactions: ArrayList<Transaction>) :
                 ContextCompat.getDrawable(parent.context, R.drawable.custom_rectangle_negatif_cr10)
         } else {
             holder.transactionPrice.background =
-                ContextCompat.getDrawable(parent.context, R.drawable.custom_rectangle_positif_cr10)
+                ContextCompat.getDrawable(parent.context, R.drawable.custom_rectangle_positive_cr10)
         }
     }
 

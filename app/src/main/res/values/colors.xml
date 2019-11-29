@@ -3,10 +3,8 @@
     <color name="colorPrimary">#373631</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#F5AE00</color>
-    <color name="colorPrimaryLight">#474642</color>
-    <color name="colorNegatif">#DC3545</color>
-    <color name="colorPositif">#36BA54</color>
+    <color name="negativePriceColor">#DC3545</color>
+    <color name="positivePriceColor">#36BA54</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorGreyLight">#CAC6C6</color>
 </resources>

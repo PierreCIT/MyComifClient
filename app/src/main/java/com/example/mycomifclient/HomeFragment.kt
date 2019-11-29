@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         this.monthConsos = monthConsos
 
         val nameView = view?.findViewById<TextView>(R.id.f_home_text_view_user_name)
-        val balanceView = view?.findViewById<TextView>(R.id.f_home_text_view_solde)
+        val balanceView = view?.findViewById<TextView>(R.id.f_home_text_view_balance)
         val dayConsosView = view?.findViewById<TextView>(R.id.f_home_text_view_today_total)
         val weekConsosView = view?.findViewById<TextView>(R.id.f_home_text_view_this_week_total)
         val monthConsosView = view?.findViewById<TextView>(R.id.f_home_text_view_this_month_total)
@@ -60,28 +60,23 @@ class HomeFragment : Fragment() {
 
         if (balance < 0) {
             balanceView?.text = String.format(
-                resources.getString(R.string.balance), "", balance.toString()
+                resources.getString(R.string.euro_price), "", balance.toString()
             )
             balanceView?.background =
                 (resources.getDrawable(R.drawable.custom_rectangle_negatif_cr10))
         } else {
             balanceView?.text = String.format(
-                resources.getString(R.string.balance), "+", balance.toString()
+                resources.getString(R.string.euro_price), "+", balance.toString()
             )
             balanceView?.background =
-                (resources.getDrawable(R.drawable.custom_rectangle_positif_cr10))
+                (resources.getDrawable(R.drawable.custom_rectangle_positive_cr10))
         }
         dayConsosView?.text =
-            String.format(resources.getString(R.string.balance), "", dayConsos)
+            String.format(resources.getString(R.string.euro_price), "", dayConsos)
         weekConsosView?.text =
-            String.format(resources.getString(R.string.balance), "", weekConsos)
+            String.format(resources.getString(R.string.euro_price), "", weekConsos)
         monthConsosView?.text =
-            String.format(resources.getString(R.string.balance), "", monthConsos)
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
+            String.format(resources.getString(R.string.euro_price), "", monthConsos)
     }
 
     override fun onAttach(context: Context) {

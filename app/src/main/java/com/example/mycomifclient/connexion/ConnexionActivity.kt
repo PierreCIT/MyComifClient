@@ -28,11 +28,11 @@ class ConnexionActivity : AppCompatActivity() {
         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     private val okHttpClient: OkHttpClient.Builder =
         OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor)
-    private val SERVER_BASE_URL = "https://comif.fr"
+    private val serverBaseUrl = "https://comif.fr"
     private val retrofit = Retrofit.Builder()
         .client(okHttpClient.build())
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(SERVER_BASE_URL)
+        .baseUrl(serverBaseUrl)
         .build()
     private val retrofitHTTPServices = retrofit.create<HTTPServices>(HTTPServices::class.java)
 
@@ -40,7 +40,6 @@ class ConnexionActivity : AppCompatActivity() {
     private lateinit var password: String
 
     private var userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

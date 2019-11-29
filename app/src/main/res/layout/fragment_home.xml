@@ -5,7 +5,6 @@
     android:id="@+id/f_home_constraint_layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorGreyLight"
     android:padding="5dp"
     tools:context=".HomeFragment">
 
@@ -24,11 +23,11 @@
         app:layout_constraintTop_toBottomOf="@id/f_home_image_view_comif_logo" />
 
     <TextView
-        android:id="@+id/f_home_text_view_solde"
+        android:id="@+id/f_home_text_view_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:background="@drawable/custom_rectangle_positif_cr10"
+        android:background="@drawable/custom_rectangle_positive_cr10"
         android:bufferType="normal"
         android:gravity="center"
         android:paddingLeft="15dp"
@@ -42,21 +41,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_user_name" />
 
-    <ProgressBar
-        android:id="@+id/progressbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
-
     <ImageView
         android:id="@+id/f_home_image_view_comif_logo"
         android:layout_width="130dp"
         android:layout_height="115dp"
         android:layout_marginTop="30dp"
+        android:contentDescription="@string/comif_logo"
         android:src="@drawable/ic_comif_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +64,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_solde">
+        app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_balance">
 
         <LinearLayout
             android:id="@+id/f_home_linear_layout_today_stats"
@@ -115,7 +105,6 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:gravity="center"
-                android:text="-13,09 €"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="21sp"
@@ -161,7 +150,6 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:gravity="center"
-                android:text="+77,09 €"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="21sp"
@@ -205,7 +193,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:text="-77,09 €"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="21sp"
