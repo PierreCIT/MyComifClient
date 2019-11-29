@@ -5,7 +5,7 @@
     android:id="@+id/f_home_constraint_layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/beer_wallpaper"
+    android:background="@color/colorGreyLight"
     android:padding="5dp"
     tools:context=".HomeFragment">
 
@@ -42,6 +42,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_user_name" />
 
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
     <ImageView
         android:id="@+id/f_home_image_view_comif_logo"
         android:layout_width="130dp"
@@ -68,7 +78,7 @@
 
         <LinearLayout
             android:id="@+id/f_home_linear_layout_today_stats"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/custom_rectangle_primary_color_cr10"
@@ -114,7 +124,7 @@
 
         <LinearLayout
             android:id="@+id/f_home_linear_layout_this_week_stats"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/custom_rectangle_primary_color_cr10"
@@ -160,7 +170,7 @@
 
         <LinearLayout
             android:id="@+id/f_home_linear_layout_this_month_stats"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/custom_rectangle_primary_color_cr10"
