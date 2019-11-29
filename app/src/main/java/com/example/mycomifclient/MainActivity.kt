@@ -225,7 +225,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     private fun createTransactionsList() {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE)
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE)
         val currentDate = Date().time
         val transactions = transactionDAO.getAll()
 
@@ -234,16 +234,20 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         var monthConsos = 0f
 
         transactions.forEach { transaction ->
+
             val itemsMap: MutableMap<String, Int> = mutableMapOf()
             val items = itemDAO.selectItems(transaction.transactionId)
             var totalTransactionPrice = 0f
+
             val date = transaction.date.split(' ')[0]
             val hour = transaction.date.split(' ')[1]
+            val timeDiff =
+                (currentDate - dateFormat.parse(transaction.date).time) / 1000f / 60f / 60f / 24f
+
             items.forEach { item ->
                 itemsMap[item.itemName] = item.quantity
                 totalTransactionPrice -= item.price * item.quantity / 100f
             }
-            val timeDiff = (currentDate - dateFormat.parse(date).time) / 1000f / 60f / 60f / 24f
             if (timeDiff <= 1 && itemsMap["Recharge"] == null) {
                 dayConsos += totalTransactionPrice
             }

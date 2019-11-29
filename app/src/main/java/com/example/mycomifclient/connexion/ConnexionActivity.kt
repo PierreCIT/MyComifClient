@@ -46,9 +46,11 @@ class ConnexionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connexion)
 
-        this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text = userDAO.getAll().email
+        val user = userDAO.getAll()
+
+        this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text = user.email
         this.findViewById<TextView>(R.id.a_connexion_edit_text_password).text =
-            userDAO.getAll().password
+            user.password
 
         findViewById<Button>(R.id.a_connexion_button_connexion).setOnClickListener {
             id = this.findViewById<EditText>(R.id.a_connexion_edit_text_email).text.toString()
