@@ -1,6 +1,7 @@
+@file:Suppress("KotlinDeprecation", "KotlinDeprecation")
+
 package com.example.mycomifclient.connexion
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -8,8 +9,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mycomifclient.MainActivity
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.ComifDatabase
+import com.example.mycomifclient.database.UserDAO
 import com.example.mycomifclient.database.UserEntity
 import com.example.mycomifclient.serverhandling.HTTPServices
 import com.google.gson.JsonElement
@@ -39,19 +42,21 @@ class ConnexionActivity : AppCompatActivity() {
     private lateinit var id: String
     private lateinit var password: String
 
-    private var userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
+    private lateinit var userDAO: UserDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connexion)
 
-        val user = userDAO.getAll()
+        userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
+        val user = userDAO.getFirst()
 
-        this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text = user.email
+        this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text = user?.email
         this.findViewById<TextView>(R.id.a_connexion_edit_text_password).text =
-            user.password
+            user?.password
 
         findViewById<Button>(R.id.a_connexion_button_connexion).setOnClickListener {
+            findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = false
             id = this.findViewById<EditText>(R.id.a_connexion_edit_text_email).text.toString()
             password =
                 this.findViewById<EditText>(R.id.a_connexion_edit_text_password).text.toString()
@@ -59,9 +64,16 @@ class ConnexionActivity : AppCompatActivity() {
             authenticate(authBody)
         }
         findViewById<Button>(R.id.a_connexion_button_first_connexion).setOnClickListener {
+            findViewById<Button>(R.id.a_first_connexion_button_connexion).isEnabled = false
             val intent = Intent(this, FirstConnexionActivity::class.java)
             this.startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = true
+        findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = true
     }
 
     private fun createAuthBody(username: String, password: String): JsonObject {
@@ -80,7 +92,6 @@ class ConnexionActivity : AppCompatActivity() {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 when (response.raw().code()) {
 
-                    //TODO: Implement bearer token in the header of the POST request
                     200 -> handleAuthenticationResponse(response.body())
 
                     401 -> Toast.makeText(
@@ -151,7 +162,8 @@ class ConnexionActivity : AppCompatActivity() {
             )
             userDAO.nukeTable()
             userDAO.insert(userEntity)
-            stopActivityAndReturnResult()
+            val intent = Intent(this, MainActivity::class.java)
+            this.startActivity(intent)
         }
     }
 
@@ -162,12 +174,5 @@ class ConnexionActivity : AppCompatActivity() {
     private fun reconnect() {
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
-    }
-
-    private fun stopActivityAndReturnResult() {
-        val returnIntent = Intent()
-        returnIntent.putExtra("User connected", 0)
-        setResult(Activity.RESULT_OK, returnIntent)
-        finish()
     }
 }
