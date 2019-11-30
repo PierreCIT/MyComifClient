@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableRow
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import java.util.*
 
@@ -25,6 +27,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        toggleViewStatus(View.INVISIBLE)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -94,8 +97,21 @@ class HomeFragment : Fragment() {
     }
 
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
+    }
+
+    fun toggleViewStatus(status: Int) {
+        view?.findViewById<TextView>(R.id.f_home_text_view_user_name)?.visibility = status
+        view?.findViewById<TextView>(R.id.f_home_text_view_balance)?.visibility = status
+        view?.findViewById<TableRow>(R.id.table_row_stats)?.visibility = status
+
+        if (status == View.VISIBLE) {
+            view?.findViewById<ConstraintLayout>(R.id.constraint_layout_progress_bar)?.visibility =
+                View.INVISIBLE
+        } else {
+            view?.findViewById<ConstraintLayout>(R.id.constraint_layout_progress_bar)?.visibility =
+                View.VISIBLE
+        }
     }
 
 }

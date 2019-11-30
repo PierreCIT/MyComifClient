@@ -18,10 +18,6 @@ data class UserEntity(
 
 @Dao
 interface UserDAO {
-
-    @Query("SELECT * FROM UserEntity")
-    fun getAll(): UserEntity
-
     @Query("SELECT * FROM UserEntity LIMIT 1")
     fun getFirst(): UserEntity
 

@@ -65,12 +65,13 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
 
+        user = userDAO.getFirst()
+        getTransactions()
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(a_main_toolbar)
 
-        val intent = Intent(this, ConnexionActivity::class.java)
-        this.startActivityForResult(intent, 1)
-
+        homeFragment.toggleViewStatus(View.INVISIBLE)
         adapter.addFragment(homeFragment, "Home")
         adapter.addFragment(transactionFragment, "Transactions")
         a_main_view_pager.adapter = adapter
@@ -261,17 +262,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
             "%.2f".format(weekConsos),
             "%.2f".format(monthConsos)
         )
+        homeFragment.toggleViewStatus(View.VISIBLE)
     }
 
     private fun reconnect() {
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        user = userDAO.getFirst()
-        homeFragment.updateViews(user.firstName, user.lastName, user.balance / 100f, "", "", "")
-        getTransactions()
     }
 }
