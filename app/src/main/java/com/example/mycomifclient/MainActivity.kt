@@ -118,6 +118,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
             R.id.action_logout -> {
                 val intent = Intent(this, ConnexionActivity::class.java)
                 this.startActivity(intent)
+                this.finish()
                 true
             }
             R.id.action_information -> {
