@@ -123,6 +123,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
             R.id.action_logout -> {
                 startConnexionActivity()
                 setSharedPrefConnexionStatus(false)
+                userDAO.updateToken("")
                 true
             }
             R.id.action_information -> {
