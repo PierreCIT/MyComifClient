@@ -3,6 +3,7 @@ package com.example.mycomifclient
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
@@ -34,8 +35,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import kotlin.collections.ArrayList
 
+const val CONNEXION_STATUS_KEY = "CONNEXION_STATUS"
+
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
+    lateinit var sharedPref: SharedPreferences
 
     private val homeFragment = HomeFragment()
     private val transactionFragment = TransactionFragment()
@@ -62,6 +66,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        sharedPref = getPreferences(Context.MODE_PRIVATE)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(a_main_toolbar)
@@ -116,9 +121,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                val intent = Intent(this, ConnexionActivity::class.java)
-                this.startActivity(intent)
-                this.finish()
+                startConnexionActivity()
+                setSharedPrefConnexionStatus(false)
                 true
             }
             R.id.action_information -> {
@@ -126,6 +130,18 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun startConnexionActivity() {
+        val intent = Intent(this, ConnexionActivity::class.java)
+        this.startActivity(intent)
+        this.finish()
+    }
+
+    private fun checkConnexionStatus() {
+        if(!sharedPref.getBoolean(CONNEXION_STATUS_KEY, false)) {
+            startConnexionActivity()
         }
     }
 
@@ -142,11 +158,19 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onResume() {
         super.onResume()
         checkConnectivity(this)
+        // TODO: Uncomment this line
+        //checkConnexionStatus()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) hideSystemUI()
+    }
+
+    private fun setSharedPrefConnexionStatus(bool: Boolean) {
+        val editor = sharedPref.edit()
+        editor.putBoolean(CONNEXION_STATUS_KEY, bool)
+        editor.apply()
     }
 
     private fun hideSystemUI() {
