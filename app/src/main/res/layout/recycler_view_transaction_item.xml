@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/recycler_view_transaction_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
@@ -10,7 +9,6 @@
     android:orientation="horizontal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/recycler_view_transaction_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -35,7 +33,6 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/recycler_view_transaction_text_view_dash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

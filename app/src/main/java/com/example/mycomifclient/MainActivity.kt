@@ -71,7 +71,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         setContentView(R.layout.activity_main)
         setSupportActionBar(a_main_toolbar)
 
-        homeFragment.toggleViewStatus(View.INVISIBLE)
         adapter.addFragment(homeFragment, "Home")
         adapter.addFragment(transactionFragment, "Transactions")
         a_main_view_pager.adapter = adapter
@@ -105,7 +104,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                // Toast.makeText(this@MainActivity, "Settings", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(baseContext, "Settings", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, ConnexionActivity::class.java)
                 this.startActivity(intent)
                 true
@@ -171,7 +170,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 }
 
                 override fun onFailure(call: Call<JsonArray>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "Error: $t", Toast.LENGTH_LONG).show()
+                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
                 }
             })
     }

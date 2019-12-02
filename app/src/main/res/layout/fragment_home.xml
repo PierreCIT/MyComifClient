@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/f_home_constraint_layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
@@ -67,7 +66,6 @@
         app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_balance">
 
         <LinearLayout
-            android:id="@+id/f_home_linear_layout_today_stats"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -77,7 +75,6 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/f_home_text_view_today_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -89,7 +86,6 @@
                 android:textSize="18sp" />
 
             <View
-                android:id="@+id/f_home_divider_today"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
@@ -112,7 +108,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/f_home_linear_layout_this_week_stats"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -121,7 +116,6 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/f_home_text_view_this_week_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -134,7 +128,6 @@
                 android:textSize="18sp" />
 
             <View
-                android:id="@+id/f_home_divider_this_week"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
@@ -157,7 +150,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/f_home_linear_layout_this_month_stats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -166,7 +158,6 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/f_home_text_view_this_month_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -178,7 +169,6 @@
                 android:textSize="18sp" />
 
             <View
-                android:id="@+id/f_home_divider_this_month"
                 android:layout_width="80dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
@@ -213,7 +203,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ProgressBar
-            android:id="@+id/progress_bar_home_fragment"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
