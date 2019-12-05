@@ -265,6 +265,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     private fun reconnect() {
+        finish()
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
     }
