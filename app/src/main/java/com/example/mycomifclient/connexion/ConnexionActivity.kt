@@ -162,6 +162,7 @@ class ConnexionActivity : AppCompatActivity() {
             )
             userDAO.nukeTable()
             userDAO.insert(userEntity)
+            finish()
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)
         }
