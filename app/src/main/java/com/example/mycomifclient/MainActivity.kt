@@ -234,19 +234,19 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
             val date = transaction.date.split(' ')[0]
             val hour = transaction.date.split(' ')[1]
             val timeDiff =
-                (currentDate - dateFormat.parse(transaction.date).time) / 1000f / 60f / 60f / 24f
+                (currentDate - dateFormat.parse(transaction.date).time) / 1000 / 60 / 60 / 24
 
             items.forEach { item ->
                 itemsMap[item.itemName] = item.quantity
                 totalTransactionPrice -= item.price * item.quantity / 100f
             }
-            if (timeDiff <= 1 && itemsMap["Recharge"] == null) {
+            if (timeDiff <= 1 && transaction.type == "debit") {
                 dayConsos += totalTransactionPrice
             }
-            if (timeDiff <= 7 && itemsMap["Recharge"] == null) {
+            if (timeDiff <= 7 && transaction.type == "debit") {
                 weekConsos += totalTransactionPrice
             }
-            if (timeDiff <= 30 && itemsMap["Recharge"] == null) {
+            if (timeDiff <= 30 && transaction.type == "debit") {
                 monthConsos += totalTransactionPrice
             }
             transactionList.add(Transaction(date, hour, itemsMap, totalTransactionPrice.toString()))
