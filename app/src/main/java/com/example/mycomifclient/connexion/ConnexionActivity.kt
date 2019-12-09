@@ -164,6 +164,7 @@ class ConnexionActivity : AppCompatActivity() {
     }
 
     private fun reconnect() {
+        finish()
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
     }

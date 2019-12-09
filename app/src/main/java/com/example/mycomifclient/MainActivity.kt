@@ -66,6 +66,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
 
         user = userDAO.getFirst()
+        if (!::user.isInitialized) {
+            reconnect()
+        }
         getTransactions()
 
         setContentView(R.layout.activity_main)
