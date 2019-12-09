@@ -39,9 +39,6 @@ class ConnexionActivity : AppCompatActivity() {
         .build()
     private val retrofitHTTPServices = retrofit.create<HTTPServices>(HTTPServices::class.java)
 
-    private lateinit var id: String
-    private lateinit var password: String
-
     private lateinit var userDAO: UserDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,13 +49,11 @@ class ConnexionActivity : AppCompatActivity() {
         val user = userDAO.getFirst()
 
         this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text = user?.email
-        this.findViewById<TextView>(R.id.a_connexion_edit_text_password).text =
-            user?.password
 
         findViewById<Button>(R.id.a_connexion_button_connexion).setOnClickListener {
             findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = false
-            id = this.findViewById<EditText>(R.id.a_connexion_edit_text_email).text.toString()
-            password =
+            val id = this.findViewById<EditText>(R.id.a_connexion_edit_text_email).text.toString()
+            val password =
                 this.findViewById<EditText>(R.id.a_connexion_edit_text_password).text.toString()
             val authBody: JsonObject = createAuthBody(id, password)
             authenticate(authBody)
@@ -110,9 +105,8 @@ class ConnexionActivity : AppCompatActivity() {
         })
     }
 
-    private fun getUser() {
-        val user = userDAO.getFirst()
-        retrofitHTTPServices.getUser(218, "Bearer " + user.token)
+    private fun getUser(token: String) {
+        retrofitHTTPServices.getUser(218, "Bearer $token")
             .enqueue(object : Callback<JsonObject> {
                 override fun onResponse(
                     call: Call<JsonObject>,
@@ -120,7 +114,7 @@ class ConnexionActivity : AppCompatActivity() {
                 ) {
                     when (response.raw().code()) {
 
-                        200 -> handleGetUserResponse(response.body())
+                        200 -> handleGetUserResponse(response.body(), token)
 
                         401 -> reconnect()
 
@@ -143,21 +137,18 @@ class ConnexionActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
         } else {
-            userDAO.insert(UserEntity(1, "", "", id, password, removeQuotes(token), 0))
-            getUser()
+            getUser(removeQuotes(token))
         }
     }
 
-    private fun handleGetUserResponse(body: JsonObject?) {
+    private fun handleGetUserResponse(body: JsonObject?, token: String) {
         if (body != null) {
-            val user = userDAO.getFirst()
             val userEntity = UserEntity(
                 body.get("id").asInt,
                 removeQuotes(body.get("first_name")),
                 removeQuotes(body.get("last_name")),
                 removeQuotes(body.get("email")),
-                user.password,
-                user.token,
+                token,
                 body.get("balance").asInt
             )
             userDAO.nukeTable()

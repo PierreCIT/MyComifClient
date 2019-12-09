@@ -11,7 +11,6 @@ data class UserEntity(
     @ColumnInfo(name = "last_name")
     val lastName: String,
     val email: String,
-    val password: String,
     val token: String,
     val balance: Int
 )
