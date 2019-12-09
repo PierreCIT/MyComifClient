@@ -64,7 +64,7 @@ class ConnexionActivity : AppCompatActivity() {
             authenticate(authBody)
         }
         findViewById<Button>(R.id.a_connexion_button_first_connexion).setOnClickListener {
-            findViewById<Button>(R.id.a_first_connexion_button_connexion).isEnabled = false
+            findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = false
             val intent = Intent(this, FirstConnexionActivity::class.java)
             this.startActivity(intent)
         }
