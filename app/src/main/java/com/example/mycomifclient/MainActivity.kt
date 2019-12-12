@@ -188,31 +188,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
     }
-
-    private fun authenticate(authBody: JsonObject) {
-
-        retrofitHTTPServices.authenticate(authBody).enqueue(object : Callback<JsonObject> {
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                when (response.raw().code()) {
-
-                    //TODO: Implement bearer token in the header of the POST request
-                    200 -> handleAuthenticationResponse(response.body())
-
-                    401 -> Toast.makeText(
-                        baseContext,
-                        "Unauthorised request",
-                        Toast.LENGTH_LONG
-                    ).show()
-
-                    else -> println("Error")
-                }
-            }
-
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Error: $t", Toast.LENGTH_LONG).show()
-            }
-        })
-    }
       
     private fun getTransactions() {
         val user = userDAO.getFirst()
