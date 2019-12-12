@@ -11,17 +11,12 @@ data class UserEntity(
     @ColumnInfo(name = "last_name")
     val lastName: String,
     val email: String,
-    val password: String,
     val token: String,
     val balance: Int
 )
 
 @Dao
 interface UserDAO {
-
-    @Query("SELECT * FROM UserEntity")
-    fun getAll(): UserEntity
-
     @Query("SELECT * FROM UserEntity LIMIT 1")
     fun getFirst(): UserEntity
 

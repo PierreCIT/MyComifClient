@@ -2,11 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/f_home_constraint_layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/beer_wallpaper"
-    android:padding="5dp"
+    android:background="@color/colorBackground"
     tools:context=".HomeFragment">
 
 
@@ -16,19 +14,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:gravity="center"
-        android:textColor="@color/colorWhite"
-        android:textSize="28sp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/f_home_image_view_comif_logo" />
 
     <TextView
-        android:id="@+id/f_home_text_view_solde"
+        android:id="@+id/f_home_text_view_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:background="@drawable/custom_rectangle_positif_cr10"
+        android:background="@drawable/custom_rectangle_positive_cr10"
         android:bufferType="normal"
         android:gravity="center"
         android:paddingLeft="15dp"
@@ -47,6 +45,7 @@
         android:layout_width="130dp"
         android:layout_height="115dp"
         android:layout_marginTop="30dp"
+        android:contentDescription="@string/comif_logo"
         android:src="@drawable/ic_comif_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,11 +63,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_solde">
+        app:layout_constraintTop_toBottomOf="@+id/f_home_text_view_balance">
 
         <LinearLayout
-            android:id="@+id/f_home_linear_layout_today_stats"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/custom_rectangle_primary_color_cr10"
@@ -77,7 +75,6 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/f_home_text_view_today_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -89,7 +86,6 @@
                 android:textSize="18sp" />
 
             <View
-                android:id="@+id/f_home_divider_today"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
@@ -105,7 +101,6 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:gravity="center"
-                android:text="-13,09 €"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="21sp"
@@ -113,8 +108,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/f_home_linear_layout_this_week_stats"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/custom_rectangle_primary_color_cr10"
@@ -122,7 +116,6 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/f_home_text_view_this_week_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -135,7 +128,6 @@
                 android:textSize="18sp" />
 
             <View
-                android:id="@+id/f_home_divider_this_week"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
@@ -151,7 +143,6 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:gravity="center"
-                android:text="+77,09 €"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="21sp"
@@ -159,8 +150,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/f_home_linear_layout_this_month_stats"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/custom_rectangle_primary_color_cr10"
@@ -168,7 +158,6 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/f_home_text_view_this_month_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -180,7 +169,6 @@
                 android:textSize="18sp" />
 
             <View
-                android:id="@+id/f_home_divider_this_month"
                 android:layout_width="80dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
@@ -195,7 +183,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:text="-77,09 €"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="21sp"
@@ -204,5 +191,26 @@
         </LinearLayout>
 
     </TableRow>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_progress_bar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorLightGrey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

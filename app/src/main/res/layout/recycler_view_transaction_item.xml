@@ -3,59 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/custom_rectangle_recycler_view_item"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:id="@+id/recycler_view_transaction_item"
-    android:background="@drawable/custom_rectangle_white_cr10"
-    android:layout_margin="5dp">
+    android:orientation="horizontal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recycler_view_transaction_constraint_layout">
+        android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/recycler_view_transaction_relative_layout_date_hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/recycler_view_transaction_relative_layout_date_hour"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/recycler_view_transaction_text_view_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date"
-                android:textSize="14sp"
-                android:textColor="@color/colorBlack"
-                android:textStyle="bold"
+                android:layout_gravity="center"
                 android:layout_marginEnd="8dp"
-                android:layout_gravity="center"/>
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/recycler_view_transaction_text_view_dash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-"
-                android:textSize="14sp"
+                android:layout_gravity="center"
                 android:textColor="@color/colorBlack"
-                android:textStyle="bold"
-                android:layout_gravity="center"/>
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/recycler_view_transaction_text_view_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hour"
-                android:textSize="14sp"
-                android:textColor="@color/colorBlack"
-                android:textStyle="bold"
-                android:layout_marginEnd="8dp"
+                android:layout_gravity="center"
                 android:layout_marginStart="8dp"
-                android:layout_gravity="center"/>
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
@@ -65,7 +59,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="5dp"
-            android:text="Product xQuantities"
             android:textColor="@color/colorBlack"
             android:textSize="16sp"
             android:textStyle="normal"
@@ -78,13 +71,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/custom_rectangle_positif_cr10"
+            android:background="@drawable/custom_rectangle_positive_cr10"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
-            android:text="  Price €  "
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
             android:textSize="20sp"

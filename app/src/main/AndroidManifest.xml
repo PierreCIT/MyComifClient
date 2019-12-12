@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".connexion.FirstConnexionActivity"></activity>
+        <activity android:name=".connexion.FirstConnexionActivity" />
         <activity android:name=".connexion.ConnexionActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

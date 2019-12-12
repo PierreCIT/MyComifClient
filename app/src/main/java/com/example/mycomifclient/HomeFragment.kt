@@ -6,63 +6,80 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableRow
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import java.util.*
 
 class HomeFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
-    var firstName: String? = "My"
-    var lastName: String? = "friend"
-    var balance: Float = 0f
 
-    lateinit var balanceView: TextView
-    lateinit var nameView: TextView
+    private lateinit var firstName: String
+    private lateinit var lastName: String
+    private lateinit var dayConsos: String
+    private lateinit var weekConsos: String
+    private lateinit var monthConsos: String
+
+    private var balance = 0f
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
-        balanceView = view.findViewById<TextView>(R.id.f_home_text_view_solde)
-        nameView = view.findViewById<TextView>(R.id.f_home_text_view_user_name)
-
-        updateNameAndBalance(firstName, lastName, balance)
-
-        return view
+        toggleViewStatus(View.INVISIBLE)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    fun updateNameAndBalance(firstName: String?, lastName: String?, balance: Float){
+    fun updateViews(
+        firstName: String,
+        lastName: String,
+        balance: Float,
+        dayConsos: String,
+        weekConsos: String,
+        monthConsos: String
+    ) {
 
         this.firstName = firstName
         this.lastName = lastName
         this.balance = balance
+        this.dayConsos = dayConsos
+        this.weekConsos = weekConsos
+        this.monthConsos = monthConsos
 
-        nameView.text = String.format(
-            "Hello %s %s", firstName, lastName?.toUpperCase(
+        val nameView = view?.findViewById<TextView>(R.id.f_home_text_view_user_name)
+        val balanceView = view?.findViewById<TextView>(R.id.f_home_text_view_balance)
+        val dayConsosView = view?.findViewById<TextView>(R.id.f_home_text_view_today_total)
+        val weekConsosView = view?.findViewById<TextView>(R.id.f_home_text_view_this_week_total)
+        val monthConsosView = view?.findViewById<TextView>(R.id.f_home_text_view_this_month_total)
+
+        nameView?.text = String.format(
+            resources.getString(
+                R.string.first_last_name
+            ), firstName, lastName.toUpperCase(
                 Locale.FRANCE
             )
         )
 
         if (balance < 0) {
-            balanceView.text = String.format(
-                resources.getString(R.string.balance), "-", balance.toString()
+            balanceView?.text = String.format(
+                resources.getString(R.string.euro_price), "", balance.toString()
             )
-            balanceView.background =
+            balanceView?.background =
                 (resources.getDrawable(R.drawable.custom_rectangle_negatif_cr10))
         } else {
-            balanceView.text = String.format(
-                resources.getString(R.string.balance), "+", balance.toString()
+            balanceView?.text = String.format(
+                resources.getString(R.string.euro_price), "+", balance.toString()
             )
-            balanceView.background =
-                (resources.getDrawable(R.drawable.custom_rectangle_positif_cr10))
+            balanceView?.background =
+                (resources.getDrawable(R.drawable.custom_rectangle_positive_cr10))
         }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
+        dayConsosView?.text =
+            String.format(resources.getString(R.string.euro_price), "", dayConsos)
+        weekConsosView?.text =
+            String.format(resources.getString(R.string.euro_price), "", weekConsos)
+        monthConsosView?.text =
+            String.format(resources.getString(R.string.euro_price), "", monthConsos)
     }
 
     override fun onAttach(context: Context) {
@@ -80,8 +97,21 @@ class HomeFragment : Fragment() {
     }
 
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
+    }
+
+    fun toggleViewStatus(status: Int) {
+        view?.findViewById<TextView>(R.id.f_home_text_view_user_name)?.visibility = status
+        view?.findViewById<TextView>(R.id.f_home_text_view_balance)?.visibility = status
+        view?.findViewById<TableRow>(R.id.table_row_stats)?.visibility = status
+
+        if (status == View.VISIBLE) {
+            view?.findViewById<ConstraintLayout>(R.id.constraint_layout_progress_bar)?.visibility =
+                View.INVISIBLE
+        } else {
+            view?.findViewById<ConstraintLayout>(R.id.constraint_layout_progress_bar)?.visibility =
+                View.VISIBLE
+        }
     }
 
 }
