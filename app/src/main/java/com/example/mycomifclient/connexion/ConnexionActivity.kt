@@ -89,11 +89,7 @@ class ConnexionActivity : AppCompatActivity() {
 
                     200 -> handleAuthenticationResponse(response.body())
 
-                    401 -> Toast.makeText(
-                        this@ConnexionActivity,
-                        "Wrong credentials, please try again",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    401 -> handle401Response()
 
                     else -> println("Error")
                 }
@@ -167,5 +163,14 @@ class ConnexionActivity : AppCompatActivity() {
         finish()
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
+    }
+
+    private fun handle401Response() {
+        Toast.makeText(
+            this@ConnexionActivity,
+            "Wrong credentials, please try again",
+            Toast.LENGTH_LONG
+        ).show()
+        findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = true
     }
 }
