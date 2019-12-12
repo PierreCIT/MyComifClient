@@ -68,16 +68,17 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         user = userDAO.getFirst()
         if (!::user.isInitialized) {
             reconnect()
+        } else {
+            getTransactions()
+
+            setContentView(R.layout.activity_main)
+            setSupportActionBar(a_main_toolbar)
+
+            adapter.addFragment(homeFragment, "Home")
+            adapter.addFragment(transactionFragment, "Transactions")
+            a_main_view_pager.adapter = adapter
+            tabs.setupWithViewPager(a_main_view_pager)
         }
-        getTransactions()
-
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(a_main_toolbar)
-
-        adapter.addFragment(homeFragment, "Home")
-        adapter.addFragment(transactionFragment, "Transactions")
-        a_main_view_pager.adapter = adapter
-        tabs.setupWithViewPager(a_main_view_pager)
     }
 
     private fun checkConnectivity(context: Context) {
