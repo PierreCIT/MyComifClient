@@ -19,4 +19,6 @@
     <string name="password_by_email">Your new password was sent by email. Please check your emails.</string>
     <string name="comif_logo">Comif\' Logo</string>
     <string name="todo">TODO</string>
+    <string name="logout">Logout</string>
+    <string name="info">Information</string>
 </resources>

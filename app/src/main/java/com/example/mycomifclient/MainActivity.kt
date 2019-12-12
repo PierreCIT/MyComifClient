@@ -2,6 +2,7 @@ package com.example.mycomifclient
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
@@ -31,8 +32,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+const val CONNEXION_STATUS_KEY = "CONNEXION_STATUS"
+
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
+    lateinit var sharedPref: SharedPreferences
 
     private val homeFragment = HomeFragment()
     private val transactionFragment = TransactionFragment()
@@ -59,6 +63,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     private lateinit var user: UserEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        sharedPref = getPreferences(Context.MODE_PRIVATE)
         super.onCreate(savedInstanceState)
 
         userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
@@ -107,13 +112,29 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> {
-                // Toast.makeText(baseContext, "Settings", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, ConnexionActivity::class.java)
-                this.startActivity(intent)
+            R.id.action_logout -> {
+                startConnexionActivity()
+                setSharedPrefConnexionStatus(false)
+                userDAO.updateToken("")
+                true
+            }
+            R.id.action_information -> {
+                Toast.makeText(baseContext, "Not implemented yet", Toast.LENGTH_LONG).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun startConnexionActivity() {
+        val intent = Intent(this, ConnexionActivity::class.java)
+        this.startActivity(intent)
+        this.finish()
+    }
+
+    private fun checkConnexionStatus() {
+        if(!sharedPref.getBoolean(CONNEXION_STATUS_KEY, false)) {
+            startConnexionActivity()
         }
     }
 
@@ -130,11 +151,19 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onResume() {
         super.onResume()
         checkConnectivity(this)
+        // TODO: Uncomment this line
+        //checkConnexionStatus()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) hideSystemUI()
+    }
+
+    private fun setSharedPrefConnexionStatus(bool: Boolean) {
+        val editor = sharedPref.edit()
+        editor.putBoolean(CONNEXION_STATUS_KEY, bool)
+        editor.apply()
     }
 
     private fun hideSystemUI() {
@@ -152,6 +181,39 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
 
+    // Shows the system bars by removing all the flags
+    // except for the ones that make the content appear under the system bars.
+    private fun showSystemUI() {
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+    }
+
+    private fun authenticate(authBody: JsonObject) {
+
+        retrofitHTTPServices.authenticate(authBody).enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                when (response.raw().code()) {
+
+                    //TODO: Implement bearer token in the header of the POST request
+                    200 -> handleAuthenticationResponse(response.body())
+
+                    401 -> Toast.makeText(
+                        baseContext,
+                        "Unauthorised request",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    else -> println("Error")
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error: $t", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+      
     private fun getTransactions() {
         val user = userDAO.getFirst()
         retrofitHTTPServices.getTransactions(
