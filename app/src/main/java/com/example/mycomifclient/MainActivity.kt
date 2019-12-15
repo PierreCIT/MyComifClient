@@ -282,7 +282,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 itemsMap[item.itemName] = item.quantity
                 totalTransactionPrice -= item.price * item.quantity / 100f
             }
-            println(timeDiff)
+
             if (timeDiff <= 1 && transaction.type == "debit") {
                 dayConsos += totalTransactionPrice
             }
