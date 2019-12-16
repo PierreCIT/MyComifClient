@@ -24,7 +24,7 @@ interface UserDAO {
     fun insert(vararg userEntity: UserEntity)
 
     @Query("DELETE FROM UserEntity")
-    fun nukeTable()
+    fun nukeUserTable()
 
     @Query("UPDATE UserEntity SET token = :token")
     fun updateToken(token: String)

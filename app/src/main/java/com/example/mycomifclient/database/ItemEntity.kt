@@ -30,4 +30,7 @@ interface ItemDAO {
     @Delete
     fun delete(itemEntity: ItemEntity)
 
+    @Query("DELETE FROM ItemEntity")
+    fun nukeItemTable()
+
 }
