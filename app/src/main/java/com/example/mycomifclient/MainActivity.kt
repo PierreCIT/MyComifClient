@@ -297,7 +297,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                     date,
                     hour,
                     itemsMap,
-                    "%.2f".format(totalTransactionPrice)
+                    totalTransactionPrice.toString()
                 )
             )
         }

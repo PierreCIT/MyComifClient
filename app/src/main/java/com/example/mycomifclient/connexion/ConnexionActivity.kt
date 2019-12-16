@@ -102,7 +102,7 @@ class ConnexionActivity : AppCompatActivity() {
     }
 
     private fun getUser(token: String) {
-        retrofitHTTPServices.getUser(218, "Bearer $token")
+        retrofitHTTPServices.getUser("Bearer $token")
             .enqueue(object : Callback<JsonObject> {
                 override fun onResponse(
                     call: Call<JsonObject>,

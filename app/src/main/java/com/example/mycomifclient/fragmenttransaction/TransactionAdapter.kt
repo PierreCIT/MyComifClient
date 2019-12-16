@@ -26,18 +26,21 @@ class TransactionAdapter(private val transactions: ArrayList<Transaction>) :
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val (date, hour, product, price) = this.transactions[position]
-        holder.transactionDate.text = date
-        holder.transactionHour.text = hour
-        holder.transactionProducts.text = mutableMapOfToString(product)
-        holder.transactionPrice.text = "$price €"
 
-        if (price.toDouble() < 0.0) {
+        val castedPriceToDouble = price.toDouble()
+
+        if (castedPriceToDouble < 0.0) {
             holder.transactionPrice.background =
                 ContextCompat.getDrawable(parent.context, R.drawable.custom_rectangle_negatif_cr10)
         } else {
             holder.transactionPrice.background =
                 ContextCompat.getDrawable(parent.context, R.drawable.custom_rectangle_positive_cr10)
         }
+
+        holder.transactionDate.text = date
+        holder.transactionHour.text = hour
+        holder.transactionProducts.text = mutableMapOfToString(product)
+        holder.transactionPrice.text = "%.2f".format(castedPriceToDouble) + " €"
     }
 
     private fun mutableMapOfToString(map: MutableMap<String, Int>): String {
