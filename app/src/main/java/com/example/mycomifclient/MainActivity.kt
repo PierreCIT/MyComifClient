@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mycomifclient.connexion.ChangePasswordActivity
 import com.example.mycomifclient.connexion.ConnexionActivity
 import com.example.mycomifclient.database.*
 import com.example.mycomifclient.fragmenttransaction.Transaction
@@ -117,19 +118,28 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                startConnexionActivity()
-                setSharedPrefConnexionStatus(false)
-                userDAO.updateToken("")
-                transactionDAO.nukeTransactionTable()
-                itemDAO.nukeItemTable()
+                logout()
                 true
             }
             R.id.action_information -> {
                 Toast.makeText(baseContext, "Not implemented yet", Toast.LENGTH_LONG).show()
                 true
             }
+            R.id.change_password -> {
+                val intent = Intent(this, ChangePasswordActivity::class.java)
+                this.startActivity(intent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun logout() {
+        startConnexionActivity()
+        setSharedPrefConnexionStatus(false)
+        userDAO.updateToken("")
+        transactionDAO.nukeTransactionTable()
+        itemDAO.nukeItemTable()
     }
 
     private fun startConnexionActivity() {
