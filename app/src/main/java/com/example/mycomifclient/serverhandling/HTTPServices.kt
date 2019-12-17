@@ -16,8 +16,14 @@ interface HTTPServices {
         @Header("Authorization") bearerToken: String
     ): Call<JsonArray>
 
-    //TODO: implement authenticate function
     @POST("api/users/login")
     @Headers("Content-Type:application/json")
     fun authenticate(@Body request: JsonObject): Call<JsonObject>
+
+    @POST("api/users/reset")
+    @Headers("Content-Type:application/json")
+    fun resetPassword(
+        @Header("Authorization") bearerToken: String,
+        @Body request: JsonObject
+    ): Call<JsonObject>
 }

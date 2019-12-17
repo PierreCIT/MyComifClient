@@ -277,7 +277,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         val currentDate = Date().time
         val transactions = transactionDAO.getAll()
 
-        //TODO: Fix the statistics, as they are not accurate actually
         var dayConsos = 0f
         var weekConsos = 0f
         var monthConsos = 0f
