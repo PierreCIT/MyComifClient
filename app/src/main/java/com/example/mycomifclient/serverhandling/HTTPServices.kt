@@ -1,8 +1,11 @@
 package com.example.mycomifclient.serverhandling
 
+import com.example.mycomifclient.UnsafeHTTPClient
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
 interface HTTPServices {
@@ -26,4 +29,24 @@ interface HTTPServices {
         @Header("Authorization") bearerToken: String,
         @Body request: JsonObject
     ): Call<JsonObject>
+
+    companion object {
+
+        fun create(isSafeConnexion: Boolean): HTTPServices {
+
+            val retrofit: Retrofit = if (isSafeConnexion) {
+                Retrofit.Builder()
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl("https://dev.comif.fr")
+                    .build()
+            } else {
+                Retrofit.Builder()
+                    .client(UnsafeHTTPClient.getUnsafeOkHttpClient().build())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl("https://dev.comif.fr")
+                    .build()
+            }
+            return retrofit.create(HTTPServices::class.java)
+        }
+    }
 }

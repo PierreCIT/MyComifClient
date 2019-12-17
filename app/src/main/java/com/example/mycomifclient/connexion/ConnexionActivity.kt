@@ -11,33 +11,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.MainActivity
 import com.example.mycomifclient.R
-import com.example.mycomifclient.UnsafeHTTPClient
 import com.example.mycomifclient.database.*
 import com.example.mycomifclient.serverhandling.HTTPServices
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class ConnexionActivity : AppCompatActivity() {
 
-    private val httpLoggingInterceptor =
-        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-
     //TODO: use basic okHttpClient when the API will be put in production
-    private val okHttpClient: OkHttpClient.Builder = UnsafeHTTPClient.getUnsafeOkHttpClient()
-    private val serverBaseUrl = "https://dev.comif.fr"
-    private val retrofit = Retrofit.Builder()
-        .client(okHttpClient.build())
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(serverBaseUrl)
-        .build()
-    private val retrofitHTTPServices = retrofit.create<HTTPServices>(HTTPServices::class.java)
+    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
 
     private lateinit var userDAO: UserDAO
     private lateinit var transactionDAO: TransactionDAO
