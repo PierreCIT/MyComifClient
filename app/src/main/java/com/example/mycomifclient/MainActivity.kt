@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
 
         user = userDAO.getFirst()
-        if (!::user.isInitialized) {
+        if (!::user.isInitialized || user.token.isBlank()) {
             reconnect()
         } else {
             getTransactions()
@@ -314,6 +314,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     private fun reconnect() {
+        logout()
         finish()
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)

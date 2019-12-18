@@ -1,6 +1,7 @@
 package com.example.mycomifclient
 
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import java.security.cert.CertificateException
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -40,6 +41,11 @@ class UnsafeHTTPClient {
                 val builder = OkHttpClient.Builder()
                 builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
                 builder.hostnameVerifier { _, _ -> true }
+
+                val httpLoggingInterceptor =
+                    HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
+                builder.addInterceptor(httpLoggingInterceptor)
 
                 return builder
             } catch (e: Exception) {
