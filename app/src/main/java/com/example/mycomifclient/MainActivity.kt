@@ -318,9 +318,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     private fun reconnect() {
         logout()
-        this.finish()
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
+        this.finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

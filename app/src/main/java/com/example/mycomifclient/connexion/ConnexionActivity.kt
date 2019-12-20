@@ -19,6 +19,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+const val FIRST_CONNEXION = 1
+
 class ConnexionActivity : AppCompatActivity() {
 
     //TODO: use basic okHttpClient when the API will be put in production
@@ -51,7 +53,7 @@ class ConnexionActivity : AppCompatActivity() {
         findViewById<Button>(R.id.a_connexion_button_first_connexion).setOnClickListener {
             findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = false
             val intent = Intent(this, FirstConnexionActivity::class.java)
-            this.startActivity(intent)
+            this.startActivityForResult(intent, FIRST_CONNEXION)
         }
     }
 
@@ -139,12 +141,11 @@ class ConnexionActivity : AppCompatActivity() {
             )
 
             userDAO.nukeUserTable()
-
             userDAO.insert(userEntity)
 
-            finish()
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)
+            finish()
         }
     }
 
@@ -153,9 +154,9 @@ class ConnexionActivity : AppCompatActivity() {
     }
 
     private fun reconnect() {
-        finish()
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
+        finish()
     }
 
     private fun handle401Response() {
