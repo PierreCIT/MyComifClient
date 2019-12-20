@@ -1,5 +1,6 @@
 package com.example.mycomifclient
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -30,9 +31,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 const val CONNEXION_STATUS_KEY = "CONNEXION_STATUS"
+const val CHANGE_PASSWORD = 1
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
+
     lateinit var sharedPref: SharedPreferences
 
     private val homeFragment = HomeFragment()
@@ -112,19 +115,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
             }
             R.id.change_password -> {
                 val intent = Intent(this, ChangePasswordActivity::class.java)
-                this.startActivity(intent)
+                this.startActivityForResult(intent, CHANGE_PASSWORD)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun logout() {
-        startConnexionActivity()
-        setSharedPrefConnexionStatus(false)
-        userDAO.updateToken("")
-        transactionDAO.nukeTransactionTable()
-        itemDAO.nukeItemTable()
     }
 
     private fun startConnexionActivity() {
@@ -313,10 +308,33 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         homeFragment.toggleViewStatus(View.VISIBLE)
     }
 
+    private fun logout() {
+        startConnexionActivity()
+        setSharedPrefConnexionStatus(false)
+        userDAO.updateToken("")
+        transactionDAO.nukeTransactionTable()
+        itemDAO.nukeItemTable()
+    }
+
     private fun reconnect() {
         logout()
-        finish()
+        this.finish()
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CHANGE_PASSWORD) {
+            if (resultCode == Activity.RESULT_OK) {
+                reconnect()
+            } else {
+                Toast.makeText(
+                    baseContext,
+                    "Error while changing your password. Please contact and administrator",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
     }
 }

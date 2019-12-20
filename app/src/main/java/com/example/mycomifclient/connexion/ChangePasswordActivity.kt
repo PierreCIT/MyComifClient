@@ -1,13 +1,12 @@
 package com.example.mycomifclient.connexion
 
-import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mycomifclient.MainActivity
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.ComifDatabase
 import com.example.mycomifclient.serverhandling.HTTPServices
@@ -63,7 +62,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                             Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
                         }
                     })
-            } else if (newPassword.compareTo(verifiedNewPassword) == 0) {
+            } else if (newPassword.compareTo(verifiedNewPassword) != 0) {
                 Toast.makeText(baseContext, "New passwords must match", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(
@@ -100,14 +99,13 @@ class ChangePasswordActivity : AppCompatActivity() {
 
     private fun handlePositiveResponse() {
         userDAO.updateToken("")
-        finish()
         Toast.makeText(
             baseContext,
             "Password changed successfully. Please log in with your new credentials",
             Toast.LENGTH_LONG
         ).show()
-        val intent = Intent(this, MainActivity::class.java)
-        this.startActivity(intent)
+        setResult(Activity.RESULT_OK, null)
+        this.finish()
     }
 
     private fun removeQuotes(item: JsonElement): String {
