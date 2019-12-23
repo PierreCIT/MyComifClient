@@ -11,9 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.MainActivity
 import com.example.mycomifclient.R
-import com.example.mycomifclient.database.ComifDatabase
-import com.example.mycomifclient.database.UserDAO
-import com.example.mycomifclient.database.UserEntity
+import com.example.mycomifclient.UnsafeHTTPClient
+import com.example.mycomifclient.database.*
 import com.example.mycomifclient.serverhandling.HTTPServices
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -29,9 +28,10 @@ class ConnexionActivity : AppCompatActivity() {
 
     private val httpLoggingInterceptor =
         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-    private val okHttpClient: OkHttpClient.Builder =
-        OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor)
-    private val serverBaseUrl = "https://comif.fr"
+
+    //TODO: use basic okHttpClient when the API will be put in production
+    private val okHttpClient: OkHttpClient.Builder = UnsafeHTTPClient.getUnsafeOkHttpClient()
+    private val serverBaseUrl = "https://dev.comif.fr"
     private val retrofit = Retrofit.Builder()
         .client(okHttpClient.build())
         .addConverterFactory(GsonConverterFactory.create())
@@ -40,12 +40,17 @@ class ConnexionActivity : AppCompatActivity() {
     private val retrofitHTTPServices = retrofit.create<HTTPServices>(HTTPServices::class.java)
 
     private lateinit var userDAO: UserDAO
+    private lateinit var transactionDAO: TransactionDAO
+    private lateinit var itemDAO: ItemDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connexion)
 
         userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
+        transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
+        itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
         val user = userDAO.getFirst()
 
         this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text = user?.email
@@ -102,7 +107,7 @@ class ConnexionActivity : AppCompatActivity() {
     }
 
     private fun getUser(token: String) {
-        retrofitHTTPServices.getUser(218, "Bearer $token")
+        retrofitHTTPServices.getUser("Bearer $token")
             .enqueue(object : Callback<JsonObject> {
                 override fun onResponse(
                     call: Call<JsonObject>,
@@ -147,8 +152,11 @@ class ConnexionActivity : AppCompatActivity() {
                 token,
                 body.get("balance").asInt
             )
-            userDAO.nukeTable()
+
+            userDAO.nukeUserTable()
+
             userDAO.insert(userEntity)
+
             finish()
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)

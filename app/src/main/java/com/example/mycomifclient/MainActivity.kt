@@ -50,9 +50,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     private val httpLoggingInterceptor =
         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-    private val okHttpClient: OkHttpClient.Builder =
-        OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor)
-    private val serverBaseUrl = "https://comif.fr"
+
+    //TODO: use basic okHttpClient when the API will be put in production
+    private val okHttpClient: OkHttpClient.Builder = UnsafeHTTPClient.getUnsafeOkHttpClient()
+
+    private val serverBaseUrl = "https://dev.comif.fr"
     private val retrofit = Retrofit.Builder()
         .client(okHttpClient.build())
         .addConverterFactory(GsonConverterFactory.create())
@@ -75,6 +77,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
             reconnect()
         } else {
             getTransactions()
+
+            setSharedPrefConnexionStatus(true)
 
             setContentView(R.layout.activity_main)
             setSupportActionBar(a_main_toolbar)
@@ -116,6 +120,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 startConnexionActivity()
                 setSharedPrefConnexionStatus(false)
                 userDAO.updateToken("")
+                transactionDAO.nukeTransactionTable()
+                itemDAO.nukeItemTable()
                 true
             }
             R.id.action_information -> {
@@ -133,7 +139,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     private fun checkConnexionStatus() {
-        if(!sharedPref.getBoolean(CONNEXION_STATUS_KEY, false)) {
+        if (!sharedPref.getBoolean(CONNEXION_STATUS_KEY, false)) {
             startConnexionActivity()
         }
     }
@@ -188,11 +194,10 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
     }
-      
+
     private fun getTransactions() {
         val user = userDAO.getFirst()
         retrofitHTTPServices.getTransactions(
-            user.id,
             "Bearer " + user.token
         )
             .enqueue(object : Callback<JsonArray> {
@@ -297,7 +302,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                     date,
                     hour,
                     itemsMap,
-                    "%.2f".format(totalTransactionPrice)
+                    totalTransactionPrice.toString()
                 )
             )
         }

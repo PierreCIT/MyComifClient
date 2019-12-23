@@ -21,4 +21,7 @@ interface TransactionDAO {
 
     @Delete
     fun delete(transactionEntity: TransactionEntity)
+
+    @Query("DELETE FROM TransactionEntity")
+    fun nukeTransactionTable()
 }

@@ -6,14 +6,14 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface HTTPServices {
-    @GET("/api/users/{userId}")
+    @GET("/api/users/info")
     fun getUser(
-        @Path("userId") userId: Int, @Header("Authorization") bearerToken: String
+        @Header("Authorization") bearerToken: String
     ): Call<JsonObject>
 
-    @GET("api/transactions/by-user/{userId}")
+    @GET("api/transactions/info")
     fun getTransactions(
-        @Path("userId") userId: Int, @Header("Authorization") bearerToken: String
+        @Header("Authorization") bearerToken: String
     ): Call<JsonArray>
 
     //TODO: implement authenticate function
