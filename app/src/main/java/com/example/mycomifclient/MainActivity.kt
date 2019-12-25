@@ -326,14 +326,24 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CHANGE_PASSWORD) {
-            if (resultCode == Activity.RESULT_OK) {
-                reconnect()
-            } else {
-                Toast.makeText(
-                    baseContext,
-                    "Error while changing your password. Please contact and administrator",
-                    Toast.LENGTH_LONG
-                ).show()
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    reconnect()
+                }
+                Activity.RESULT_CANCELED -> {
+                    Toast.makeText(
+                        baseContext,
+                        "Operation cancelled",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                else -> {
+                    Toast.makeText(
+                        baseContext,
+                        "Error while changing your password. Please contact and administrator",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
     }
