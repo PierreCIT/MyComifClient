@@ -88,7 +88,7 @@ class ConnexionActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Toast.makeText(this@ConnexionActivity, "Error: $t", Toast.LENGTH_LONG).show()
+                Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -111,7 +111,7 @@ class ConnexionActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    Toast.makeText(this@ConnexionActivity, "Error: $t", Toast.LENGTH_LONG).show()
+                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
                 }
             })
     }
@@ -161,7 +161,7 @@ class ConnexionActivity : AppCompatActivity() {
 
     private fun handle401Response() {
         Toast.makeText(
-            this@ConnexionActivity,
+            this,
             "Wrong credentials, please try again",
             Toast.LENGTH_LONG
         ).show()
