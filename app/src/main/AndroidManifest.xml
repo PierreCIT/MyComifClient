@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".connexion.ChangePasswordActivity" />
+        <activity android:name=".connexion.ChangePasswordActivity"
+            android:screenOrientation="sensorPortrait"/>
         <activity
             android:name=".connexion.FirstConnexionActivity"
             android:screenOrientation="sensorPortrait" />
