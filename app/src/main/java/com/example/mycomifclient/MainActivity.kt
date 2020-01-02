@@ -125,7 +125,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 true
             }
             R.id.action_information -> {
-                Toast.makeText(baseContext, "Not implemented yet", Toast.LENGTH_LONG).show()
+                //Toast.makeText(baseContext, "Not implemented yet", Toast.LENGTH_LONG).show()
+                val intent = Intent(this, InfoActivity::class.java)
+                this.startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
