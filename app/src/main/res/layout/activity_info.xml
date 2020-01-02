@@ -79,7 +79,32 @@
                 android:paddingTop="5dp"
                 android:paddingEnd="20dp"
                 android:text="@string/description_content"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:autoLink="web"/>
+
+            <TextView
+                android:id="@+id/a_info_text_view_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="10dp"/>
+
+            <TextView
+                android:id="@+id/a_info_text_view_contact_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:justificationMode="inter_word"
+                android:paddingStart="20dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="5dp"
+                android:text="@string/contact_content"
+                android:textSize="16sp"
+                android:autoLink="web"/>
 
             <TextView
                 android:id="@+id/a_info_text_view_license"
@@ -100,6 +125,7 @@
                 android:paddingStart="20dp"
                 android:paddingTop="5dp"
                 android:paddingEnd="20dp"
+                android:paddingBottom="5dp"
                 android:text="@string/license_content"
                 android:textSize="16sp"/>
 
