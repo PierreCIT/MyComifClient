@@ -17,6 +17,8 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".connexion.ChangePasswordActivity"
             android:screenOrientation="sensorPortrait"/>
+        <activity android:name=".InfoActivity"
+            android:screenOrientation="sensorPortrait"/>
         <activity
             android:name=".connexion.FirstConnexionActivity"
             android:screenOrientation="sensorPortrait" />
