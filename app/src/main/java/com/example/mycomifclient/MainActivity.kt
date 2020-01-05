@@ -1,5 +1,6 @@
 package com.example.mycomifclient
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -13,6 +14,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mycomifclient.connexion.ChangePasswordActivity
 import com.example.mycomifclient.connexion.ConnexionActivity
 import com.example.mycomifclient.database.*
 import com.example.mycomifclient.fragmenttransaction.Transaction
@@ -21,21 +23,19 @@ import com.example.mycomifclient.serverhandling.HTTPServices
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 const val CONNEXION_STATUS_KEY = "CONNEXION_STATUS"
+const val CHANGE_PASSWORD = 1
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
+
     lateinit var sharedPref: SharedPreferences
 
     private val homeFragment = HomeFragment()
@@ -48,19 +48,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     private lateinit var transactionDAO: TransactionDAO
     private lateinit var itemDAO: ItemDAO
 
-    private val httpLoggingInterceptor =
-        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-
     //TODO: use basic okHttpClient when the API will be put in production
-    private val okHttpClient: OkHttpClient.Builder = UnsafeHTTPClient.getUnsafeOkHttpClient()
-
-    private val serverBaseUrl = "https://dev.comif.fr"
-    private val retrofit = Retrofit.Builder()
-        .client(okHttpClient.build())
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(serverBaseUrl)
-        .build()
-    private val retrofitHTTPServices = retrofit.create<HTTPServices>(HTTPServices::class.java)
+    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
 
     private lateinit var user: UserEntity
 
@@ -73,7 +62,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
 
         user = userDAO.getFirst()
-        if (!::user.isInitialized) {
+        if (!::user.isInitialized || user.token.isBlank()) {
             reconnect()
         } else {
             getTransactions()
@@ -117,17 +106,18 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                startConnexionActivity()
-                setSharedPrefConnexionStatus(false)
-                userDAO.updateToken("")
-                transactionDAO.nukeTransactionTable()
-                itemDAO.nukeItemTable()
+                logout()
                 true
             }
             R.id.action_information -> {
                 //Toast.makeText(baseContext, "Not implemented yet", Toast.LENGTH_LONG).show()
                 val intent = Intent(this, InfoActivity::class.java)
                 this.startActivity(intent)
+                true
+            }
+            R.id.change_password -> {
+                val intent = Intent(this, ChangePasswordActivity::class.java)
+                this.startActivityForResult(intent, CHANGE_PASSWORD)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -269,7 +259,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         val currentDate = Date().time
         val transactions = transactionDAO.getAll()
 
-        //TODO: Fix the statistics, as they are not accurate actually
         var dayConsos = 0f
         var weekConsos = 0f
         var monthConsos = 0f
@@ -321,9 +310,43 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         homeFragment.toggleViewStatus(View.VISIBLE)
     }
 
+    private fun logout() {
+        startConnexionActivity()
+        setSharedPrefConnexionStatus(false)
+        userDAO.updateToken("")
+        transactionDAO.nukeTransactionTable()
+        itemDAO.nukeItemTable()
+    }
+
     private fun reconnect() {
-        finish()
+        logout()
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
+        this.finish()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CHANGE_PASSWORD) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    reconnect()
+                }
+                Activity.RESULT_CANCELED -> {
+                    Toast.makeText(
+                        baseContext,
+                        "Operation cancelled",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                else -> {
+                    Toast.makeText(
+                        baseContext,
+                        "Error while changing your password. Please contact and administrator",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
     }
 }

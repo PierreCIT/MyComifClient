@@ -11,33 +11,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.MainActivity
 import com.example.mycomifclient.R
-import com.example.mycomifclient.UnsafeHTTPClient
 import com.example.mycomifclient.database.*
 import com.example.mycomifclient.serverhandling.HTTPServices
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+
+const val FIRST_CONNEXION = 1
 
 class ConnexionActivity : AppCompatActivity() {
 
-    private val httpLoggingInterceptor =
-        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-
     //TODO: use basic okHttpClient when the API will be put in production
-    private val okHttpClient: OkHttpClient.Builder = UnsafeHTTPClient.getUnsafeOkHttpClient()
-    private val serverBaseUrl = "https://dev.comif.fr"
-    private val retrofit = Retrofit.Builder()
-        .client(okHttpClient.build())
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(serverBaseUrl)
-        .build()
-    private val retrofitHTTPServices = retrofit.create<HTTPServices>(HTTPServices::class.java)
+    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
 
     private lateinit var userDAO: UserDAO
     private lateinit var transactionDAO: TransactionDAO
@@ -66,7 +53,7 @@ class ConnexionActivity : AppCompatActivity() {
         findViewById<Button>(R.id.a_connexion_button_first_connexion).setOnClickListener {
             findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = false
             val intent = Intent(this, FirstConnexionActivity::class.java)
-            this.startActivity(intent)
+            this.startActivityForResult(intent, FIRST_CONNEXION)
         }
     }
 
@@ -101,7 +88,7 @@ class ConnexionActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Toast.makeText(this@ConnexionActivity, "Error: $t", Toast.LENGTH_LONG).show()
+                Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -124,7 +111,7 @@ class ConnexionActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    Toast.makeText(this@ConnexionActivity, "Error: $t", Toast.LENGTH_LONG).show()
+                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
                 }
             })
     }
@@ -154,12 +141,11 @@ class ConnexionActivity : AppCompatActivity() {
             )
 
             userDAO.nukeUserTable()
-
             userDAO.insert(userEntity)
 
-            finish()
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)
+            finish()
         }
     }
 
@@ -168,14 +154,14 @@ class ConnexionActivity : AppCompatActivity() {
     }
 
     private fun reconnect() {
-        finish()
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
+        finish()
     }
 
     private fun handle401Response() {
         Toast.makeText(
-            this@ConnexionActivity,
+            this,
             "Wrong credentials, please try again",
             Toast.LENGTH_LONG
         ).show()
