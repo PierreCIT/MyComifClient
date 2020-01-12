@@ -82,7 +82,8 @@
                 android:paddingTop="5dp"
                 android:paddingEnd="20dp"
                 android:text="@string/description_content"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimaryDark"/>
 
             <TextView
                 android:id="@+id/a_info_text_view_contact"
@@ -107,7 +108,8 @@
                 android:paddingBottom="5dp"
                 android:text="@string/contact_content"
                 android:textSize="16sp"
-                android:textIsSelectable="true"/>
+                android:textIsSelectable="true"
+                android:textColor="@color/colorPrimaryDark"/>
 
             <TextView
                 android:id="@+id/a_info_text_view_license"
@@ -131,7 +133,8 @@
                 android:paddingBottom="5dp"
                 android:text="@string/license_content"
                 android:textSize="16sp"
-                android:textIsSelectable="true"/>
+                android:textIsSelectable="true"
+                android:textColor="@color/colorPrimaryDark"/>
 
         </LinearLayout>
     </ScrollView>
