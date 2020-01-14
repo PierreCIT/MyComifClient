@@ -15,6 +15,14 @@
     <string name="email">Email address</string>
     <string name="password">Password</string>
     <string name="connexion">Connection</string>
+    <string name="op_cancelled">Operation cancelled</string>
+    <string name="err_loading_pwd">Error while changing your password. Please contact and administrator.</string>
+    <string name="refill">Refill</string>
+    <string name="match_new_pwd">The passwords are not the same !</string>
+    <string name="new_pwd_diff">New password must be different from the old one</string>
+    <string name="success_change_pwd">Password changed successfully. Please log in with your new credentials</string>
+    <string name="error_server_data">Error while recovering data from server. Please contact an administrator</string>
+    <string name="bad_id">Wrong credentials, please try again.</string>
     <string name="first_connexion">First connection</string>
     <string name="get_password">Get password</string>
     <string name="password_by_email">Your new password was sent by email. Please check your emails.</string>

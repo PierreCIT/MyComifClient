@@ -50,7 +50,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                             when {
                                 response.body()?.get("success") == null -> Toast.makeText(
                                     baseContext,
-                                    "Error while changing your password. Please contact and administrator",
+                                    resources.getString(R.string.err_loading_pwd),
                                     Toast.LENGTH_LONG
                                 ).show()
                                 response.body()!!.get("success").asBoolean -> handlePositiveResponse()
@@ -63,11 +63,15 @@ class ChangePasswordActivity : AppCompatActivity() {
                         }
                     })
             } else if (newPassword.compareTo(verifiedNewPassword) != 0) {
-                Toast.makeText(baseContext, "New passwords must match", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    baseContext,
+                    resources.getString(R.string.match_new_pwd),
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
                 Toast.makeText(
                     baseContext,
-                    "New password must be different from the old one",
+                    resources.getString(R.string.new_pwd_diff),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -101,7 +105,7 @@ class ChangePasswordActivity : AppCompatActivity() {
         userDAO.updateToken("")
         Toast.makeText(
             baseContext,
-            "Password changed successfully. Please log in with your new credentials",
+            resources.getString(R.string.success_change_pwd),
             Toast.LENGTH_LONG
         ).show()
         setResult(Activity.RESULT_OK, null)

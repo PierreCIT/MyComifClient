@@ -228,7 +228,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 itemDAO.insert(
                     ItemEntity(
                         transaction.get("id").asInt,
-                        "Recharge",
+                        resources.getString(R.string.refill),
                         1,
                         transaction.get("value").asInt * -1
                     )
@@ -335,14 +335,14 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 Activity.RESULT_CANCELED -> {
                     Toast.makeText(
                         baseContext,
-                        "Operation cancelled",
+                        resources.getString(R.string.op_cancelled),
                         Toast.LENGTH_LONG
                     ).show()
                 }
                 else -> {
                     Toast.makeText(
                         baseContext,
-                        "Error while changing your password. Please contact and administrator",
+                        resources.getString(R.string.err_loading_pwd),
                         Toast.LENGTH_LONG
                     ).show()
                 }

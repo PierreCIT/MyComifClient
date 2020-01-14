@@ -46,7 +46,7 @@ class TransactionAdapter(private val transactions: ArrayList<Transaction>) :
     private fun mutableMapOfToString(map: MutableMap<String, Int>): String {
         var productStr = ""
         for ((item, quantity) in map) {
-            productStr += if (item == "Recharge") {
+            productStr += if (item == parent.context.resources.getString(R.string.refill)) {
                 item
             } else {
                 "$item x$quantity\n"

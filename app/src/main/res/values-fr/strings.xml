@@ -10,8 +10,16 @@
     <string name="offline_message">Vous êtes hors ligne. Vos données ne sont pas à jour.</string>
     <string name="first_last_name">%s %s</string>
     <string name="euro_price">%s %s €</string>
+    <string name="refill">Recharge</string>
     <string name="home">Accueil</string>
     <string name="transactions">Transactions</string>
+    <string name="op_cancelled">Opération annulée</string>
+    <string name="err_loading_pwd">Erreur lors du changement de mot de passe. Veuillez contacter un administrateur.</string>
+    <string name="match_new_pwd">Les mots de passe de sont pas les mêmes</string>
+    <string name="new_pwd_diff">Le nouveau mot de passe doit être différent de l\'ancien</string>
+    <string name="success_change_pwd">Mot de passe changé. Veuillez vous connecter avec ces nouveaux identifiants.</string>
+    <string name="error_server_data">Erreur lors du chargement des données depuis le serveur. Veuillez contacter un administrateur.</string>
+    <string name="bad_id">Mauvais identifiants et/ou mot de passe. Veuillez essayer à nouveau.</string>
     <string name="email">Adresse email</string>
     <string name="password">Mot de passe</string>
     <string name="connexion">Connexion</string>
