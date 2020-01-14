@@ -10,6 +10,8 @@
     <string name="offline_message">You are offline. Your data are not up to date.</string>
     <string name="first_last_name">%s %s</string>
     <string name="euro_price">%s %s €</string>
+    <string name="home">Home</string>
+    <string name="transactions">Transactions</string>
     <string name="email">Email address</string>
     <string name="password">Password</string>
     <string name="connexion">Connection</string>

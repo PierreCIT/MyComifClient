@@ -10,6 +10,8 @@
     <string name="offline_message">Vous êtes hors ligne. Vos données ne sont pas à jour.</string>
     <string name="first_last_name">%s %s</string>
     <string name="euro_price">%s %s €</string>
+    <string name="home">Accueil</string>
+    <string name="transactions">Transactions</string>
     <string name="email">Adresse email</string>
     <string name="password">Mot de passe</string>
     <string name="connexion">Connexion</string>
@@ -25,7 +27,7 @@
     <string name="new_password">Nouveau mot de passe</string>
     <string name="confirm_your_password">Confirmer votre mot de passe</string>
     <string name="description">Description</string>
-    <string name="description_content">Application Android pour l\'association COMIF du campus Georges Charpake de l\'Ecole des Mines de Saint-Etienne. Cette application a pour objectif de permettre aux cotisants de cette association de consulter leur solde et les produits achetés.\n\n Tous les codes sources de cette application sont disponible sur <a href="https://github.com/PierreCIT/MyComifClient">github.com/PierreCIT/MyComifClient</a></string>
+    <string name="description_content">Application Android pour l\'association COMIF du campus Georges Charpake de l\'Ecole des Mines de Saint-Etienne. Cette application a pour objectif de permettre aux cotisants de cette association de consulter leur solde et les produits achetés.\n\nTous les codes sources de cette application sont disponible sur <a href="https://github.com/PierreCIT/MyComifClient">github.com/PierreCIT/MyComifClient</a></string>
     <string name="license">Licence</string>
     <string name="license_content"><![CDATA[ MIT License\n\nCopyright © 2020 Jean-Christophe Chevalier, Alexandre Ladrière, Pierre Seite & Hugo Serieys\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.]]></string>
     <string name="contact">Contacts</string>

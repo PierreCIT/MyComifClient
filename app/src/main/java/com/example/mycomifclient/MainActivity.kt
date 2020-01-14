@@ -72,8 +72,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
             setContentView(R.layout.activity_main)
             setSupportActionBar(a_main_toolbar)
 
-            adapter.addFragment(homeFragment, "Home")
-            adapter.addFragment(transactionFragment, "Transactions")
+            adapter.addFragment(homeFragment, resources.getString(R.string.home))
+            adapter.addFragment(transactionFragment, resources.getString(R.string.transactions))
             a_main_view_pager.adapter = adapter
             tabs.setupWithViewPager(a_main_view_pager)
         }
