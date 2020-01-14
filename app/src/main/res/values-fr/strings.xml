@@ -2,8 +2,8 @@
     <string name="app_name">My Comif</string>
 
     <string name="action_settings">Paramètres</string>
-    <string name="this_week">Cette semaine</string>
-    <string name="this_month">Ce mois</string>
+    <string name="this_week">Semaine</string>
+    <string name="this_month">Mois</string>
     <string name="today">Aujourd\'hui</string>
     <string name="OK">OK</string>
     <string name="no_internet_connexion">Aucune Connexion Internet</string>
