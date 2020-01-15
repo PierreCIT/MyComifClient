@@ -3,10 +3,7 @@ package com.example.mycomifclient.connexion
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.ComifDatabase
@@ -27,7 +24,9 @@ class ChangePasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_password)
-
+        findViewById<ImageButton>(R.id.a_change_password_image_button_back).setOnClickListener {
+            finish()
+        }
         val submitButton = this.findViewById<Button>(R.id.a_change_password_button_change_password)
         submitButton.setOnClickListener {
             val oldPassword =
