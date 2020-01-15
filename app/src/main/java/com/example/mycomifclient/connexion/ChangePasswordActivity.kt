@@ -2,6 +2,7 @@ package com.example.mycomifclient.connexion
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -97,8 +98,8 @@ class ChangePasswordActivity : AppCompatActivity() {
             .setText("")
         this.findViewById<EditText>(R.id.a_change_password_edit_text_verified_new_password)
             .setText("")
-        this.findViewById<TextView>(R.id.a_change_password_text_view_response).text =
-            removeQuotes(body.get("message"))
+        // this.findViewById<TextView>(R.id.a_change_password_text_view_response).text =
+        //     removeQuotes(body.get("message"))
     }
 
     private fun handlePositiveResponse() {
@@ -116,4 +117,23 @@ class ChangePasswordActivity : AppCompatActivity() {
         return item.toString().substring(1, item.toString().length - 1)
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) hideSystemUI()
+    }
+
+    private fun hideSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                // Set the content to appear under the system bars so that the
+                // content doesn't resize when the system bars hide and show.
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                // Hide the nav bar and status bar
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    }
 }
