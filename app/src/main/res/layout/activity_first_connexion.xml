@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".connexion.FirstConnexionActivity">
+    tools:context=".connexion.FirstConnexionActivity"
+    android:background="@color/colorWhiteDark">
 
 
     <ImageButton
@@ -13,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:background="@color/colorWhite"
+        android:background="@color/colorWhiteDark"
         android:tint="@color/colorPrimary"
         android:layout_gravity="center"
         app:srcCompat="@drawable/ic_arrow_back_primary_color"
