@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">My Comif</string>
+
+    <string name="action_settings">Paramètres</string>
+    <string name="this_week">Semaine</string>
+    <string name="this_month">Mois</string>
+    <string name="today">Jour</string>
+    <string name="OK">OK</string>
+    <string name="no_internet_connexion">Aucune Connexion Internet</string>
+    <string name="offline_message">Vous êtes hors ligne. Vos données ne sont pas à jour.</string>
+    <string name="first_last_name">%s %s</string>
+    <string name="euro_price">%s %s €</string>
+    <string name="refill">Recharge</string>
+    <string name="home">Accueil</string>
+    <string name="transactions">Transactions</string>
+    <string name="op_cancelled">Opération annulée</string>
+    <string name="err_loading_pwd">Erreur lors du changement de mot de passe. Veuillez contacter un administrateur.</string>
+    <string name="match_new_pwd">Les mots de passe de sont pas les mêmes</string>
+    <string name="new_pwd_diff">Le nouveau mot de passe doit être différent de l\'ancien</string>
+    <string name="success_change_pwd">Mot de passe changé. Veuillez vous connecter avec ces nouveaux identifiants.</string>
+    <string name="error_server_data">Erreur lors du chargement des données depuis le serveur. Veuillez contacter un administrateur.</string>
+    <string name="bad_id">Mauvais identifiants et/ou mot de passe. Veuillez essayer à nouveau.</string>
+    <string name="email">Adresse email</string>
+    <string name="password">Mot de passe</string>
+    <string name="connexion">Connexion</string>
+    <string name="first_connexion">Première connexion</string>
+    <string name="get_password">Obtenir mon mot de passe</string>
+    <string name="password_by_email">Votre nouveau mot de passe a été envoyé par email. Veuillez vérifier vos courriels.</string>
+    <string name="comif_logo">Comif\' Logo</string>
+    <string name="todo">TODO</string>
+    <string name="logout">Déconnexion</string>
+    <string name="info">Information</string>
+    <string name="change_password">Changer de mot de passe</string>
+    <string name="old_password">Ancien mot de passe</string>
+    <string name="new_password">Nouveau mot de passe</string>
+    <string name="confirm_your_password">Confirmer le mot de passe</string>
+    <string name="description">Description</string>
+    <string name="description_content">Application Android pour l\'association COMIF du campus Georges Charpake de l\'Ecole des Mines de Saint-Etienne. Cette application a pour objectif de permettre aux cotisants de cette association de consulter leur solde et les produits achetés.\n\nTous les codes sources de cette application sont disponible sur <a href="https://github.com/PierreCIT/MyComifClient">github.com/PierreCIT/MyComifClient</a></string>
+    <string name="license">Licence</string>
+    <string name="license_content"><![CDATA[ MIT License\n\nCopyright © 2020 Jean-Christophe Chevalier, Alexandre Ladrière, Pierre Seite & Hugo Serieys\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.]]></string>
+    <string name="contact">Contacts</string>
+    <string name="contact_content">Vous pouvez nous contacter à l\'adresse suivante: comif13120@gmail.com.\n\nOu nous contacter directement sur Facebook: <a href="https://www.facebook.com/profile.php?id=100011711589847">facebook.com/profile.php?id=100011711589847</a>.</string>
+</resources>

@@ -121,7 +121,7 @@ class ConnexionActivity : AppCompatActivity() {
         if (token == null) {
             Toast.makeText(
                 this,
-                "Error while recovering data from server. Please contact an administrator",
+                resources.getString(R.string.error_server_data),
                 Toast.LENGTH_LONG
             ).show()
         } else {
@@ -162,7 +162,7 @@ class ConnexionActivity : AppCompatActivity() {
     private fun handle401Response() {
         Toast.makeText(
             this,
-            "Wrong credentials, please try again",
+            resources.getString(R.string.bad_id),
             Toast.LENGTH_LONG
         ).show()
         findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = true

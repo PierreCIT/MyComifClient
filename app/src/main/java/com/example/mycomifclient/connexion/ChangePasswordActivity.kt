@@ -2,10 +2,8 @@ package com.example.mycomifclient.connexion
 
 import android.app.Activity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.ComifDatabase
@@ -26,7 +24,9 @@ class ChangePasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_password)
-
+        findViewById<ImageButton>(R.id.a_change_password_image_button_back).setOnClickListener {
+            finish()
+        }
         val submitButton = this.findViewById<Button>(R.id.a_change_password_button_change_password)
         submitButton.setOnClickListener {
             val oldPassword =
@@ -50,7 +50,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                             when {
                                 response.body()?.get("success") == null -> Toast.makeText(
                                     baseContext,
-                                    "Error while changing your password. Please contact and administrator",
+                                    resources.getString(R.string.err_loading_pwd),
                                     Toast.LENGTH_LONG
                                 ).show()
                                 response.body()!!.get("success").asBoolean -> handlePositiveResponse()
@@ -63,11 +63,15 @@ class ChangePasswordActivity : AppCompatActivity() {
                         }
                     })
             } else if (newPassword.compareTo(verifiedNewPassword) != 0) {
-                Toast.makeText(baseContext, "New passwords must match", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    baseContext,
+                    resources.getString(R.string.match_new_pwd),
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
                 Toast.makeText(
                     baseContext,
-                    "New password must be different from the old one",
+                    resources.getString(R.string.new_pwd_diff),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -93,15 +97,15 @@ class ChangePasswordActivity : AppCompatActivity() {
             .setText("")
         this.findViewById<EditText>(R.id.a_change_password_edit_text_verified_new_password)
             .setText("")
-        this.findViewById<TextView>(R.id.a_change_password_text_view_response).text =
-            removeQuotes(body.get("message"))
+        // this.findViewById<TextView>(R.id.a_change_password_text_view_response).text =
+        //     removeQuotes(body.get("message"))
     }
 
     private fun handlePositiveResponse() {
         userDAO.updateToken("")
         Toast.makeText(
             baseContext,
-            "Password changed successfully. Please log in with your new credentials",
+            resources.getString(R.string.success_change_pwd),
             Toast.LENGTH_LONG
         ).show()
         setResult(Activity.RESULT_OK, null)
@@ -112,4 +116,23 @@ class ChangePasswordActivity : AppCompatActivity() {
         return item.toString().substring(1, item.toString().length - 1)
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) hideSystemUI()
+    }
+
+    private fun hideSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                // Set the content to appear under the system bars so that the
+                // content doesn't resize when the system bars hide and show.
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                // Hide the nav bar and status bar
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    }
 }

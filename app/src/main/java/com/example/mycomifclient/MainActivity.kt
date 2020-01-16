@@ -72,8 +72,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
             setContentView(R.layout.activity_main)
             setSupportActionBar(a_main_toolbar)
 
-            adapter.addFragment(homeFragment, "Home")
-            adapter.addFragment(transactionFragment, "Transactions")
+            adapter.addFragment(homeFragment, resources.getString(R.string.home))
+            adapter.addFragment(transactionFragment, resources.getString(R.string.transactions))
             a_main_view_pager.adapter = adapter
             tabs.setupWithViewPager(a_main_view_pager)
         }
@@ -228,7 +228,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 itemDAO.insert(
                     ItemEntity(
                         transaction.get("id").asInt,
-                        "Recharge",
+                        resources.getString(R.string.refill),
                         1,
                         transaction.get("value").asInt * -1
                     )
@@ -335,14 +335,14 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 Activity.RESULT_CANCELED -> {
                     Toast.makeText(
                         baseContext,
-                        "Operation cancelled",
+                        resources.getString(R.string.op_cancelled),
                         Toast.LENGTH_LONG
                     ).show()
                 }
                 else -> {
                     Toast.makeText(
                         baseContext,
-                        "Error while changing your password. Please contact and administrator",
+                        resources.getString(R.string.err_loading_pwd),
                         Toast.LENGTH_LONG
                     ).show()
                 }

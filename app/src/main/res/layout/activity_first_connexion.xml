@@ -4,7 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".connexion.FirstConnexionActivity">
+    tools:context=".connexion.FirstConnexionActivity"
+    android:background="@color/colorWhiteDark">
+
+
+    <ImageButton
+        android:id="@+id/a_first_connexion_image_button_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/colorWhiteDark"
+        android:tint="@color/colorPrimary"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/ic_arrow_back_primary_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/a_first_connexion_text_view_app_name"
@@ -59,16 +74,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/a_first_connexion_edit_text_email"
         app:srcCompat="@drawable/ic_arrow_back_primary_color" />
-
-    <ImageButton
-        android:id="@+id/a_first_connexion_image_button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/colorWhite"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/todo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
