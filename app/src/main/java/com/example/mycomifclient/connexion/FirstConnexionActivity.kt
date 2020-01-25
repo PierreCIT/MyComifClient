@@ -9,6 +9,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.R
 
+/**
+ * Implement the "First connexion" activity
+ */
 class FirstConnexionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +25,11 @@ class FirstConnexionActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Display a popup to inform the user that its new pwd was sent by email
+     * @param context Context of the activity to display popup
+     * @return None
+     */
     private fun displayPasswordMessage(context: Context) {
         val alertDialog: AlertDialog? = this.let {
             val builder = AlertDialog.Builder(it)
@@ -44,6 +52,10 @@ class FirstConnexionActivity : AppCompatActivity() {
         if (hasFocus) hideSystemUI()
     }
 
+    /**
+     * Enable immersive mode
+     * @return None
+     */
     private fun hideSystemUI() {
         // Enables regular immersive mode.
         // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
