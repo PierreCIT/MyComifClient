@@ -33,7 +33,7 @@ interface ItemDAO {
     fun selectItems(transactionId: Int): List<ItemEntity>
 
     /**
-     * Insert a transaction item into the database
+     * Insert a transaction item into the database (or replace it if it already exists in the table)
      * @param itemEntity Item you want to insert into the database (ItemEntity)
      * @return None
      */
