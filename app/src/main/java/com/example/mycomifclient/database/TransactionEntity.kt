@@ -3,7 +3,10 @@ package com.example.mycomifclient.database
 import androidx.room.*
 
 /**
- * Implement an object representation of a transaction
+ * Implementation of a database object representation of a transaction
+ * @param transactionId ID of the transaction (Integer)
+ * @param type Type of the transaction (String)
+ * @param date Date of the transaction (String)
  */
 @Entity
 data class TransactionEntity(
@@ -13,9 +16,11 @@ data class TransactionEntity(
     val date: String
 )
 
+/**
+ * Interface for the Transaction DAO
+ */
 @Dao
 interface TransactionDAO {
-
     /**
      * Get all the transaction from the database
      * @return List of all transactions (List<TransactionEntity>)
