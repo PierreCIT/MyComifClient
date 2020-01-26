@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.R
 
 /**
- * Implement the "First connexion" activity
+ * Implementation of the "First connexion" activity
  */
 class FirstConnexionActivity : AppCompatActivity() {
 

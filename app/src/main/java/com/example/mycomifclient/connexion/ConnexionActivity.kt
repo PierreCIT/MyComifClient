@@ -23,7 +23,7 @@ import retrofit2.Response
 const val FIRST_CONNEXION = 1
 
 /**
- * Implement the "Connexion" activity
+ * Implementation of the "Connexion" activity
  */
 class ConnexionActivity : AppCompatActivity() {
 

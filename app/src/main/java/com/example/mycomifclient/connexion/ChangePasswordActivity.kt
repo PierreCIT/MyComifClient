@@ -18,7 +18,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 /**
- * Implement the activity to change password
+ * Implementation of the activity to change password
  */
 class ChangePasswordActivity : AppCompatActivity() {
 
