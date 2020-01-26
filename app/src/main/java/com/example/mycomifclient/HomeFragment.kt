@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import java.util.*
 
 /**
- * Implement a fragment with main info (Home fragment)
+ * Implementation of a fragment with main info (Home fragment)
  */
 class HomeFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null

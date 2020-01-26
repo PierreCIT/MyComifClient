@@ -7,7 +7,7 @@ import android.widget.ImageButton
 import kotlinx.android.synthetic.main.activity_info.*
 
 /**
- * Implement the Information activity
+ * Implementation of the Information activity
  */
 class InfoActivity : AppCompatActivity() {
 
