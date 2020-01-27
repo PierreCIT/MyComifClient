@@ -56,7 +56,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                             )
                             else -> Toast.makeText(
                                 baseContext,
-                                "An error occured during this operation. Please contact an administrator",
+                                resources.getString(R.string.err_loading_pwd),
                                 Toast.LENGTH_LONG
                             ).show()
                         }
