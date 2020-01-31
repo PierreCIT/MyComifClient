@@ -1,3 +1,5 @@
+@file:Suppress("Annotator")
+
 package com.example.mycomifclient.connexion
 
 import android.app.Activity
@@ -8,8 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.ComifDatabase
 import com.example.mycomifclient.serverhandling.HTTPServices
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,43 +41,31 @@ class ChangePasswordActivity : AppCompatActivity() {
             val verifiedNewPassword =
                 this.findViewById<EditText>(R.id.a_change_password_edit_text_verified_new_password)
                     .text.toString()
-            if (newPassword.compareTo(verifiedNewPassword) == 0 && newPassword.compareTo(oldPassword) != 0) {
-                val body = buildResetPasswordBody(oldPassword, newPassword, verifiedNewPassword)
-                val token = userDAO.getFirst().token
-                retrofitHTTPServices.resetPassword("Bearer $token", body)
-                    .enqueue(object : Callback<JsonObject> {
-                        override fun onResponse(
-                            call: Call<JsonObject>,
-                            response: Response<JsonObject>
-                        ) {
-                            when {
-                                response.body()?.get("success") == null -> Toast.makeText(
-                                    baseContext,
-                                    resources.getString(R.string.err_loading_pwd),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                response.body()!!.get("success").asBoolean -> handlePositiveResponse()
-                                else -> handleBadResponse(response.body()!!)
-                            }
+            val body = buildResetPasswordBody(oldPassword, newPassword, verifiedNewPassword)
+            val token = userDAO.getFirst().token
+            retrofitHTTPServices.resetPassword("Bearer $token", body)
+                .enqueue(object : Callback<JsonObject> {
+                    override fun onResponse(
+                        call: Call<JsonObject>,
+                        response: Response<JsonObject>
+                    ) {
+                        when {
+                            response.code() == 200 -> handlePositiveResponse()
+                            response.code() == 422 || response.code() == 400 -> handleBadResponse(
+                                response
+                            )
+                            else -> Toast.makeText(
+                                baseContext,
+                                resources.getString(R.string.err_loading_pwd),
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
+                    }
 
-                        override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                            Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
-                        }
-                    })
-            } else if (newPassword.compareTo(verifiedNewPassword) != 0) {
-                Toast.makeText(
-                    baseContext,
-                    resources.getString(R.string.match_new_pwd),
-                    Toast.LENGTH_LONG
-                ).show()
-            } else {
-                Toast.makeText(
-                    baseContext,
-                    resources.getString(R.string.new_pwd_diff),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+                    override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                        Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
+                    }
+                })
         }
     }
 
@@ -86,19 +77,42 @@ class ChangePasswordActivity : AppCompatActivity() {
         val response = JsonObject()
         response.addProperty("old_password", oldPassword)
         response.addProperty("new_password", newPassword)
-        response.addProperty("verified_new_password", verifiedNewPassword)
+        response.addProperty("new_password_confirmation", verifiedNewPassword)
         return response
     }
 
-    private fun handleBadResponse(body: JsonObject) {
+    private fun handleBadResponse(response: Response<JsonObject>) {
+        val errorMessage = JSONObject(response.errorBody()!!.string())
+        var errors = JSONArray()
+
+        when {
+            response.code() == 422 -> {
+                errors = errorMessage.getJSONObject("errors").getJSONArray("new_password")
+            }
+            response.code() == 400 -> {
+                errors = errorMessage.getJSONArray("errors")
+            }
+            else -> {
+                setResult(Activity.RESULT_CANCELED, null)
+                this.finish()
+            }
+        }
+
+        var displayedError = ""
+
+        for (i in 0 until errors.length()) {
+            displayedError += "•"
+            displayedError += errors[i]
+            displayedError += "\n"
+        }
+
         this.findViewById<EditText>(R.id.a_change_password_edit_text_old_password)
             .setText("")
         this.findViewById<EditText>(R.id.a_change_password_edit_text_new_password)
             .setText("")
         this.findViewById<EditText>(R.id.a_change_password_edit_text_verified_new_password)
             .setText("")
-        // this.findViewById<TextView>(R.id.a_change_password_text_view_response).text =
-        //     removeQuotes(body.get("message"))
+        this.findViewById<TextView>(R.id.a_change_password_text_view_response).text = displayedError
     }
 
     private fun handlePositiveResponse() {
@@ -110,10 +124,6 @@ class ChangePasswordActivity : AppCompatActivity() {
         ).show()
         setResult(Activity.RESULT_OK, null)
         this.finish()
-    }
-
-    private fun removeQuotes(item: JsonElement): String {
-        return item.toString().substring(1, item.toString().length - 1)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

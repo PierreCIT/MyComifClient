@@ -16,7 +16,7 @@
     <string name="password">Password</string>
     <string name="connexion">Connection</string>
     <string name="op_cancelled">Operation cancelled</string>
-    <string name="err_loading_pwd">Error while changing your password. Please contact and administrator.</string>
+    <string name="err_loading_pwd">An error occurred while changing your password. Please contact and administrator.</string>
     <string name="refill">Refill</string>
     <string name="match_new_pwd">The passwords are not the same !</string>
     <string name="new_pwd_diff">New password must be different from the old one</string>
