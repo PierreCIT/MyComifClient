@@ -5,6 +5,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mycomifclient.R
 
+/**
+ * Implementation of the transaction view holder
+ * @param rootView Root view of the ViewHolder
+ */
 class TransactionViewHolder(rootView: View) :
     RecyclerView.ViewHolder(rootView) {
     var transactionDate: TextView =

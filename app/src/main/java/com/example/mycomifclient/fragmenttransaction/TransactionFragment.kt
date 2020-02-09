@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mycomifclient.R
 
+/**
+ * Implementation of the Transaction Fragment
+ */
 class TransactionFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private var transactionList: ArrayList<Transaction> = ArrayList()
@@ -43,12 +46,20 @@ class TransactionFragment : Fragment() {
         listener = null
     }
 
+    /**
+     * Set the transaction list for the adapter
+     * @param transactionList List of all the transactions to display (ArrayList<Transaction>)
+     * @return None
+     */
     fun setTransactionList(transactionList: ArrayList<Transaction>) {
         this.transactionList.clear()
         this.transactionList.addAll(transactionList)
         adapter.notifyDataSetChanged()
     }
 
+    /**
+     * Interface for the fragment interaction listener
+     */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)

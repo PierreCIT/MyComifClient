@@ -33,6 +33,9 @@ import kotlin.collections.ArrayList
 const val CONNEXION_STATUS_KEY = "CONNEXION_STATUS"
 const val CHANGE_PASSWORD = 1
 
+/**
+ * Main activity
+ */
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
 
@@ -79,6 +82,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         }
     }
 
+    /**
+     * Check the connectivity of the user device and display an alert box if no connexions were found
+     * @param context Context of the calling activity
+     * @return None
+     */
     private fun checkConnectivity(context: Context) {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
@@ -124,12 +132,20 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         }
     }
 
+    /**
+     * Start the connexion activity and close the main activity
+     * @return None
+     */
     private fun startConnexionActivity() {
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
         this.finish()
     }
 
+    /**
+     * Check the connexion status
+     * @return None
+     */
     private fun checkConnexionStatus() {
         if (!sharedPref.getBoolean(CONNEXION_STATUS_KEY, false)) {
             startConnexionActivity()
@@ -158,12 +174,21 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         if (hasFocus) hideSystemUI()
     }
 
+    /**
+     * Set the shared preference connexion status var
+     * @param bool Connexion status (True = connected; false = not connected) (Boolean)
+     * @return None
+     */
     private fun setSharedPrefConnexionStatus(bool: Boolean) {
         val editor = sharedPref.edit()
         editor.putBoolean(CONNEXION_STATUS_KEY, bool)
         editor.apply()
     }
 
+    /**
+     * Enable immersive mode
+     * @return None
+     */
     private fun hideSystemUI() {
         // Enables regular immersive mode.
         // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.

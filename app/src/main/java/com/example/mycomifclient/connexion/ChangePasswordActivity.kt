@@ -5,7 +5,10 @@ package com.example.mycomifclient.connexion
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.ComifDatabase
@@ -17,11 +20,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+/**
+ * Implementation of the activity to change password
+ */
 class ChangePasswordActivity : AppCompatActivity() {
 
     //TODO: use basic okHttpClient when the API will be put in production
     private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
-
     private val userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +74,13 @@ class ChangePasswordActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Build the "reset pwd" request body
+     * @param oldPassword Old password (String)
+     * @param newPassword New password (String)
+     * @param verifiedNewPassword Confirmation of new password (String)
+     * @return The request body (JsonObject)
+     */
     private fun buildResetPasswordBody(
         oldPassword: String,
         newPassword: String,
@@ -81,6 +93,10 @@ class ChangePasswordActivity : AppCompatActivity() {
         return response
     }
 
+    /**
+     * Handle bad responses: Set to empty quotes all text views of the activity
+     * @return None
+     */
     private fun handleBadResponse(response: Response<JsonObject>) {
         val errorMessage = JSONObject(response.errorBody()!!.string())
         var errors = JSONArray()
@@ -105,7 +121,6 @@ class ChangePasswordActivity : AppCompatActivity() {
             displayedError += errors[i]
             displayedError += "\n"
         }
-
         this.findViewById<EditText>(R.id.a_change_password_edit_text_old_password)
             .setText("")
         this.findViewById<EditText>(R.id.a_change_password_edit_text_new_password)
@@ -115,6 +130,10 @@ class ChangePasswordActivity : AppCompatActivity() {
         this.findViewById<TextView>(R.id.a_change_password_text_view_response).text = displayedError
     }
 
+    /**
+     * Handle positive responses: close the activity when the pwd was successfully changed.
+     * @return None
+     */
     private fun handlePositiveResponse() {
         userDAO.updateToken("")
         Toast.makeText(

@@ -22,6 +22,9 @@ import retrofit2.Response
 
 const val FIRST_CONNEXION = 1
 
+/**
+ * Implementation of the "Connexion" activity
+ */
 class ConnexionActivity : AppCompatActivity() {
 
     //TODO: use basic okHttpClient when the API will be put in production
@@ -64,6 +67,12 @@ class ConnexionActivity : AppCompatActivity() {
         findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = true
     }
 
+    /**
+     * Create the authenticate request body
+     * @param username User name (String)
+     * @param password user password (String)
+     * @return a JsonObject which represents an authenticate request body (JsonObject)
+     */
     private fun createAuthBody(username: String, password: String): JsonObject {
         val serverBody = JsonObject()
         serverBody.addProperty("client_id", 1)
@@ -74,6 +83,13 @@ class ConnexionActivity : AppCompatActivity() {
         return serverBody
     }
 
+    /**
+     * Authenticate the user and handle response
+     * @param authBody Authentication request body (JsonObject)
+     * @return None
+     * @see handle401Response
+     * @see handleAuthenticationResponse
+     */
     private fun authenticate(authBody: JsonObject) {
 
         retrofitHTTPServices.authenticate(authBody).enqueue(object : Callback<JsonObject> {
@@ -94,6 +110,13 @@ class ConnexionActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * Get the user from API
+     * @param token Token of the user to retrieve (String)
+     * @return None
+     * @see reconnect
+     * @see handleGetUserResponse
+     */
     private fun getUser(token: String) {
         retrofitHTTPServices.getUser("Bearer $token")
             .enqueue(object : Callback<JsonObject> {
@@ -117,6 +140,12 @@ class ConnexionActivity : AppCompatActivity() {
             })
     }
 
+    /**
+     * Handle authentication response: Get user info or display error msg
+     * @param body Response body (JsonObject?)
+     * @return None
+     * @see getUser
+     */
     private fun handleAuthenticationResponse(body: JsonObject?) {
         val token = body?.get("access_token")
         if (token == null) {
@@ -130,6 +159,12 @@ class ConnexionActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Handle response to the request for getting a specific user and close activity
+     * @param body response body (JsonObject?)
+     * @param token user token (String)
+     * @return None
+     */
     private fun handleGetUserResponse(body: JsonObject?, token: String) {
         if (body != null) {
             val userEntity = UserEntity(
@@ -150,16 +185,29 @@ class ConnexionActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Remove quotes from JsonElement
+     * @param item Item from which you want to remove quotes (JsonElement)
+     * @return Item substring (without quotes) (String)
+     */
     private fun removeQuotes(item: JsonElement): String {
         return item.toString().substring(1, item.toString().length - 1)
     }
 
+    /**
+     * Reconnect the user and close the activity
+     * @return None
+     */
     private fun reconnect() {
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
         finish()
     }
 
+    /**
+     * Handle 401 response by displaying Toast error message
+     * @return None
+     */
     private fun handle401Response() {
         Toast.makeText(
             this,

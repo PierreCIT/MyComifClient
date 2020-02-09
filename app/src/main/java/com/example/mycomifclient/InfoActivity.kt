@@ -6,6 +6,9 @@ import android.view.View
 import android.widget.ImageButton
 import kotlinx.android.synthetic.main.activity_info.*
 
+/**
+ * Implementation of the Information activity
+ */
 class InfoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +25,10 @@ class InfoActivity : AppCompatActivity() {
         if (hasFocus) hideSystemUI()
     }
 
+    /**
+     * Enable immersive mode
+     * @return None
+     */
     private fun hideSystemUI() {
         // Enables regular immersive mode.
         // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.

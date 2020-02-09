@@ -9,6 +9,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.R
 
+/**
+ * Implementation of the "First connexion" activity
+ */
 class FirstConnexionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +25,11 @@ class FirstConnexionActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Display a popup to inform the user that its new pwd was sent by email
+     * @param context Context of the activity to display popup
+     * @return None
+     */
     private fun displayPasswordMessage(context: Context) {
         val alertDialog: AlertDialog? = this.let {
             val builder = AlertDialog.Builder(it)

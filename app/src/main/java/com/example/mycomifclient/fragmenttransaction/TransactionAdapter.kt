@@ -7,6 +7,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mycomifclient.R
 
+/**
+ * Implementation of an Adapter for Transaction objects
+ * @param transactions List of transaction objects (ArrayList<Transaction>)
+ */
 class TransactionAdapter(private val transactions: ArrayList<Transaction>) :
     RecyclerView.Adapter<TransactionViewHolder>() {
 
@@ -43,6 +47,11 @@ class TransactionAdapter(private val transactions: ArrayList<Transaction>) :
         holder.transactionPrice.text = "%.2f".format(castedPriceToDouble) + " €"
     }
 
+    /**
+     * Convert a MutableMap<String, Int> object to a String object
+     * @param map MutableMap<String, Int> object you want to convert
+     * @return String representation of the mutable map
+     */
     private fun mutableMapOfToString(map: MutableMap<String, Int>): String {
         var productStr = ""
         for ((item, quantity) in map) {

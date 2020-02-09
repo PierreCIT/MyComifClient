@@ -12,6 +12,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import java.util.*
 
+/**
+ * Implementation of a fragment with main info (Home fragment)
+ */
 class HomeFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
 
@@ -31,6 +34,10 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    /**
+     * Updates all views of the fragment according to class data retrieved from API
+     * @return None
+     */
     fun updateViews(
         firstName: String,
         lastName: String,
@@ -96,10 +103,18 @@ class HomeFragment : Fragment() {
         listener = null
     }
 
+    /**
+     * Interface for fragment interaction listener
+     */
     interface OnFragmentInteractionListener {
         fun onFragmentInteraction(uri: Uri)
     }
 
+    /**
+     * Display or Hide the progress bar and fragment views according to the current status
+     * @param status Connexion status
+     * @return None
+     */
     fun toggleViewStatus(status: Int) {
         view?.findViewById<TextView>(R.id.f_home_text_view_user_name)?.visibility = status
         view?.findViewById<TextView>(R.id.f_home_text_view_balance)?.visibility = status
