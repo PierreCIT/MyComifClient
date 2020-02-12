@@ -22,6 +22,7 @@ import com.example.mycomifclient.fragmenttransaction.TransactionFragment
 import com.example.mycomifclient.serverhandling.HTTPServices
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -68,9 +69,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         if (!::user.isInitialized || user.token.isBlank()) {
             reconnect()
         } else {
-            getTransactions()
-
-            setSharedPrefConnexionStatus(true)
+            getUser(user.token)
 
             setContentView(R.layout.activity_main)
             setSupportActionBar(a_main_toolbar)
@@ -372,6 +371,79 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                     ).show()
                 }
             }
+        }
+    }
+
+    /**
+     * Get the user from API
+     * @param token Token of the user to retrieve (String)
+     * @return None
+     * @see reconnect
+     * @see handleGetUserResponse
+     */
+    private fun getUser(token: String) {
+        retrofitHTTPServices.getUser("Bearer $token")
+            .enqueue(object : Callback<JsonObject> {
+                override fun onResponse(
+                    call: Call<JsonObject>,
+                    response: Response<JsonObject>
+                ) {
+                    when (response.raw().code()) {
+
+                        200 -> handleGetUserResponse(response.body(), token)
+
+                        401 -> reconnect()
+
+                        else -> println("Error")
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
+                }
+            })
+        /*retrofitHTTPServices.getUser("Bearer $token")
+            .enqueue(object : Callback<JsonObject> {
+                override fun onResponse(
+                    call: Call<JsonObject>,
+                    response: Response<JsonObject>
+                ) {
+                    when (response.raw().code()) {
+
+                        200 -> handleGetUserResponse(response.body(), token)
+
+                        401 -> reconnect()
+
+                        else -> println("Error")
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
+                }
+            })*/
+    }
+
+    /**
+     * Handle response to the request for getting a specific user and close activity
+     * @param body response body (JsonObject?)
+     * @param token user token (String)
+     * @return None
+     */
+    private fun handleGetUserResponse(body: JsonObject?, token: String) {
+        if (body != null) {
+            val userEntity = UserEntity(
+                body.get("id").asInt,
+                removeQuotes(body.get("first_name")),
+                removeQuotes(body.get("last_name")),
+                removeQuotes(body.get("email")),
+                token,
+                body.get("balance").asInt
+            )
+
+            userDAO.nukeUserTable()
+            userDAO.insert(userEntity)
+            getTransactions()
         }
     }
 }

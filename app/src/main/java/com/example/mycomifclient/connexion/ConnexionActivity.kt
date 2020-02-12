@@ -4,7 +4,6 @@ package com.example.mycomifclient.connexion
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -111,40 +110,9 @@ class ConnexionActivity : AppCompatActivity() {
     }
 
     /**
-     * Get the user from API
-     * @param token Token of the user to retrieve (String)
-     * @return None
-     * @see reconnect
-     * @see handleGetUserResponse
-     */
-    private fun getUser(token: String) {
-        retrofitHTTPServices.getUser("Bearer $token")
-            .enqueue(object : Callback<JsonObject> {
-                override fun onResponse(
-                    call: Call<JsonObject>,
-                    response: Response<JsonObject>
-                ) {
-                    when (response.raw().code()) {
-
-                        200 -> handleGetUserResponse(response.body(), token)
-
-                        401 -> reconnect()
-
-                        else -> println("Error")
-                    }
-                }
-
-                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
-                }
-            })
-    }
-
-    /**
      * Handle authentication response: Get user info or display error msg
      * @param body Response body (JsonObject?)
      * @return None
-     * @see getUser
      */
     private fun handleAuthenticationResponse(body: JsonObject?) {
         val token = body?.get("access_token")
@@ -155,35 +123,22 @@ class ConnexionActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
         } else {
-            getUser(removeQuotes(token))
-        }
-    }
-
-    /**
-     * Handle response to the request for getting a specific user and close activity
-     * @param body response body (JsonObject?)
-     * @param token user token (String)
-     * @return None
-     */
-    private fun handleGetUserResponse(body: JsonObject?, token: String) {
-        if (body != null) {
             val userEntity = UserEntity(
-                body.get("id").asInt,
-                removeQuotes(body.get("first_name")),
-                removeQuotes(body.get("last_name")),
-                removeQuotes(body.get("email")),
-                token,
-                body.get("balance").asInt
+                0,
+                "",
+                "",
+                "",
+                removeQuotes(token),
+                0
             )
-
             userDAO.nukeUserTable()
             userDAO.insert(userEntity)
-
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)
             finish()
         }
     }
+
 
     /**
      * Remove quotes from JsonElement

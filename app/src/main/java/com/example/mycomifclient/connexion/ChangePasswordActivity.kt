@@ -4,11 +4,7 @@ package com.example.mycomifclient.connexion
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.ComifDatabase
