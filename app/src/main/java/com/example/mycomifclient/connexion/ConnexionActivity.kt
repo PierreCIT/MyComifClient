@@ -41,9 +41,10 @@ class ConnexionActivity : AppCompatActivity() {
         userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
         transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
-        val user = userDAO.getFirst()
 
-        this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text = user.email
+        //Do NOT remove the question mark next line, as it permits to verify whether the database contains a user or not
+        this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text =
+            userDAO.getFirst()?.email
 
         findViewById<Button>(R.id.a_connexion_button_connexion).setOnClickListener {
             findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = false
@@ -102,7 +103,6 @@ class ConnexionActivity : AppCompatActivity() {
                     else -> println("Error")
                 }
             }
-
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
                 Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
             }
@@ -129,13 +129,17 @@ class ConnexionActivity : AppCompatActivity() {
                 "",
                 "",
                 removeQuotes(token),
+                0,
+                0,
+                0,
                 0
             )
             userDAO.nukeUserTable()
             userDAO.insert(userEntity)
+
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)
-            finish()
+            this.finish()
         }
     }
 

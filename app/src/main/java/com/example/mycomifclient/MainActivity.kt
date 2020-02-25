@@ -14,22 +14,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import com.example.mycomifclient.connexion.ChangePasswordActivity
 import com.example.mycomifclient.connexion.ConnexionActivity
 import com.example.mycomifclient.database.*
-import com.example.mycomifclient.fragmenttransaction.Transaction
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
-import com.example.mycomifclient.serverhandling.HTTPServices
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 const val CONNEXION_STATUS_KEY = "CONNEXION_STATUS"
 const val CHANGE_PASSWORD = 1
@@ -42,18 +32,14 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     private lateinit var sharedPref: SharedPreferences
 
-    private val homeFragment = HomeFragment()
-    private val transactionFragment = TransactionFragment()
-    private val transactionList: ArrayList<Transaction> = ArrayList()
-
-    private var adapter = ViewPagerAdapter(supportFragmentManager)
-
     private lateinit var userDAO: UserDAO
     private lateinit var transactionDAO: TransactionDAO
     private lateinit var itemDAO: ItemDAO
 
-    //TODO: use basic okHttpClient when the API will be put in production
-    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
+    private lateinit var homeFragment: HomeFragment
+    private lateinit var transactionFragment: TransactionFragment
+
+    private var adapter = ViewPagerAdapter(supportFragmentManager)
 
     private lateinit var user: UserEntity
 
@@ -65,16 +51,38 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
 
-        user = userDAO.getFirst()
+        user = this.userDAO.getFirst()
         if (!::user.isInitialized || user.token.isBlank()) {
             reconnect()
         } else {
+            homeFragment = HomeFragment(userDAO)
+            transactionFragment = TransactionFragment(userDAO, transactionDAO, itemDAO)
+
             setContentView(R.layout.activity_main)
             setSupportActionBar(a_main_toolbar)
 
             adapter.addFragment(homeFragment, resources.getString(R.string.home))
             adapter.addFragment(transactionFragment, resources.getString(R.string.transactions))
             a_main_view_pager.adapter = adapter
+            a_main_view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {}
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                }
+
+                override fun onPageSelected(position: Int) {
+                    if (position == 0) {
+                        transactionFragment.toggleViewStatus(View.VISIBLE)
+                        homeFragment.getUser()
+                    } else if (position == 1) {
+                        transactionFragment.getTransactions()
+                    }
+                }
+
+            })
             tabs.setupWithViewPager(a_main_view_pager)
         }
     }
@@ -94,7 +102,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
             builder.apply {
                 setPositiveButton(
                     R.string.OK
-                ) { dialog, id ->
+                ) { _, _ ->
                     // User clicked OK button
                 }
             }
@@ -161,11 +169,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     override fun onResume() {
         super.onResume()
-        getUser(user.token)
-        adapter.notifyDataSetChanged()
-
         checkConnectivity(this)
-        checkConnexionStatus()
+        //TODO: what does this do ?
+        //checkConnexionStatus()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -203,129 +209,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
 
-    private fun getTransactions() {
-        val user = userDAO.getFirst()
-        retrofitHTTPServices.getTransactions(
-            "Bearer " + user.token
-        )
-            .enqueue(object : Callback<JsonArray> {
-                override fun onResponse(
-                    call: Call<JsonArray>,
-                    response: Response<JsonArray>
-                ) {
-                    when (response.raw().code()) {
-
-                        200 -> handleGetTransactionsResponse(response.body())
-
-                        401 -> reconnect()
-
-                        else -> println("Error")
-                    }
-                }
-
-                override fun onFailure(call: Call<JsonArray>, t: Throwable) {
-                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
-                }
-            })
-    }
-
-    private fun handleGetTransactionsResponse(body: JsonArray?) {
-        body?.forEach { bodyElement ->
-            val transaction = bodyElement.asJsonObject
-            val items = transaction.get("products").asJsonArray
-            transactionDAO.insert(
-                TransactionEntity(
-                    transaction.get("id").asInt,
-                    removeQuotes(transaction.get("type")),
-                    removeQuotes(transaction.get("created_at"))
-                )
-            )
-            if (removeQuotes(transaction.get("type")) == "credit") {
-                itemDAO.insert(
-                    ItemEntity(
-                        transaction.get("id").asInt,
-                        resources.getString(R.string.refill),
-                        1,
-                        transaction.get("value").asInt * -1
-                    )
-                )
-            } else {
-                items.forEach { itemsElement ->
-                    val item = itemsElement.asJsonObject
-                    itemDAO.insert(
-                        ItemEntity(
-                            transaction.get("id").asInt,
-                            removeQuotes(item.get("name")),
-                            item.get("pivot").asJsonObject.get("quantity").asInt,
-                            item.get("pivot").asJsonObject.get("unit_price").asInt
-                        )
-                    )
-                }
-            }
-        }
-        createTransactionsList()
-    }
-
-    private fun removeQuotes(item: JsonElement): String {
-        return item.toString().substring(1, item.toString().length - 1)
-    }
-
-    private fun createTransactionsList() {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE)
-        val currentDate = Date().time
-        val transactions = transactionDAO.getAll()
-
-        var dayConsos = 0f
-        var weekConsos = 0f
-        var monthConsos = 0f
-
-        transactions.forEach { transaction ->
-
-            val itemsMap: MutableMap<String, Int> = mutableMapOf()
-            val items = itemDAO.selectItems(transaction.transactionId)
-            var totalTransactionPrice = 0f
-
-            val date = transaction.date.split(' ')[0]
-            val hour = transaction.date.split(' ')[1]
-            val timeDiff =
-                (currentDate - dateFormat.parse(transaction.date).time) / 1000f / 60f / 60f / 24f
-
-            items.forEach { item ->
-                itemsMap[item.itemName] = item.quantity
-                totalTransactionPrice -= item.price * item.quantity / 100f
-            }
-
-            if (timeDiff <= 1 && transaction.type == "debit") {
-                dayConsos += totalTransactionPrice
-            }
-            if (timeDiff <= 7 && transaction.type == "debit") {
-                weekConsos += totalTransactionPrice
-            }
-            if (timeDiff <= 30 && transaction.type == "debit") {
-                monthConsos += totalTransactionPrice
-            }
-            transactionList.add(
-                Transaction(
-                    date,
-                    hour,
-                    itemsMap,
-                    totalTransactionPrice.toString()
-                )
-            )
-        }
-        transactionList.reverse()
-        transactionFragment.setTransactionList(transactionList)
-        homeFragment.updateViews(
-            user.firstName,
-            user.lastName,
-            user.balance / 100f,
-            "%.2f".format(dayConsos),
-            "%.2f".format(weekConsos),
-            "%.2f".format(monthConsos)
-        )
-        homeFragment.toggleViewStatus(View.VISIBLE)
-    }
-
     private fun logout() {
         startConnexionActivity()
         setSharedPrefConnexionStatus(false)
@@ -334,7 +217,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         itemDAO.nukeItemTable()
     }
 
-    private fun reconnect() {
+    fun reconnect() {
         logout()
         val intent = Intent(this, ConnexionActivity::class.java)
         this.startActivity(intent)
@@ -363,79 +246,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                     ).show()
                 }
             }
-        }
-    }
-
-    /**
-     * Get the user from API
-     * @param token Token of the user to retrieve (String)
-     * @return None
-     * @see reconnect
-     * @see handleGetUserResponse
-     */
-    private fun getUser(token: String) {
-        retrofitHTTPServices.getUser("Bearer $token")
-            .enqueue(object : Callback<JsonObject> {
-                override fun onResponse(
-                    call: Call<JsonObject>,
-                    response: Response<JsonObject>
-                ) {
-                    when (response.raw().code()) {
-
-                        200 -> handleGetUserResponse(response.body(), token)
-
-                        401 -> reconnect()
-
-                        else -> println("Error")
-                    }
-                }
-
-                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
-                }
-            })
-        /*retrofitHTTPServices.getUser("Bearer $token")
-            .enqueue(object : Callback<JsonObject> {
-                override fun onResponse(
-                    call: Call<JsonObject>,
-                    response: Response<JsonObject>
-                ) {
-                    when (response.raw().code()) {
-
-                        200 -> handleGetUserResponse(response.body(), token)
-
-                        401 -> reconnect()
-
-                        else -> println("Error")
-                    }
-                }
-
-                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
-                }
-            })*/
-    }
-
-    /**
-     * Handle response to the request for getting a specific user and close activity
-     * @param body response body (JsonObject?)
-     * @param token user token (String)
-     * @return None
-     */
-    private fun handleGetUserResponse(body: JsonObject?, token: String) {
-        if (body != null) {
-            val userEntity = UserEntity(
-                body.get("id").asInt,
-                removeQuotes(body.get("first_name")),
-                removeQuotes(body.get("last_name")),
-                removeQuotes(body.get("email")),
-                token,
-                body.get("balance").asInt
-            )
-
-            userDAO.nukeUserTable()
-            userDAO.insert(userEntity)
-            getTransactions()
         }
     }
 }
