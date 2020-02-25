@@ -1,2 +1,2 @@
 # MyComifClient
-Application android pour l'association COMIF du campus Georges Charpak de l'école des Mines de Saint-Étienne. Cette application à pour objectif de permettre aux usagers de l'association de visualiser le solde de leur compte et les produits achetés.
+Android application for the Comif' association of the Georges Charpak campus of the Ecole des Mines de Saint-Etienne. This application aims to allow users of the association to view the balance of their account and the products purchased.

@@ -43,7 +43,7 @@ class ConnexionActivity : AppCompatActivity() {
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
         val user = userDAO.getFirst()
 
-        this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text = user?.email
+        this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text = user.email
 
         findViewById<Button>(R.id.a_connexion_button_connexion).setOnClickListener {
             findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = false
@@ -55,7 +55,7 @@ class ConnexionActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.a_connexion_button_first_connexion).setOnClickListener {
             findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = false
-            val intent = Intent(this, FirstConnexionActivity::class.java)
+            val intent = Intent(this, PasswordForgottenActivity::class.java)
             this.startActivityForResult(intent, FIRST_CONNEXION)
         }
     }
@@ -147,16 +147,6 @@ class ConnexionActivity : AppCompatActivity() {
      */
     private fun removeQuotes(item: JsonElement): String {
         return item.toString().substring(1, item.toString().length - 1)
-    }
-
-    /**
-     * Reconnect the user and close the activity
-     * @return None
-     */
-    private fun reconnect() {
-        val intent = Intent(this, ConnexionActivity::class.java)
-        this.startActivity(intent)
-        finish()
     }
 
     /**

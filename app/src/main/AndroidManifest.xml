@@ -16,18 +16,23 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".connexion.ChangePasswordActivity"
-            android:screenOrientation="sensorPortrait"/>
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity android:name=".InfoActivity"
-            android:screenOrientation="sensorPortrait"/>
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".connexion.FirstConnexionActivity"
-            android:screenOrientation="sensorPortrait" />
+            android:name=".connexion.PasswordForgottenActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".connexion.ConnexionActivity"
-            android:screenOrientation="sensorPortrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="sensorPortrait">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

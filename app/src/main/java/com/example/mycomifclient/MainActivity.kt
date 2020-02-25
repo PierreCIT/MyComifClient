@@ -40,7 +40,7 @@ const val CHANGE_PASSWORD = 1
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
 
-    lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPref: SharedPreferences
 
     private val homeFragment = HomeFragment()
     private val transactionFragment = TransactionFragment()
@@ -69,8 +69,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         if (!::user.isInitialized || user.token.isBlank()) {
             reconnect()
         } else {
-            getUser(user.token)
-
             setContentView(R.layout.activity_main)
             setSupportActionBar(a_main_toolbar)
 
@@ -163,9 +161,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     override fun onResume() {
         super.onResume()
+        getUser(user.token)
+        adapter.notifyDataSetChanged()
+
         checkConnectivity(this)
-        // TODO: Uncomment this line
-        //checkConnexionStatus()
+        checkConnexionStatus()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -201,14 +201,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                 // Hide the nav bar and status bar
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
-    }
-
-    // Shows the system bars by removing all the flags
-    // except for the ones that make the content appear under the system bars.
-    private fun showSystemUI() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
     }
 
     private fun getTransactions() {
