@@ -80,6 +80,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                     } else if (position == 1) {
                         transactionFragment.getTransactions()
                     }
+                    checkConnectivity(this@MainActivity)
+                    //TODO: what does this do ?
+                    //checkConnexionStatus()
                 }
 
             })
@@ -165,13 +168,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     override fun onFragmentInteraction(uri: Uri) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onResume() {
-        super.onResume()
-        checkConnectivity(this)
-        //TODO: what does this do ?
-        //checkConnexionStatus()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
