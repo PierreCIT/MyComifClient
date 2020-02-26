@@ -135,7 +135,7 @@ class TransactionFragment(
         createTransactionsList()
     }
 
-    fun createTransactionsList() {
+    private fun createTransactionsList() {
         val transactions = transactionDAO.getAll()
 
         transactions.forEach { transaction ->

@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.mycomifclient.database.UserDAO
 import com.example.mycomifclient.database.UserEntity
@@ -185,10 +187,32 @@ class HomeFragment(private var userDAO: UserDAO) : Fragment() {
                 "%.2f".format(userEntity.monthlyExpenses / 100f),
                 "%.2f".format(userEntity.monthlyExpenses / 100f)
             )
+
+            this.toggleViewStatus(View.INVISIBLE)
         }
     }
 
     private fun removeQuotes(item: JsonElement): String {
         return item.toString().substring(1, item.toString().length - 1)
+    }
+
+    /**
+     * Display or Hide the progress bar and fragment views according to the current status
+     * @param status Connexion status
+     * @return None
+     */
+    private fun toggleViewStatus(status: Int) {
+        view?.findViewById<ConstraintLayout>(R.id.constraint_layout_progress_bar)?.visibility =
+            status
+        if (status == View.INVISIBLE) {
+            view?.findViewById<TextView>(R.id.f_home_text_view_user_name)?.visibility = View.VISIBLE
+            view?.findViewById<TextView>(R.id.f_home_text_view_balance)?.visibility = View.VISIBLE
+            view?.findViewById<TableRow>(R.id.table_row_stats)?.visibility = View.VISIBLE
+        } else {
+            view?.findViewById<TextView>(R.id.f_home_text_view_user_name)?.visibility =
+                View.INVISIBLE
+            view?.findViewById<TextView>(R.id.f_home_text_view_balance)?.visibility = View.INVISIBLE
+            view?.findViewById<TableRow>(R.id.table_row_stats)?.visibility = View.INVISIBLE
+        }
     }
 }
