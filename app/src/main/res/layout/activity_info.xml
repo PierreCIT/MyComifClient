@@ -26,14 +26,14 @@
             android:id="@+id/a_info_image_button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:tint="@color/colorWhite"
             android:layout_gravity="center"
+            android:background="@color/colorPrimary"
+            android:contentDescription="@string/back_button"
+            android:tint="@color/colorWhite"
             app:srcCompat="@drawable/ic_arrow_back_primary_color" />
 
 
         <TextView
-            android:id="@+id/a_info_text_view_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/info"
@@ -60,7 +60,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/a_info_text_view_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/description"
@@ -71,7 +70,6 @@
                 android:paddingTop="10dp"/>
 
             <TextView
-                android:id="@+id/a_info_text_view_description_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
@@ -82,10 +80,10 @@
                 android:paddingEnd="20dp"
                 android:text="@string/description_content"
                 android:textSize="16sp"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:textColor="@color/colorPrimaryDark"
+                tools:targetApi="o" />
 
             <TextView
-                android:id="@+id/a_info_text_view_contact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/contact"
@@ -96,7 +94,6 @@
                 android:paddingTop="10dp"/>
 
             <TextView
-                android:id="@+id/a_info_text_view_contact_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
@@ -107,10 +104,10 @@
                 android:text="@string/contact_content"
                 android:textSize="16sp"
                 android:textIsSelectable="true"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:textColor="@color/colorPrimaryDark"
+                tools:targetApi="o" />
 
             <TextView
-                android:id="@+id/a_info_text_view_license"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/license"
@@ -121,7 +118,6 @@
                 android:paddingTop="10dp"/>
 
             <TextView
-                android:id="@+id/a_info_text_view_license_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="20dp"
@@ -131,7 +127,8 @@
                 android:text="@string/license_content"
                 android:textSize="16sp"
                 android:textIsSelectable="true"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:textColor="@color/colorPrimaryDark"
+                tools:targetApi="o" />
 
         </LinearLayout>
     </ScrollView>

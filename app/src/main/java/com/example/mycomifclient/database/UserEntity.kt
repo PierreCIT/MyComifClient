@@ -21,7 +21,10 @@ data class UserEntity(
     val lastName: String,
     val email: String,
     val token: String,
-    val balance: Int
+    val balance: Int,
+    val dailyExpenses: Int,
+    val weeklyExpenses: Int,
+    val monthlyExpenses: Int
 )
 
 /**

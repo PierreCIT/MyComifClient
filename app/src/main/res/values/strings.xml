@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">My Comif</string>
 
-    <string name="action_settings">Settings</string>
     <string name="this_week">This week</string>
     <string name="this_month">This month</string>
     <string name="today">Today</string>
@@ -18,8 +17,6 @@
     <string name="op_cancelled">Operation cancelled</string>
     <string name="err_loading_pwd">An error occurred while changing your password. Please contact and administrator.</string>
     <string name="refill">Refill</string>
-    <string name="match_new_pwd">The passwords are not the same !</string>
-    <string name="new_pwd_diff">New password must be different from the old one</string>
     <string name="success_change_pwd">Password changed successfully. Please log in with your new credentials</string>
     <string name="error_server_data">Error while recovering data from server. Please contact an administrator</string>
     <string name="bad_id">Wrong credentials, please try again.</string>
@@ -37,7 +34,8 @@
     <string name="description">Description</string>
     <string name="description_content">Android application for the association COMIF of the Georges Charpak campus of the Ecole des Mines de Saint-Etienne. This application aims to allow users of the association to view the balance of their account and the products purchased.\n\n All the source codes of this app are available at <a href="https://github.com/PierreCIT/MyComifClient">github.com/PierreCIT/MyComifClient</a></string>
     <string name="license">License</string>
-    <string name="license_content"><![CDATA[ MIT License\n\nCopyright © 2020 Jean-Christophe Chevalier, Alexandre Ladrière, Pierre Seite & Hugo Serieys\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.]]></string>
+    <string name="license_content"><![CDATA[ MIT License\n\nCopyright © 2020 Jean-Christophe Chevalier, Alexandre Ladrière, Pierre Seite & Hugo Serieys\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.]]></string>
     <string name="contact">Contact</string>
     <string name="contact_content">You can contact us at the following address: comif13120@gmail.com.\n\nOr you can contact us directly on Facebook: <a href="https://www.facebook.com/profile.php?id=100011711589847">facebook.com/profile.php?id=100011711589847</a>.</string>
+    <string name="back_button">Back button</string>
 </resources>

@@ -4,7 +4,6 @@ package com.example.mycomifclient.connexion
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -42,9 +41,10 @@ class ConnexionActivity : AppCompatActivity() {
         userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
         transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
-        val user = userDAO.getFirst()
 
-        this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text = user?.email
+        //Do NOT remove the question mark next line, as it permits to verify whether the database contains a user or not
+        this.findViewById<TextView>(R.id.a_connexion_edit_text_email).text =
+            userDAO.getFirst()?.email
 
         findViewById<Button>(R.id.a_connexion_button_connexion).setOnClickListener {
             findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = false
@@ -56,7 +56,7 @@ class ConnexionActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.a_connexion_button_first_connexion).setOnClickListener {
             findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = false
-            val intent = Intent(this, FirstConnexionActivity::class.java)
+            val intent = Intent(this, PasswordForgottenActivity::class.java)
             this.startActivityForResult(intent, FIRST_CONNEXION)
         }
     }
@@ -103,7 +103,6 @@ class ConnexionActivity : AppCompatActivity() {
                     else -> println("Error")
                 }
             }
-
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
                 Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
             }
@@ -111,40 +110,9 @@ class ConnexionActivity : AppCompatActivity() {
     }
 
     /**
-     * Get the user from API
-     * @param token Token of the user to retrieve (String)
-     * @return None
-     * @see reconnect
-     * @see handleGetUserResponse
-     */
-    private fun getUser(token: String) {
-        retrofitHTTPServices.getUser("Bearer $token")
-            .enqueue(object : Callback<JsonObject> {
-                override fun onResponse(
-                    call: Call<JsonObject>,
-                    response: Response<JsonObject>
-                ) {
-                    when (response.raw().code()) {
-
-                        200 -> handleGetUserResponse(response.body(), token)
-
-                        401 -> reconnect()
-
-                        else -> println("Error")
-                    }
-                }
-
-                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
-                }
-            })
-    }
-
-    /**
      * Handle authentication response: Get user info or display error msg
      * @param body Response body (JsonObject?)
      * @return None
-     * @see getUser
      */
     private fun handleAuthenticationResponse(body: JsonObject?) {
         val token = body?.get("access_token")
@@ -155,35 +123,26 @@ class ConnexionActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
         } else {
-            getUser(removeQuotes(token))
-        }
-    }
-
-    /**
-     * Handle response to the request for getting a specific user and close activity
-     * @param body response body (JsonObject?)
-     * @param token user token (String)
-     * @return None
-     */
-    private fun handleGetUserResponse(body: JsonObject?, token: String) {
-        if (body != null) {
             val userEntity = UserEntity(
-                body.get("id").asInt,
-                removeQuotes(body.get("first_name")),
-                removeQuotes(body.get("last_name")),
-                removeQuotes(body.get("email")),
-                token,
-                body.get("balance").asInt
+                0,
+                "",
+                "",
+                "",
+                removeQuotes(token),
+                0,
+                0,
+                0,
+                0
             )
-
             userDAO.nukeUserTable()
             userDAO.insert(userEntity)
 
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)
-            finish()
+            this.finish()
         }
     }
+
 
     /**
      * Remove quotes from JsonElement
@@ -192,16 +151,6 @@ class ConnexionActivity : AppCompatActivity() {
      */
     private fun removeQuotes(item: JsonElement): String {
         return item.toString().substring(1, item.toString().length - 1)
-    }
-
-    /**
-     * Reconnect the user and close the activity
-     * @return None
-     */
-    private fun reconnect() {
-        val intent = Intent(this, ConnexionActivity::class.java)
-        this.startActivity(intent)
-        finish()
     }
 
     /**

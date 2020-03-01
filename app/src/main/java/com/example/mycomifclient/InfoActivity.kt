@@ -1,9 +1,9 @@
 package com.example.mycomifclient
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_info.*
 
 /**

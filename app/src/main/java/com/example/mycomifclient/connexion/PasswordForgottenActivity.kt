@@ -1,8 +1,6 @@
 package com.example.mycomifclient.connexion
 
-import android.content.Context
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
@@ -12,31 +10,30 @@ import com.example.mycomifclient.R
 /**
  * Implementation of the "First connexion" activity
  */
-class FirstConnexionActivity : AppCompatActivity() {
+class PasswordForgottenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_first_connexion)
+        setContentView(R.layout.activity_password_forgotten)
         findViewById<ImageButton>(R.id.a_first_connexion_image_button_back).setOnClickListener {
             finish()
         }
         findViewById<Button>(R.id.a_first_connexion_button_connexion).setOnClickListener {
-            displayPasswordMessage(this)
+            displayPasswordMessage()
         }
     }
 
     /**
      * Display a popup to inform the user that its new pwd was sent by email
-     * @param context Context of the activity to display popup
      * @return None
      */
-    private fun displayPasswordMessage(context: Context) {
+    private fun displayPasswordMessage() {
         val alertDialog: AlertDialog? = this.let {
             val builder = AlertDialog.Builder(it)
             builder.apply {
                 setPositiveButton(
                     R.string.OK
-                ) { dialog, id ->
+                ) { _, _ ->
                     finish()
                 }
             }
