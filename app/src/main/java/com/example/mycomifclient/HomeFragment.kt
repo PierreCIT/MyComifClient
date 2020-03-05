@@ -184,7 +184,7 @@ class HomeFragment(private var userDAO: UserDAO) : Fragment() {
                 userEntity.lastName,
                 userEntity.balance / 100f,
                 "%.2f".format(userEntity.dailyExpenses / 100f),
-                "%.2f".format(userEntity.monthlyExpenses / 100f),
+                "%.2f".format(userEntity.weeklyExpenses / 100f),
                 "%.2f".format(userEntity.monthlyExpenses / 100f)
             )
 
