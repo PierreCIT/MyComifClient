@@ -20,7 +20,6 @@
     <string name="email">Adresse email</string>
     <string name="password">Mot de passe</string>
     <string name="connexion">Connexion</string>
-    <string name="first_connexion">Première connexion</string>
     <string name="get_password">Obtenir mon mot de passe</string>
     <string name="password_by_email">Votre nouveau mot de passe a été envoyé par email. Veuillez vérifier vos courriels.</string>
     <string name="comif_logo">Comif\' Logo</string>

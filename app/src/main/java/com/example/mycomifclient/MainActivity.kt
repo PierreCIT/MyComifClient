@@ -150,16 +150,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         this.finish()
     }
 
-    /**
-     * Check the connexion status
-     * @return None
-     */
-    private fun checkConnexionStatus() {
-        if (!sharedPref.getBoolean(CONNEXION_STATUS_KEY, false)) {
-            startConnexionActivity()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
