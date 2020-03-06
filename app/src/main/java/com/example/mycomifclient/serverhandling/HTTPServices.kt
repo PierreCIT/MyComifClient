@@ -28,8 +28,15 @@ interface HTTPServices {
     ): Call<JsonObject>
 
     @POST("api/users/reset")
+    @Headers("Content-Type:application/json")
     fun resetPassword(
         @Header("Authorization") bearerToken: String,
+        @Body request: JsonObject
+    ): Call<JsonObject>
+
+    @POST("api/users/forgot")
+    @Headers("Content-Type:application/json")
+    fun forgotPassword(
         @Body request: JsonObject
     ): Call<JsonObject>
 
