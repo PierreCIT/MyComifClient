@@ -38,4 +38,5 @@
     <string name="contact">Contacts</string>
     <string name="contact_content">Vous pouvez nous contacter à l\'adresse suivante: comif13120@gmail.com.\n\nOu nous contacter directement sur Facebook: <a href="https://www.facebook.com/profile.php?id=100011711589847">facebook.com/profile.php?id=100011711589847</a>.</string>
     <string name="back_button">Bouton retour</string>
+    <string name="password_forgotten">Mot de passe oublié ?</string>
 </resources>
