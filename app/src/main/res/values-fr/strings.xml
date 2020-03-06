@@ -20,7 +20,6 @@
     <string name="email">Adresse email</string>
     <string name="password">Mot de passe</string>
     <string name="connexion">Connexion</string>
-    <string name="first_connexion">Première connexion</string>
     <string name="get_password">Obtenir mon mot de passe</string>
     <string name="password_by_email">Votre nouveau mot de passe a été envoyé par email. Veuillez vérifier vos courriels.</string>
     <string name="comif_logo">Comif\' Logo</string>
@@ -38,4 +37,5 @@
     <string name="contact">Contacts</string>
     <string name="contact_content">Vous pouvez nous contacter à l\'adresse suivante: comif13120@gmail.com.\n\nOu nous contacter directement sur Facebook: <a href="https://www.facebook.com/profile.php?id=100011711589847">facebook.com/profile.php?id=100011711589847</a>.</string>
     <string name="back_button">Bouton retour</string>
+    <string name="password_forgotten">Mot de passe oublié ?</string>
 </resources>
