@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mycomifclient.R
+import com.example.mycomifclient.database.ComifDatabase
 import com.example.mycomifclient.serverhandling.HTTPServices
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -21,11 +22,14 @@ import retrofit2.Response
 class PasswordForgottenActivity : AppCompatActivity() {
 
     private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
-    private var email: String = ""
+    private var email: String = ComifDatabase.getAppDatabase(this).getUserDAO().getFirst().email
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password_forgotten)
+
+        findViewById<EditText>(R.id.a_first_connexion_edit_text_email).setText(email)
+
         findViewById<ImageButton>(R.id.a_first_connexion_image_button_back).setOnClickListener {
             finish()
         }
@@ -56,7 +60,7 @@ class PasswordForgottenActivity : AppCompatActivity() {
         alertDialog?.show()
     }
 
-    private fun forgotPassword() {
+    fun forgotPassword() {
         retrofitHTTPServices.forgotPassword(buildForgotPasswordBody())
             .enqueue(object : Callback<JsonObject> {
                 override fun onResponse(
