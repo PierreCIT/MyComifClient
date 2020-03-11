@@ -20,7 +20,7 @@
     <string name="success_change_pwd">Password changed successfully. Please log in with your new credentials</string>
     <string name="error_server_data">Error while recovering data from server. Please contact an administrator</string>
     <string name="bad_id">Wrong credentials, please try again.</string>
-    <string name="get_password">Get password</string>
+    <string name="get_password">Confirmer</string>
     <string name="password_by_email">Your new password was sent by email. Please check your emails.</string>
     <string name="comif_logo">Comif\' Logo</string>
     <string name="todo">TODO</string>
@@ -38,4 +38,5 @@
     <string name="contact_content">You can contact us at the following address: comif13120@gmail.com.\n\nOr you can contact us directly on Facebook: <a href="https://www.facebook.com/profile.php?id=100011711589847">facebook.com/profile.php?id=100011711589847</a>.</string>
     <string name="back_button">Back button</string>
     <string name="password_forgotten">Password forgotten ?</string>
+    <string name="forgot_password_description">Fill out the form with your .etu email address. An email with a link will be sent to this address, and it will allow you to reset the password of your account.</string>
 </resources>

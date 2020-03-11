@@ -60,7 +60,7 @@ class PasswordForgottenActivity : AppCompatActivity() {
         alertDialog?.show()
     }
 
-    fun forgotPassword() {
+    private fun forgotPassword() {
         retrofitHTTPServices.forgotPassword(buildForgotPasswordBody())
             .enqueue(object : Callback<JsonObject> {
                 override fun onResponse(
