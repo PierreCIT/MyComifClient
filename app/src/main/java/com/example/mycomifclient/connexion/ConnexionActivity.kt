@@ -100,9 +100,13 @@ class ConnexionActivity : AppCompatActivity() {
 
                     401 -> handle401Response()
 
-                    else -> println("Error")
+                    else -> {
+                        println("Error")
+                        findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = true
+                    }
                 }
             }
+
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
                 Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
             }
