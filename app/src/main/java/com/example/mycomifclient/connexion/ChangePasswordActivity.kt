@@ -44,7 +44,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                 this.findViewById<EditText>(R.id.a_change_password_edit_text_verified_new_password)
                     .text.toString()
             val body = buildResetPasswordBody(oldPassword, newPassword, verifiedNewPassword)
-            val token = userDAO.getFirst().token
+            val token = userDAO.getFirst()?.token
             retrofitHTTPServices.resetPassword("Bearer $token", body)
                 .enqueue(object : Callback<JsonObject> {
                     override fun onResponse(

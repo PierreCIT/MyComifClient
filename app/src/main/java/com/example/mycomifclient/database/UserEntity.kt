@@ -37,7 +37,7 @@ interface UserDAO {
      * @return None
      */
     @Query("SELECT * FROM UserEntity LIMIT 1")
-    fun getFirst(): UserEntity
+    fun getFirst(): UserEntity?
 
     /**
      * Insert (or replace if it already exists) a user entity into the database

@@ -73,7 +73,7 @@ class TransactionFragment(
     }
 
     fun getTransactions() {
-        val user = userDAO.getFirst()
+        val user = userDAO.getFirst()!!
         retrofitHTTPServices.getTransactions(
             "Bearer " + user.token
         )

@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     private var adapter = ViewPagerAdapter(supportFragmentManager)
 
-    private lateinit var user: UserEntity
+    private var user: UserEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         sharedPref = getPreferences(Context.MODE_PRIVATE)
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
 
         user = this.userDAO.getFirst()
-        if (!::user.isInitialized || user.token.isBlank()) {
+        if (user == null || user!!.token.isBlank()) {
             reconnect()
         } else {
             homeFragment = HomeFragment(userDAO)

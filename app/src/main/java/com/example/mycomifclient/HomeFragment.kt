@@ -44,7 +44,7 @@ class HomeFragment(private var userDAO: UserDAO) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        user = userDAO.getFirst()
+        user = userDAO.getFirst()!!
         getUser()
         return inflater.inflate(R.layout.fragment_home, container, false)
     }

@@ -22,7 +22,7 @@ import retrofit2.Response
 class PasswordForgottenActivity : AppCompatActivity() {
 
     private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
-    private var email: String = ComifDatabase.getAppDatabase(this).getUserDAO().getFirst().email
+    private var email: String? = ComifDatabase.getAppDatabase(this).getUserDAO().getFirst()?.email
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
