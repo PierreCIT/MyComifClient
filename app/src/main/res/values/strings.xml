@@ -20,7 +20,7 @@
     <string name="success_change_pwd">Password changed successfully. Please log in with your new credentials</string>
     <string name="error_server_data">Error while recovering data from server. Please contact an administrator</string>
     <string name="bad_id">Wrong credentials, please try again.</string>
-    <string name="get_password">Confirmer</string>
+    <string name="get_password">Confirm</string>
     <string name="password_by_email">Your new password was sent by email. Please check your emails.</string>
     <string name="comif_logo">Comif\' Logo</string>
     <string name="todo">TODO</string>
