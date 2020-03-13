@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
         user = this.userDAO.getFirst()
         if (user == null || user!!.token.isBlank()) {
-            reconnect()
+            logout()
         } else {
             homeFragment = HomeFragment(userDAO)
             transactionFragment = TransactionFragment(userDAO, transactionDAO, itemDAO)
@@ -81,8 +81,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                         transactionFragment.getTransactions()
                     }
                     checkConnectivity(this@MainActivity)
-                    //TODO: what does this do ?
-                    //checkConnexionStatus()
                 }
 
             })
@@ -157,7 +155,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     /**
@@ -171,19 +168,12 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         editor.apply()
     }
 
-    private fun logout() {
-        startConnexionActivity()
+    fun logout() {
         setSharedPrefConnexionStatus(false)
         userDAO.updateToken("")
         transactionDAO.nukeTransactionTable()
         itemDAO.nukeItemTable()
-    }
-
-    fun reconnect() {
-        logout()
-        val intent = Intent(this, ConnexionActivity::class.java)
-        this.startActivity(intent)
-        this.finish()
+        startConnexionActivity()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -191,7 +181,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         if (requestCode == CHANGE_PASSWORD) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
-                    reconnect()
+                    logout()
                 }
                 Activity.RESULT_CANCELED -> {
                     Toast.makeText(

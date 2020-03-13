@@ -128,7 +128,7 @@ class HomeFragment(private var userDAO: UserDAO) : Fragment() {
     /**
      * Get the user from API
      * @return None
-     * @see MainActivity.reconnect
+     * @see MainActivity.logout
      * @see handleGetUserResponse
      */
     fun getUser() {
@@ -143,7 +143,7 @@ class HomeFragment(private var userDAO: UserDAO) : Fragment() {
 
                         200 -> handleGetUserResponse(response.body(), token)
 
-                        401 -> (activity as MainActivity).reconnect()
+                        401 -> (activity as MainActivity).logout()
 
                         else -> println("Error")
                     }

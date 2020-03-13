@@ -86,7 +86,7 @@ class TransactionFragment(
 
                         200 -> handleGetTransactionsResponse(response.body())
 
-                        401 -> (activity as MainActivity).reconnect()
+                        401 -> (activity as MainActivity).logout()
 
                         else -> println("Error")
                     }
