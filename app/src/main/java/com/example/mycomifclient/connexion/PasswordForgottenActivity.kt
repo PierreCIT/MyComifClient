@@ -67,7 +67,13 @@ class PasswordForgottenActivity : AppCompatActivity() {
                     call: Call<JsonObject>,
                     response: Response<JsonObject>
                 ) {
-                    displayPasswordMessage(removeQuotes(response.body()?.get("status")))
+                    when (response.raw().code()) {
+
+                        200 -> displayPasswordMessage(removeQuotes(response.body()?.get("status")))
+
+                        500 -> displayPasswordMessage("There was an error while sending your mail. Contact an administrator")
+
+                    }
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
