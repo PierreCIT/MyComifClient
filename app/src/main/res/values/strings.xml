@@ -6,7 +6,7 @@
     <string name="today">Today</string>
     <string name="OK">OK</string>
     <string name="no_internet_connexion">No Internet Connection</string>
-    <string name="offline_message">You are offline. Your data are not up to date.</string>
+    <string name="offline_message">You are offline. Please turn on your wifi or your mobile data</string>
     <string name="first_last_name">%s %s</string>
     <string name="euro_price">%s %s €</string>
     <string name="home">Home</string>

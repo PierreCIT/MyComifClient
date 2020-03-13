@@ -6,7 +6,7 @@
     <string name="today">Jour</string>
     <string name="OK">OK</string>
     <string name="no_internet_connexion">Aucune Connexion Internet</string>
-    <string name="offline_message">Vous êtes hors ligne. Vos données ne sont pas à jour.</string>
+    <string name="offline_message">Vous êtes hors ligne. Activez vos données mobiles ou votre wifi pour utiliser MyComif\'</string>
     <string name="first_last_name">%s %s</string>
     <string name="euro_price">%s %s €</string>
     <string name="refill">Recharge</string>
