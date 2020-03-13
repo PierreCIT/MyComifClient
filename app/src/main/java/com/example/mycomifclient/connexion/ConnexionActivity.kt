@@ -4,11 +4,13 @@ package com.example.mycomifclient.connexion
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.mycomifclient.MainActivity
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.*
@@ -47,7 +49,8 @@ class ConnexionActivity : AppCompatActivity() {
             userDAO.getFirst()?.email
 
         findViewById<Button>(R.id.a_connexion_button_connexion).setOnClickListener {
-            findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = false
+            disableButtons()
+            showLoader()
             val id = this.findViewById<EditText>(R.id.a_connexion_edit_text_email).text.toString()
             val password =
                 this.findViewById<EditText>(R.id.a_connexion_edit_text_password).text.toString()
@@ -55,7 +58,7 @@ class ConnexionActivity : AppCompatActivity() {
             authenticate(authBody)
         }
         findViewById<Button>(R.id.a_connexion_button_first_connexion).setOnClickListener {
-            findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = false
+            disableButtons()
             val intent = Intent(this, PasswordForgottenActivity::class.java)
             this.startActivityForResult(intent, FIRST_CONNEXION)
         }
@@ -63,8 +66,27 @@ class ConnexionActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        enableButtons()
+    }
+
+    private fun enableButtons() {
         findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = true
         findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = true
+    }
+
+    private fun disableButtons() {
+        findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = false
+        findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = false
+    }
+
+    private fun showLoader() {
+        findViewById<ConstraintLayout>(R.id.constraint_layout_progress_bar_connexion).visibility =
+            View.VISIBLE
+    }
+
+    private fun hideLoader() {
+        findViewById<ConstraintLayout>(R.id.constraint_layout_progress_bar_connexion).visibility =
+            View.INVISIBLE
     }
 
     /**
@@ -104,7 +126,7 @@ class ConnexionActivity : AppCompatActivity() {
 
                     else -> {
                         println("Error")
-                        findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = true
+                        enableButtons()
                     }
                 }
             }
@@ -169,7 +191,7 @@ class ConnexionActivity : AppCompatActivity() {
             resources.getString(R.string.bad_id),
             Toast.LENGTH_LONG
         ).show()
-        findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = true
+        enableButtons()
     }
 
     /**
@@ -182,6 +204,6 @@ class ConnexionActivity : AppCompatActivity() {
             resources.getString(R.string.error_server_data),
             Toast.LENGTH_LONG
         ).show()
-        findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = true
+        enableButtons()
     }
 }
