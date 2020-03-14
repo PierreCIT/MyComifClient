@@ -3,7 +3,7 @@
     <color name="colorPrimary">#373631</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#F5AE00</color>
-    <color name="colorLightGrey">#ddA9A9A9</color>
+    <color name="colorLightGrey">#DDDFDFDF</color>
     <color name="negativePriceColor">#DC3545</color>
     <color name="positivePriceColor">#36BA54</color>
     <color name="colorWhite">#FFFFFF</color>
