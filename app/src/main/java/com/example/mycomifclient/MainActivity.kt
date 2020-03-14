@@ -33,8 +33,6 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
 
-    private lateinit var sharedPref: SharedPreferences
-
     //TODO: use basic okHttpClient when the API will be put in production
     private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = IS_SAFE_CONNEXION)
 
@@ -50,7 +48,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     private var user: UserEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        sharedPref = getPreferences(Context.MODE_PRIVATE)
         super.onCreate(savedInstanceState)
 
         userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
@@ -163,17 +160,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onFragmentInteraction(uri: Uri) {
     }
 
-    /**
-     * Set the shared preference connexion status var
-     * @param bool Connexion status (True = connected; false = not connected) (Boolean)
-     * @return None
-     */
-    private fun setSharedPrefConnexionStatus(bool: Boolean) {
-        val editor = sharedPref.edit()
-        editor.putBoolean(CONNEXION_STATUS_KEY, bool)
-        editor.apply()
-    }
-
     fun logoutFromApi() {
         val token = user?.token
         if (token == null) {
@@ -213,7 +199,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     fun logoutFromApplication() {
-        setSharedPrefConnexionStatus(false)
         Toast.makeText(this@MainActivity, "Token successfully invalidated", Toast.LENGTH_LONG)
             .show()
         userDAO.updateToken("")
