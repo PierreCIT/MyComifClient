@@ -19,10 +19,8 @@ import com.example.mycomifclient.connexion.ChangePasswordActivity
 import com.example.mycomifclient.connexion.ConnexionActivity
 import com.example.mycomifclient.database.*
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
+import com.example.mycomifclient.serverhandling.HTTPServices
 import kotlinx.android.synthetic.main.activity_main.*
-
-const val CONNEXION_STATUS_KEY = "CONNEXION_STATUS"
-const val CHANGE_PASSWORD = 1
 
 /**
  * Main activity
@@ -31,6 +29,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     TransactionFragment.OnFragmentInteractionListener {
 
     private lateinit var sharedPref: SharedPreferences
+
+    //TODO: use basic okHttpClient when the API will be put in production
+    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = IS_SAFE_CONNEXION)
 
     private lateinit var userDAO: UserDAO
     private lateinit var transactionDAO: TransactionDAO
@@ -55,8 +56,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         if (user == null || user!!.token.isBlank()) {
             logout()
         } else {
-            homeFragment = HomeFragment(userDAO)
-            transactionFragment = TransactionFragment(userDAO, transactionDAO, itemDAO)
+            homeFragment = HomeFragment(userDAO, retrofitHTTPServices)
+            transactionFragment =
+                TransactionFragment(userDAO, transactionDAO, itemDAO, retrofitHTTPServices)
 
             setContentView(R.layout.activity_main)
             setSupportActionBar(a_main_toolbar)

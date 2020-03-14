@@ -6,6 +6,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mycomifclient.IS_SAFE_CONNEXION
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.ComifDatabase
 import com.example.mycomifclient.serverhandling.HTTPServices
@@ -22,7 +23,7 @@ import retrofit2.Response
 class ChangePasswordActivity : AppCompatActivity() {
 
     //TODO: use basic okHttpClient when the API will be put in production
-    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
+    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = IS_SAFE_CONNEXION)
     private val userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
 
     override fun onCreate(savedInstanceState: Bundle?) {

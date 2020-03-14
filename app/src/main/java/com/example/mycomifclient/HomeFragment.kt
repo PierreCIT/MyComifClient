@@ -24,7 +24,8 @@ import java.util.*
 /**
  * Implementation of a fragment with main info (Home fragment)
  */
-class HomeFragment(private var userDAO: UserDAO) : Fragment() {
+class HomeFragment(private var userDAO: UserDAO, private var retrofitHTTPServices: HTTPServices) :
+    Fragment() {
     private var listener: OnFragmentInteractionListener? = null
 
     private lateinit var firstName: String
@@ -34,9 +35,6 @@ class HomeFragment(private var userDAO: UserDAO) : Fragment() {
     private lateinit var monthConsos: String
 
     private lateinit var user: UserEntity
-
-    //TODO: use basic okHttpClient when the API will be put in production
-    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
 
     private var balance = 0f
 

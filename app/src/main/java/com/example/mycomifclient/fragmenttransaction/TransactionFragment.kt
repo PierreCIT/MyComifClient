@@ -27,15 +27,13 @@ import retrofit2.Response
 class TransactionFragment(
     private val userDAO: UserDAO,
     private val transactionDAO: TransactionDAO,
-    private val itemDAO: ItemDAO
+    private val itemDAO: ItemDAO,
+    private val retrofitHTTPServices: HTTPServices
 ) : Fragment() {
 
     private var listener: OnFragmentInteractionListener? = null
     private var transactionList: ArrayList<Transaction> = ArrayList()
     private val adapter = TransactionAdapter(transactionList)
-
-    //TODO: use basic okHttpClient when the API will be put in production
-    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

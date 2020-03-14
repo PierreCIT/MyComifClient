@@ -40,6 +40,12 @@ interface HTTPServices {
         @Body request: JsonObject
     ): Call<JsonObject>
 
+    @POST("api/users/logout")
+    @Headers("Content-Type:application/json")
+    fun logoutFromApi(
+        @Body request: JsonObject
+    ): Call<JsonObject>
+
     companion object {
 
         fun create(isSafeConnexion: Boolean): HTTPServices {

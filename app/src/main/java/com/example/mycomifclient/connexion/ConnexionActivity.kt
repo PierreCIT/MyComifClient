@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.mycomifclient.IS_SAFE_CONNEXION
 import com.example.mycomifclient.MainActivity
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.*
@@ -33,7 +34,7 @@ const val FIRST_CONNEXION = 1
 class ConnexionActivity : AppCompatActivity() {
 
     //TODO: use basic okHttpClient when the API will be put in production
-    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
+    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = IS_SAFE_CONNEXION)
 
     private lateinit var userDAO: UserDAO
     private lateinit var transactionDAO: TransactionDAO

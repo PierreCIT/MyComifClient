@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mycomifclient.IS_SAFE_CONNEXION
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.ComifDatabase
 import com.example.mycomifclient.serverhandling.HTTPServices
@@ -21,7 +22,7 @@ import retrofit2.Response
  */
 class PasswordForgottenActivity : AppCompatActivity() {
 
-    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
+    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = IS_SAFE_CONNEXION)
     private var email: String? = ComifDatabase.getAppDatabase(this).getUserDAO().getFirst()?.email
 
     override fun onCreate(savedInstanceState: Bundle?) {
