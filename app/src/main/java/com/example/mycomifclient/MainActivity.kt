@@ -20,7 +20,12 @@ import com.example.mycomifclient.connexion.ConnexionActivity
 import com.example.mycomifclient.database.*
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
 import com.example.mycomifclient.serverhandling.HTTPServices
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_main.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * Main activity
@@ -54,7 +59,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
         user = this.userDAO.getFirst()
         if (user == null || user!!.token.isBlank()) {
-            logout()
+            logoutFromApplication()
         } else {
             homeFragment = HomeFragment(userDAO, retrofitHTTPServices)
             transactionFragment =
@@ -122,11 +127,10 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                logout()
+                logoutFromApi()
                 true
             }
             R.id.action_information -> {
-                //Toast.makeText(baseContext, "Not implemented yet", Toast.LENGTH_LONG).show()
                 val intent = Intent(this, InfoActivity::class.java)
                 this.startActivity(intent)
                 true
@@ -170,20 +174,73 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         editor.apply()
     }
 
-    fun logout() {
+    fun logoutFromApi() {
+        val token = user?.token
+        if (token == null) {
+            logoutFromApplication()
+        } else {
+            retrofitHTTPServices.logoutFromApi(buildLogoutRequest(token))
+                .enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>
+                    ) {
+                        when (response.raw().code()) {
+
+                            200 -> logoutFromApplication()
+
+                            401 -> Toast.makeText(
+                                this@MainActivity,
+                                "An error occurred during your logout. Please try again",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            400 -> Toast.makeText(
+                                this@MainActivity,
+                                "Invalid request",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            else -> println("Error")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Toast.makeText(this@MainActivity, "Error: $t", Toast.LENGTH_LONG).show()
+                    }
+                })
+        }
+    }
+
+    fun logoutFromApplication() {
         setSharedPrefConnexionStatus(false)
+        Toast.makeText(this@MainActivity, "Token successfully invalidated", Toast.LENGTH_LONG)
+            .show()
         userDAO.updateToken("")
         transactionDAO.nukeTransactionTable()
         itemDAO.nukeItemTable()
         startConnexionActivity()
     }
 
+    /**
+     * Create the logout request body
+     * @param token Bearer token of the user (String)
+     * @return a JsonObject which represents an authenticate request body (JsonObject)
+     */
+    private fun buildLogoutRequest(token: String): JsonObject {
+        val serverBody = JsonObject()
+        serverBody.addProperty("token", token)
+        serverBody.addProperty("token_type_hint", "access_token")
+        return serverBody
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CHANGE_PASSWORD) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
-                    logout()
+                    logoutFromApi()
                 }
                 Activity.RESULT_CANCELED -> {
                     Toast.makeText(

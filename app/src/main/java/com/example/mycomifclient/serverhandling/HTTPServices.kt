@@ -3,6 +3,7 @@ package com.example.mycomifclient.serverhandling
 import com.example.mycomifclient.UnsafeHTTPClient
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -41,10 +42,10 @@ interface HTTPServices {
     ): Call<JsonObject>
 
     @POST("api/users/logout")
-    @Headers("Content-Type:application/json")
+    @Headers("Content-Type: text/html")
     fun logoutFromApi(
         @Body request: JsonObject
-    ): Call<JsonObject>
+    ): Call<ResponseBody>
 
     companion object {
 

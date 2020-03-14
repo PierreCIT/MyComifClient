@@ -84,7 +84,7 @@ class TransactionFragment(
 
                         200 -> handleGetTransactionsResponse(response.body())
 
-                        401 -> (activity as MainActivity).logout()
+                        401 -> (activity as MainActivity).logoutFromApi()
 
                         else -> println("Error")
                     }

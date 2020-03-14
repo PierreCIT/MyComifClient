@@ -126,7 +126,7 @@ class HomeFragment(private var userDAO: UserDAO, private var retrofitHTTPService
     /**
      * Get the user from API
      * @return None
-     * @see MainActivity.logout
+     * @see MainActivity.logoutFromApplication
      * @see handleGetUserResponse
      */
     fun getUser() {
@@ -141,7 +141,7 @@ class HomeFragment(private var userDAO: UserDAO, private var retrofitHTTPService
 
                         200 -> handleGetUserResponse(response.body(), token)
 
-                        401 -> (activity as MainActivity).logout()
+                        401 -> (activity as MainActivity).logoutFromApplication()
 
                         else -> println("Error")
                     }
