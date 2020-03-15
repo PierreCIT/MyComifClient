@@ -6,7 +6,7 @@
     <string name="today">Jour</string>
     <string name="OK">OK</string>
     <string name="no_internet_connexion">Aucune Connexion Internet</string>
-    <string name="offline_message">Vous êtes hors ligne. Vos données ne sont pas à jour.</string>
+    <string name="offline_message">Vous êtes hors ligne. Activez vos données mobiles ou votre wifi pour utiliser MyComif\'</string>
     <string name="first_last_name">%s %s</string>
     <string name="euro_price">%s %s €</string>
     <string name="refill">Recharge</string>
@@ -20,7 +20,7 @@
     <string name="email">Adresse email</string>
     <string name="password">Mot de passe</string>
     <string name="connexion">Connexion</string>
-    <string name="get_password">Obtenir mon mot de passe</string>
+    <string name="get_password">Confirmer</string>
     <string name="password_by_email">Votre nouveau mot de passe a été envoyé par email. Veuillez vérifier vos courriels.</string>
     <string name="comif_logo">Comif\' Logo</string>
     <string name="todo">TODO</string>
@@ -38,4 +38,8 @@
     <string name="contact_content">Vous pouvez nous contacter à l\'adresse suivante: comif13120@gmail.com.\n\nOu nous contacter directement sur Facebook: <a href="https://www.facebook.com/profile.php?id=100011711589847">facebook.com/profile.php?id=100011711589847</a>.</string>
     <string name="back_button">Bouton retour</string>
     <string name="password_forgotten">Mot de passe oublié ?</string>
+    <string name="forgot_password_description">Remplissez le formulaire avec votre adresse électronique .etu. Un courriel avec un lien sera envoyé à cette adresse, et il vous permettra de réinitialiser votre mot de passe.</string>
+    <string name="unsuccessful_logout">Une erreur est survenue. Réessayez.</string>
+    <string name="invalid_request">Requête invalide</string>
+    <string name="successful_logout">Déconnexion réussie</string>
 </resources>

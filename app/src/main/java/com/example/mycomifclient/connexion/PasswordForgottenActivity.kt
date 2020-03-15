@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mycomifclient.IS_SAFE_CONNEXION
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.ComifDatabase
 import com.example.mycomifclient.serverhandling.HTTPServices
@@ -21,8 +22,8 @@ import retrofit2.Response
  */
 class PasswordForgottenActivity : AppCompatActivity() {
 
-    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
-    private var email: String = ComifDatabase.getAppDatabase(this).getUserDAO().getFirst().email
+    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = IS_SAFE_CONNEXION)
+    private var email: String? = ComifDatabase.getAppDatabase(this).getUserDAO().getFirst()?.email
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,14 +61,20 @@ class PasswordForgottenActivity : AppCompatActivity() {
         alertDialog?.show()
     }
 
-    fun forgotPassword() {
+    private fun forgotPassword() {
         retrofitHTTPServices.forgotPassword(buildForgotPasswordBody())
             .enqueue(object : Callback<JsonObject> {
                 override fun onResponse(
                     call: Call<JsonObject>,
                     response: Response<JsonObject>
                 ) {
-                    displayPasswordMessage(removeQuotes(response.body()?.get("status")))
+                    when (response.raw().code()) {
+
+                        200 -> displayPasswordMessage(removeQuotes(response.body()?.get("status")))
+
+                        500 -> displayPasswordMessage("There was an error while sending your mail. Contact an administrator")
+
+                    }
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {

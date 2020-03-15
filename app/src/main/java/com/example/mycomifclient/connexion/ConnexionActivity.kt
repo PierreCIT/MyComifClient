@@ -2,13 +2,20 @@
 
 package com.example.mycomifclient.connexion
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.mycomifclient.IS_SAFE_CONNEXION
 import com.example.mycomifclient.MainActivity
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.*
@@ -27,7 +34,7 @@ const val FIRST_CONNEXION = 1
 class ConnexionActivity : AppCompatActivity() {
 
     //TODO: use basic okHttpClient when the API will be put in production
-    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
+    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = IS_SAFE_CONNEXION)
 
     private lateinit var userDAO: UserDAO
     private lateinit var transactionDAO: TransactionDAO
@@ -47,7 +54,8 @@ class ConnexionActivity : AppCompatActivity() {
             userDAO.getFirst()?.email
 
         findViewById<Button>(R.id.a_connexion_button_connexion).setOnClickListener {
-            findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = false
+            disableButtons()
+            showLoader()
             val id = this.findViewById<EditText>(R.id.a_connexion_edit_text_email).text.toString()
             val password =
                 this.findViewById<EditText>(R.id.a_connexion_edit_text_password).text.toString()
@@ -55,16 +63,66 @@ class ConnexionActivity : AppCompatActivity() {
             authenticate(authBody)
         }
         findViewById<Button>(R.id.a_connexion_button_first_connexion).setOnClickListener {
-            findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = false
+            disableButtons()
             val intent = Intent(this, PasswordForgottenActivity::class.java)
             this.startActivityForResult(intent, FIRST_CONNEXION)
         }
     }
 
+    /**
+     * Check the connectivity of the user device and display an alert box if no connexions were found
+     * @param context Context of the calling activity
+     * @return None
+     */
+    private fun checkConnectivity(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
+        if (!isConnected) {
+            //Alert Dialog box
+            val alertDialog: AlertDialog? = this.let {
+                val builder = AlertDialog.Builder(it)
+                builder.apply {
+                    setPositiveButton(
+                        R.string.OK
+                    ) { _, _ ->
+                        // User clicked OK button
+                    }
+                }
+                builder.setTitle(R.string.no_internet_connexion)
+                builder.setMessage(R.string.offline_message)
+                // Create the AlertDialog
+                builder.create()
+            }
+            alertDialog?.show()
+            return true
+        }
+        return false
+    }
+
     override fun onResume() {
         super.onResume()
+        enableButtons()
+    }
+
+    private fun enableButtons() {
         findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = true
         findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = true
+    }
+
+    private fun disableButtons() {
+        findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = false
+        findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = false
+    }
+
+    private fun showLoader() {
+        findViewById<ConstraintLayout>(R.id.constraint_layout_progress_bar_connexion).visibility =
+            View.VISIBLE
+    }
+
+    private fun hideLoader() {
+        findViewById<ConstraintLayout>(R.id.constraint_layout_progress_bar_connexion).visibility =
+            View.INVISIBLE
     }
 
     /**
@@ -91,22 +149,35 @@ class ConnexionActivity : AppCompatActivity() {
      * @see handleAuthenticationResponse
      */
     private fun authenticate(authBody: JsonObject) {
+        if (checkConnectivity(this)) {
+            enableButtons()
+            hideLoader()
+            return
+        } else {
+            retrofitHTTPServices.authenticate(authBody).enqueue(object : Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    when (response.raw().code()) {
 
-        retrofitHTTPServices.authenticate(authBody).enqueue(object : Callback<JsonObject> {
-            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                when (response.raw().code()) {
+                        200 -> handleAuthenticationResponse(response.body())
 
-                    200 -> handleAuthenticationResponse(response.body())
+                        400 -> handle400response()
 
-                    401 -> handle401Response()
+                        401 -> handle401Response()
 
-                    else -> println("Error")
+                        else -> {
+                            println("Error")
+                            enableButtons()
+                            hideLoader()
+                        }
+                    }
                 }
-            }
-            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
-            }
-        })
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
+                    hideLoader()
+                }
+            })
+        }
     }
 
     /**
@@ -159,10 +230,25 @@ class ConnexionActivity : AppCompatActivity() {
      */
     private fun handle401Response() {
         Toast.makeText(
-            this,
+            baseContext,
             resources.getString(R.string.bad_id),
             Toast.LENGTH_LONG
         ).show()
-        findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = true
+        enableButtons()
+        hideLoader()
+    }
+
+    /**
+     * Handle 400 response by displaying Toast error message
+     * @return None
+     */
+    private fun handle400response() {
+        Toast.makeText(
+            baseContext,
+            resources.getString(R.string.error_server_data),
+            Toast.LENGTH_LONG
+        ).show()
+        enableButtons()
+        hideLoader()
     }
 }

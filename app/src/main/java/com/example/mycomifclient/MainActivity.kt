@@ -3,7 +3,6 @@ package com.example.mycomifclient
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
@@ -19,10 +18,13 @@ import com.example.mycomifclient.connexion.ChangePasswordActivity
 import com.example.mycomifclient.connexion.ConnexionActivity
 import com.example.mycomifclient.database.*
 import com.example.mycomifclient.fragmenttransaction.TransactionFragment
+import com.example.mycomifclient.serverhandling.HTTPServices
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_main.*
-
-const val CONNEXION_STATUS_KEY = "CONNEXION_STATUS"
-const val CHANGE_PASSWORD = 1
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * Main activity
@@ -30,7 +32,8 @@ const val CHANGE_PASSWORD = 1
 class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionListener,
     TransactionFragment.OnFragmentInteractionListener {
 
-    private lateinit var sharedPref: SharedPreferences
+    //TODO: use basic okHttpClient when the API will be put in production
+    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = IS_SAFE_CONNEXION)
 
     private lateinit var userDAO: UserDAO
     private lateinit var transactionDAO: TransactionDAO
@@ -41,10 +44,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
     private var adapter = ViewPagerAdapter(supportFragmentManager)
 
-    private lateinit var user: UserEntity
+    private var user: UserEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        sharedPref = getPreferences(Context.MODE_PRIVATE)
         super.onCreate(savedInstanceState)
 
         userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
@@ -52,11 +54,12 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
 
         user = this.userDAO.getFirst()
-        if (!::user.isInitialized || user.token.isBlank()) {
-            reconnect()
+        if (user == null || user!!.token.isBlank()) {
+            logoutFromApplication()
         } else {
-            homeFragment = HomeFragment(userDAO)
-            transactionFragment = TransactionFragment(userDAO, transactionDAO, itemDAO)
+            homeFragment = HomeFragment(userDAO, retrofitHTTPServices)
+            transactionFragment =
+                TransactionFragment(userDAO, transactionDAO, itemDAO, retrofitHTTPServices)
 
             setContentView(R.layout.activity_main)
             setSupportActionBar(a_main_toolbar)
@@ -81,8 +84,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
                         transactionFragment.getTransactions()
                     }
                     checkConnectivity(this@MainActivity)
-                    //TODO: what does this do ?
-                    //checkConnexionStatus()
                 }
 
             })
@@ -122,11 +123,10 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                logout()
+                logoutFromApi()
                 true
             }
             R.id.action_information -> {
-                //Toast.makeText(baseContext, "Not implemented yet", Toast.LENGTH_LONG).show()
                 val intent = Intent(this, InfoActivity::class.java)
                 this.startActivity(intent)
                 true
@@ -157,65 +157,72 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) hideSystemUI()
+    fun logoutFromApi() {
+        val token = user?.token
+        if (token == null) {
+            logoutFromApplication()
+        } else {
+            retrofitHTTPServices.logoutFromApi(buildLogoutRequest(token))
+                .enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>
+                    ) {
+                        when (response.raw().code()) {
+
+                            200 -> logoutFromApplication()
+
+                            401 -> Toast.makeText(
+                                this@MainActivity,
+                                getString(R.string.unsuccessful_logout),
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            400 -> Toast.makeText(
+                                this@MainActivity,
+                                getString(R.string.invalid_request),
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            else -> println("Error")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Toast.makeText(this@MainActivity, "Error: $t", Toast.LENGTH_LONG).show()
+                    }
+                })
+        }
     }
 
-    /**
-     * Set the shared preference connexion status var
-     * @param bool Connexion status (True = connected; false = not connected) (Boolean)
-     * @return None
-     */
-    private fun setSharedPrefConnexionStatus(bool: Boolean) {
-        val editor = sharedPref.edit()
-        editor.putBoolean(CONNEXION_STATUS_KEY, bool)
-        editor.apply()
-    }
-
-    /**
-     * Enable immersive mode
-     * @return None
-     */
-    private fun hideSystemUI() {
-        // Enables regular immersive mode.
-        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
-        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
-                // Set the content to appear under the system bars so that the
-                // content doesn't resize when the system bars hide and show.
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                // Hide the nav bar and status bar
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN)
-    }
-
-    private fun logout() {
-        startConnexionActivity()
-        setSharedPrefConnexionStatus(false)
+    fun logoutFromApplication() {
         userDAO.updateToken("")
         transactionDAO.nukeTransactionTable()
         itemDAO.nukeItemTable()
+        startConnexionActivity()
     }
 
-    fun reconnect() {
-        logout()
-        val intent = Intent(this, ConnexionActivity::class.java)
-        this.startActivity(intent)
-        this.finish()
+    /**
+     * Create the logout request body
+     * @param token Bearer token of the user (String)
+     * @return a JsonObject which represents an authenticate request body (JsonObject)
+     */
+    private fun buildLogoutRequest(token: String): JsonObject {
+        val serverBody = JsonObject()
+        serverBody.addProperty("token", token)
+        serverBody.addProperty("token_type_hint", "access_token")
+        return serverBody
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CHANGE_PASSWORD) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
-                    reconnect()
+                    logoutFromApi()
                 }
                 Activity.RESULT_CANCELED -> {
                     Toast.makeText(
