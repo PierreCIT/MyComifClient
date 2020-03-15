@@ -3,7 +3,6 @@ package com.example.mycomifclient
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
@@ -177,13 +176,13 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
 
                             401 -> Toast.makeText(
                                 this@MainActivity,
-                                "An error occurred during your logout. Please try again",
+                                getString(R.string.unsuccessful_logout),
                                 Toast.LENGTH_LONG
                             ).show()
 
                             400 -> Toast.makeText(
                                 this@MainActivity,
-                                "Invalid request",
+                                getString(R.string.invalid_request),
                                 Toast.LENGTH_LONG
                             ).show()
 
@@ -199,8 +198,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     }
 
     fun logoutFromApplication() {
-        Toast.makeText(this@MainActivity, "Token successfully invalidated", Toast.LENGTH_LONG)
-            .show()
         userDAO.updateToken("")
         transactionDAO.nukeTransactionTable()
         itemDAO.nukeItemTable()

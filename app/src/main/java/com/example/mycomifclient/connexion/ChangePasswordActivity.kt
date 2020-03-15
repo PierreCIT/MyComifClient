@@ -53,9 +53,12 @@ class ChangePasswordActivity : AppCompatActivity() {
                         response: Response<JsonObject>
                     ) {
                         when {
+
                             response.code() == 200 -> handlePositiveResponse()
+
                             response.code() == 422 || response.code() == 400 -> handleBadResponse(
                                 response
+
                             )
                             else -> Toast.makeText(
                                 baseContext,

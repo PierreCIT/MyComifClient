@@ -39,4 +39,7 @@
     <string name="back_button">Back button</string>
     <string name="password_forgotten">Password forgotten ?</string>
     <string name="forgot_password_description">Fill out the form with your .etu email address. An email with a link will be sent to this address, and it will allow you to reset the password of your account.</string>
+    <string name="unsuccessful_logout">An error occurred during your logout. Please try again</string>
+    <string name="invalid_request">Invalid request</string>
+    <string name="successful_logout">Successful logout</string>
 </resources>

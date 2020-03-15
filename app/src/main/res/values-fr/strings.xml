@@ -39,4 +39,7 @@
     <string name="back_button">Bouton retour</string>
     <string name="password_forgotten">Mot de passe oublié ?</string>
     <string name="forgot_password_description">Remplissez le formulaire avec votre adresse électronique .etu. Un courriel avec un lien sera envoyé à cette adresse, et il vous permettra de réinitialiser votre mot de passe.</string>
+    <string name="unsuccessful_logout">Une erreur est survenue. Réessayez.</string>
+    <string name="invalid_request">Requête invalide</string>
+    <string name="successful_logout">Déconnexion réussie</string>
 </resources>
