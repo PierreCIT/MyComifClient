@@ -13,6 +13,7 @@ import androidx.room.RoomDatabase
     version = 1,
     exportSchema = false
 )
+
 abstract class ComifDatabase : RoomDatabase() {
 
     abstract fun getUserDAO(): UserDAO
@@ -23,7 +24,7 @@ abstract class ComifDatabase : RoomDatabase() {
         private var INSTANCE: ComifDatabase? = null
 
         /**
-         * Retrieve the database
+         * Retrieve the database, and creates it if its null
          * @param context Activity context (Context)
          * @return a database (ComifDatabase object)
          */
