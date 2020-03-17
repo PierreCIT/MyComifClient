@@ -34,6 +34,7 @@ class PasswordForgottenActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.a_first_connexion_image_button_back).setOnClickListener {
             finish()
         }
+
         findViewById<Button>(R.id.a_first_connexion_button_connexion).setOnClickListener {
             email = findViewById<EditText>(R.id.a_first_connexion_edit_text_email).text.toString()
             forgotPassword()
@@ -61,6 +62,11 @@ class PasswordForgottenActivity : AppCompatActivity() {
         alertDialog?.show()
     }
 
+    /*
+     * This function send the request to the server, and handle the response according to its HTTP
+     * error code
+     * @return None
+     */
     private fun forgotPassword() {
         retrofitHTTPServices.forgotPassword(buildForgotPasswordBody())
             .enqueue(object : Callback<JsonObject> {
@@ -83,6 +89,9 @@ class PasswordForgottenActivity : AppCompatActivity() {
             })
     }
 
+    /*
+     * Creates the body of the HTTP request
+     */
     private fun buildForgotPasswordBody(): JsonObject {
         val response = JsonObject()
         response.addProperty("email", email)
