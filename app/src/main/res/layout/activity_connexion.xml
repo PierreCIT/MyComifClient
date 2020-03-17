@@ -85,7 +85,7 @@
         app:layout_constraintTop_toBottomOf="@+id/a_connexion_edit_text_password" />
 
     <Button
-        android:id="@+id/a_connexion_button_first_connexion"
+        android:id="@+id/a_connexion_button_password_forgotten"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"

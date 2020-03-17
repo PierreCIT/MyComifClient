@@ -1,7 +1,6 @@
 package com.example.mycomifclient
 
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import java.security.cert.CertificateException
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -32,7 +31,7 @@ class UnsafeHTTPClient {
                     }
                 })
 
-                // Install the all-trusting trust manager
+                // Install the all-trusting certificate manager
                 val sslContext = SSLContext.getInstance("SSL")
                 sslContext.init(null, trustAllCerts, java.security.SecureRandom())
                 // Create an ssl socket factory with our all-trusting manager
@@ -42,10 +41,12 @@ class UnsafeHTTPClient {
                 builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
                 builder.hostnameVerifier { _, _ -> true }
 
+                //Allow to have debug information on the different requests exchanged
+                /*
                 val httpLoggingInterceptor =
                     HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-
                 builder.addInterceptor(httpLoggingInterceptor)
+                 */
 
                 return builder
             } catch (e: Exception) {

@@ -10,6 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
 interface HTTPServices {
+
     @GET("/api/users/info")
     @Headers("Content-Type:application/json")
     fun getUser(
@@ -47,6 +48,12 @@ interface HTTPServices {
         @Body request: JsonObject
     ): Call<ResponseBody>
 
+    /**
+     * Create the HTTPService
+     * @parameter a boolean that specifies whether the application communicates with the dev'
+     * server or the prod' one
+     * @return the HTTPService
+     */
     companion object {
 
         fun create(isSafeConnexion: Boolean): HTTPServices {

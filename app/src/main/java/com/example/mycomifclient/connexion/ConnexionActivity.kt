@@ -26,7 +26,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-const val FIRST_CONNEXION = 1
+const val PASSWORD_FORGOTTEN = 1
 
 /**
  * Implementation of the "Connexion" activity
@@ -45,6 +45,7 @@ class ConnexionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connexion)
 
+        //DAO permit to use the data stocked inside the database
         userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
         transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
@@ -54,18 +55,27 @@ class ConnexionActivity : AppCompatActivity() {
             userDAO.getFirst()?.email
 
         findViewById<Button>(R.id.a_connexion_button_connexion).setOnClickListener {
+
             disableButtons()
             showLoader()
+
+            //Get the input data
             val id = this.findViewById<EditText>(R.id.a_connexion_edit_text_email).text.toString()
             val password =
                 this.findViewById<EditText>(R.id.a_connexion_edit_text_password).text.toString()
+
+            //Create the body of the HTTP request
             val authBody: JsonObject = createAuthBody(id, password)
+
+            //Send this body to the API
             authenticate(authBody)
         }
-        findViewById<Button>(R.id.a_connexion_button_first_connexion).setOnClickListener {
+
+        findViewById<Button>(R.id.a_connexion_button_password_forgotten).setOnClickListener {
+            //Disable both buttons then start the activity
             disableButtons()
             val intent = Intent(this, PasswordForgottenActivity::class.java)
-            this.startActivityForResult(intent, FIRST_CONNEXION)
+            this.startActivityForResult(intent, PASSWORD_FORGOTTEN)
         }
     }
 
@@ -102,17 +112,18 @@ class ConnexionActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        checkConnectivity(this)
         enableButtons()
     }
 
     private fun enableButtons() {
         findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = true
-        findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = true
+        findViewById<Button>(R.id.a_connexion_button_password_forgotten).isEnabled = true
     }
 
     private fun disableButtons() {
         findViewById<Button>(R.id.a_connexion_button_connexion).isEnabled = false
-        findViewById<Button>(R.id.a_connexion_button_first_connexion).isEnabled = false
+        findViewById<Button>(R.id.a_connexion_button_password_forgotten).isEnabled = false
     }
 
     private fun showLoader() {
@@ -186,7 +197,9 @@ class ConnexionActivity : AppCompatActivity() {
      * @return None
      */
     private fun handleAuthenticationResponse(body: JsonObject?) {
+        //Retrieve the token from the body
         val token = body?.get("access_token")
+
         if (token == null) {
             Toast.makeText(
                 this,
@@ -194,6 +207,7 @@ class ConnexionActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
         } else {
+            //Create an empty UserEntity object with the token
             val userEntity = UserEntity(
                 0,
                 "",
@@ -205,9 +219,12 @@ class ConnexionActivity : AppCompatActivity() {
                 0,
                 0
             )
+
+            //Clear the database, then add the UserEntity object created
             userDAO.nukeUserTable()
             userDAO.insert(userEntity)
 
+            //Start MainActivity
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)
             this.finish()

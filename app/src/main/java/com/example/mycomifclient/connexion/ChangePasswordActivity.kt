@@ -6,7 +6,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mycomifclient.IS_SAFE_CONNEXION
 import com.example.mycomifclient.R
 import com.example.mycomifclient.database.ComifDatabase
 import com.example.mycomifclient.serverhandling.HTTPServices
@@ -23,56 +22,70 @@ import retrofit2.Response
 class ChangePasswordActivity : AppCompatActivity() {
 
     //TODO: use basic okHttpClient when the API will be put in production
-    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = IS_SAFE_CONNEXION)
+    private val retrofitHTTPServices = HTTPServices.create(isSafeConnexion = false)
     private val userDAO = ComifDatabase.getAppDatabase(this).getUserDAO()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_password)
+
         findViewById<ImageButton>(R.id.a_change_password_image_button_back).setOnClickListener {
             finish()
         }
+
         val submitButton =
             this.findViewById<Button>(R.id.a_change_password_button_change_password)
         submitButton.setOnClickListener {
+
             val oldPassword =
                 this.findViewById<EditText>(R.id.a_change_password_edit_text_old_password)
                     .text.toString()
+
             val newPassword =
                 this.findViewById<EditText>(R.id.a_change_password_edit_text_new_password)
                     .text.toString()
+
             val verifiedNewPassword =
                 this.findViewById<EditText>(R.id.a_change_password_edit_text_verified_new_password)
                     .text.toString()
+
             val body = buildResetPasswordBody(oldPassword, newPassword, verifiedNewPassword)
-            val token = userDAO.getFirst()?.token
-            retrofitHTTPServices.resetPassword("Bearer $token", body)
-                .enqueue(object : Callback<JsonObject> {
-                    override fun onResponse(
-                        call: Call<JsonObject>,
-                        response: Response<JsonObject>
-                    ) {
-                        when {
-
-                            response.code() == 200 -> handlePositiveResponse()
-
-                            response.code() == 422 || response.code() == 400 -> handleBadResponse(
-                                response
-
-                            )
-                            else -> Toast.makeText(
-                                baseContext,
-                                resources.getString(R.string.err_loading_pwd),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-
-                    override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                        Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
-                    }
-                })
+            val token = userDAO.getFirst()!!.token
+            changePassword(token, body)
         }
+    }
+
+    /**
+     * Sends an HTTP request to the API, and handle the response from the server according to its
+     * HTTP code
+     * @param token The authentication token of the user (String)
+     * @param body The body of the request (JsonObject)
+     */
+    private fun changePassword(token: String, body: JsonObject) {
+        retrofitHTTPServices.resetPassword("Bearer $token", body)
+            .enqueue(object : Callback<JsonObject> {
+                override fun onResponse(
+                    call: Call<JsonObject>,
+                    response: Response<JsonObject>
+                ) {
+                    when {
+
+                        response.code() == 200 -> handlePositiveResponse()
+
+                        response.code() >= 400 -> handleBadResponse(response)
+
+                        else -> Toast.makeText(
+                            baseContext,
+                            resources.getString(R.string.err_loading_pwd),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Toast.makeText(baseContext, "Error: $t", Toast.LENGTH_LONG).show()
+                }
+            })
     }
 
     /**
@@ -95,7 +108,7 @@ class ChangePasswordActivity : AppCompatActivity() {
     }
 
     /**
-     * Handle bad responses: Set to empty quotes all text views of the activity
+     * Retrieve the errors sent by the API and display them, then erase the EditText elements
      * @return None
      */
     private fun handleBadResponse(response: Response<JsonObject>) {

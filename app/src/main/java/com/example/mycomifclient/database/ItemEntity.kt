@@ -30,6 +30,7 @@ data class ItemEntity(
  */
 @Dao
 interface ItemDAO {
+
     /**
      * Get all the items of a given transaction
      * @param transactionId ID of the transaction (integer)
