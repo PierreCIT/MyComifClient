@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         transactionDAO = ComifDatabase.getAppDatabase(this).getTransactionDAO()
         itemDAO = ComifDatabase.getAppDatabase(this).getItemDAO()
 
+        //If there is no user inside the database, force the reconnection
         user = this.userDAO.getFirst()
         if (user == null || user!!.token.isBlank()) {
             logoutFromApplication()
@@ -67,6 +68,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
             adapter.addFragment(homeFragment, resources.getString(R.string.home))
             adapter.addFragment(transactionFragment, resources.getString(R.string.transactions))
             a_main_view_pager.adapter = adapter
+
+            //Creates a listener that permit to know on which page the user is actually
             a_main_view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {}
                 override fun onPageScrolled(
@@ -120,6 +123,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
         }
     }
 
+    /**
+     * Handles the menu
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
@@ -159,6 +165,10 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnFragmentInteractionList
     override fun onFragmentInteraction(uri: Uri) {
     }
 
+    /**
+     * Sends a HTTP request to logout from the API (it invalidates the token linked to this specific
+     * connexion, and handle the response from the server according to its HTTP code
+     */
     fun logoutFromApi() {
         val token = user?.token
         if (token == null) {
