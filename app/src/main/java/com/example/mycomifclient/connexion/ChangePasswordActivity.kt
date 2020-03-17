@@ -50,7 +50,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                     .text.toString()
 
             val body = buildResetPasswordBody(oldPassword, newPassword, verifiedNewPassword)
-            val token = userDAO.getFirst().token
+            val token = userDAO.getFirst()!!.token
             changePassword(token, body)
         }
     }
@@ -108,7 +108,7 @@ class ChangePasswordActivity : AppCompatActivity() {
     }
 
     /**
-     * Retrieve the errors sent by the API and display them
+     * Retrieve the errors sent by the API and display them, then erase the EditText elements
      * @return None
      */
     private fun handleBadResponse(response: Response<JsonObject>) {
