@@ -1,7 +1,7 @@
 # MyComifClient
 
 ![License](https://img.shields.io/badge/licence-MIT-gren "MIT License") 
-![Version](https://img.shields.io/badge/version-1.0-dev-blue "Code Version")
+![Version](https://img.shields.io/badge/version-1.0_dev-blue "Code Version")
 ![Platform](https://img.shields.io/badge/platform-Android-important "Platform")
 ![Language](https://img.shields.io/badge/language-Kotlin-blueviolet "Language")
 ![For](https://img.shields.io/badge/For-COMIF's%20users-yellow "For")
